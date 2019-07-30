@@ -1,0 +1,15 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+psycopg2-binary = "~=2.8"
+requests-oauthlib = "~=1.2"
+django-leaflet = "~=0.24"
+Django = "~=2.2"
+
+[requires]
+python_version = "3.7"
