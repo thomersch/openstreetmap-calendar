@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>{{ event.name }}</h1>
+
+	<div><a href="/event/{{ event.id }}/change/">Edit event</a></div>
+
+	<div>{{ event.start }}</div>
+
+	{{ event.description }}
+
+	<div>Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a></div>
+{% endblock %}

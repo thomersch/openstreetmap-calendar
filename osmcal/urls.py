@@ -1,28 +1,23 @@
-"""osmcal URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import include, path
 
-from django.conf.urls import url
+# from django.conf.urls import url
 
-from .views import login, oauth_start, oauth_callback
+from . import views
+
+app_name = 'osmcal'
 
 urlpatterns = [
+    path('', views.homepage),
+    path('event/add/', views.event_edit),
+    path('event/<int:event_id>/', views.event, name='event'),
+    path('event/<int:event_id>/change/', views.event_edit, name='event-change'),
+
     path('admin/', admin.site.urls),
-    path('login/', login),
-    path('oauth/start/', oauth_start),
-    path('oauth/callback/', oauth_callback)
+
+    path('login/', views.login),
+    path('logout/', views.logout),
+
+    path('oauth/start/', views.oauth_start),
+    path('oauth/callback/', views.oauth_callback)
 ]

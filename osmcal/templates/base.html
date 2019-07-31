@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OSM Calendar</title>
+	<link rel="stylesheet" href="{% static 'osmcal/style.css' %}">
+	{% block head %}
+	{% endblock %}
+</head>
+<body>
+	<header class="header-bar">
+		<a href="/" class="header-home-area">
+			<img class="header-home-icon" src="{% static 'osmcal/osm_logo.png' %}" height="100%">
+			OpenStreetMap Calendar
+		</a>
+		<nav class="navigation-top">
+			<a href="/event/add/"><button class="btn">Add Event</button></a>
+		</nav>
+	</header>
+	<content class="content-main">
+		{% block content %}
+		{% endblock %}
+	</content>
+	<footer class="footer">
+		{% if user.is_authenticated %}You are logged in as {{ user.name }}. <a href="/logout/">Logout</a>{% else %}<a href="/login/">Login</a>{% endif %}
+	</footer>
+</body>
+</html>

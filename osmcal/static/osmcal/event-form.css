@@ -1,0 +1,11 @@
+.event-form label {
+	width: 20%;
+	display: inline-block;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.event-form input, select {
+	width: 70%;
+	margin-bottom: 1em;
+}

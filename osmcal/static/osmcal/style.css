@@ -1,0 +1,165 @@
+@font-face {
+	font-family: "Source Sans";
+	font-weight: normal;
+	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Regular.otf");
+}
+
+@font-face {
+	font-family: "Source Sans";
+	font-weight: bold;
+	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Bold.otf");
+}
+
+body {
+	font-family: "Source Sans", sans-serif;
+	margin: 0;
+}
+
+a {
+	color: #24d;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.btn {
+	background-color: white;
+	border: 2px solid #7EBC6F;
+	color: #7EBC6F;
+	font-size: 12pt;
+	font-weight: bold;
+	padding: 0.5em 1.2em;
+	cursor: pointer;
+}
+
+.content-main {
+	/*width: 50%;*/
+	/*max-width: 600px;*/
+	/*margin: 0 auto;*/
+	display: block;
+	margin-left: 1em;
+	max-width: 600px;
+}
+
+.header-bar {
+	background-color: #F3F3F3;
+	display: block;
+	height: 55px;
+	margin-bottom: 1em;
+	padding: 10px;
+}
+
+.header-home-area, .header-home-area:hover {
+	color: #5A5A5A;
+	display: inline-block;
+	height: 100%;
+	font-size: 18pt;
+	text-decoration: none;
+}
+
+.header-home-icon {
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.navigation-top {
+	display: block;
+	float: right;
+	height: 100%;
+}
+
+.navigation-top a {
+	vertical-align: middle;
+}
+
+.event-list {
+	list-style: none;
+	padding-left: 0;
+}
+
+.event-list a:hover {
+	text-decoration: none;
+}
+
+.event-list-entry:first-child {
+	border-top: 1px solid #DBDBDB;
+}
+
+.event-list-entry {
+	border-bottom: 1px solid #DBDBDB;
+	color: #5A5A5A;
+	font-size: 14pt;
+	padding: 1em 0;
+}
+
+.event-list-entry a {
+	color: inherit;
+}
+
+.event-list-entry-box {
+	align-items: center;
+	display: flex;
+}
+
+.event-entry-main {
+	flex-grow: 2;
+	padding-right: 10px;
+}
+
+.event-entry-name {
+	font-size: 18pt;
+	font-weight: bold;
+	margin: 0;
+}
+
+.event-entry-location {
+	color: #A4A4A4;
+	font-size: 12pt;
+	margin: 0;
+}
+
+.event-entry-date {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.footer {
+	background-color: #F3F3F3;
+	font-size: 90%;
+	margin-top: 2em;
+	padding: 1em;
+}
+
+.event-filter-selector {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	background: url('/static/osmcal/triangle.svg') no-repeat right white;
+	background-origin: content-box;
+	border: 2px solid #7EBC6F;
+	border-radius: 0;
+	color: #7EBC6F;
+	font-size: 12pt;
+	font-weight: bold;
+	padding: 0.5em 1em;
+}
+
+.event-form label {
+	margin-top: 0.5em;
+}
+
+.event-form textarea {
+	vertical-align: top;
+	width: 70%;
+}
+
+.event-form #id_location-map {
+	display: inline-block;
+	vertical-align: top;
+	width: 70%;
+}
+
+.event-form .submit-row input {
+	width: 93%;
+}
