@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
+from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 
 from enum import Enum
@@ -23,7 +24,8 @@ class Event(models.Model):
     whole_day = models.BooleanField(default=False)
 
     location = PointField(blank=True, null=True)
-    location_text = models.CharField(max_length=80, blank=True, null=True)
+    location_address = JSONField(blank=True, null=True)
+
     link = models.URLField(blank=True, null=True)
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
     description = models.TextField(blank=True, null=True)
@@ -31,15 +33,20 @@ class Event(models.Model):
     created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.location_text and self.location:
+        if self.location:
             self.geocode_location()
         super().save(*args, **kwargs)
 
     def geocode_location(self):
-        nr = requests.get('https://nominatim.openstreetmap.org/reverse', params={'format': 'jsonv2', 'lat': self.location.y, 'lon': self.location.x})
-        addr = nr.json()['address']
-        print(addr)
-        self.location_text = ", ".join(filter(lambda x: x is not None, [addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country_code').upper()]))
+        nr = requests.get('https://nominatim.openstreetmap.org/reverse', params={'format': 'jsonv2', 'lat': self.location.y, 'lon': self.location.x, 'accept-language': 'en'})
+        self.location_address = nr.json()['address']
+
+    @property
+    def location_text(self):
+        if not self.location_address:
+            return None
+        addr = self.location_address
+        return ", ".join(filter(lambda x: x is not None, [addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
 
     class Meta:
         indexes = (
