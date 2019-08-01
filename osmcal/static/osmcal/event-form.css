@@ -1,11 +1,34 @@
+.event-form {
+	max-width: 600px;
+}
+
 .event-form label {
-	width: 20%;
+	color: #5A5A5A;
 	display: inline-block;
-	text-align: right;
+	font-weight: bold;
+	margin-top: 0.5em;
 	padding-right: 10px;
+	text-align: right;
+	width: 20%;
 }
 
 .event-form input, select {
-	width: 70%;
 	margin-bottom: 1em;
+	width: 70%;
+}
+
+.event-form textarea {
+	vertical-align: top;
+	width: 70%;
+}
+
+.event-form #id_location-map {
+	display: inline-block;
+	margin-bottom: 1em;
+	vertical-align: top;
+	width: 70%;
+}
+
+.event-form .submit-row input {
+	width: 93%;
 }

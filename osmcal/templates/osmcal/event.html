@@ -1,13 +1,44 @@
 {% extends "base.html" %}
 
+{% load leaflet_tags %}
+
+
+{% block head %}
+	{{ block.super }}
+	{% if event.location %}
+		{% leaflet_js %}
+		{% leaflet_css %}
+		<script>
+			window.addEventListener("map:init", function(e) {
+				/* jshint ignore:start */
+				var marker = new L.marker([{{ event.location.y }}, {{ event.location.x }}]);
+				/* jshing ignore:end */
+				marker.addTo(e.detail.map);
+				e.detail.map.setView(marker.getLatLng(), 12);
+			});
+		</script>
+	{% endif %}
+{% endblock %}
+
 {% block content %}
-	<h1>{{ event.name }}</h1>
+	<div class="event-single-block">
+		<div class="event-single-main">
+			<h1 class="event-single-title">{{ event.name }}</h1>
+			{% if event.location_text %}<p class="event-single-location">{{ event.location_text }}</p>{% endif %}
 
-	<div><a href="/event/{{ event.id }}/change/">Edit event</a></div>
+			<div class="event-single-date">
+				{{ event.start|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %} – {% if event.start.day == event.end.day %}{{ event.end|date:"G:i" }}{% else %}{{ event.end|date:"jS F G:i" }}{% endif %}
+			</div>
 
-	<div>{{ event.start }}</div>
+			<p>{{ event.description }}</p>
+			<p>{% if event.link %}<a href="{{ event.link }}">Link to Website</a>{% endif %}</p>
+		</div>
+		<aside class="event-single-additional">
+			{% if event.location %}
+				{% leaflet_map "yourmap" %}
+			{% endif %}
+		</aside>
+	</div>
 
-	{{ event.description }}
-
-	<div>Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a></div>
+	<div>Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a>, <a href="/event/{{ event.id }}/change/">Edit event</a></div>
 {% endblock %}

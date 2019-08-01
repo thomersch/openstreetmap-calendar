@@ -27,7 +27,7 @@
 			</div>
 			<span class="event-entry-date">
 			{% if event.start.day == event.end.day or not event.end %}
-				{{ event.start|date:"jS F"|safe }}
+				{{ event.start|date:"jS F" }}
 			{% elif event.start.month == event.end.month  %}
 				{{ event.start|date:"jS"}}-{{ event.end|date:"jS F" }}
 			{% else %}

@@ -24,6 +24,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+h1, h2 {
+	color: #5A5A5A;
+}
+
 .btn {
 	background-color: white;
 	border: 2px solid #7EBC6F;
@@ -40,7 +44,6 @@ a:hover {
 	/*margin: 0 auto;*/
 	display: block;
 	margin-left: 1em;
-	max-width: 600px;
 }
 
 .header-bar {
@@ -77,6 +80,7 @@ a:hover {
 .event-list {
 	list-style: none;
 	padding-left: 0;
+	max-width: 600px;
 }
 
 .event-list a:hover {
@@ -145,21 +149,20 @@ a:hover {
 	padding: 0.5em 1em;
 }
 
-.event-form label {
-	margin-top: 0.5em;
+.event-single-title {
+	margin: 0;
 }
 
-.event-form textarea {
-	vertical-align: top;
-	width: 70%;
+.event-single-location {
+	color: #5A5A5A;
+	margin: 0;
 }
 
-.event-form #id_location-map {
-	display: inline-block;
-	vertical-align: top;
-	width: 70%;
+.event-single-block {
+	display: flex;
 }
 
-.event-form .submit-row input {
-	width: 93%;
+.event-single-main, .event-single-additional {
+	flex: 1;
+	padding-right: 1em;
 }
