@@ -30,7 +30,7 @@
 			{% if event.location_text %}<p class="event-single-location">{{ event.location_text }}</p>{% endif %}
 
 			<div class="event-single-date">
-				{{ event.start|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %} – {% if event.start.day == event.end.day %}{{ event.end|date:"G:i" }}{% else %}{{ event.end|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %}{% endif %}
+				{{ event.start|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %}{% if event.start.day == event.end.day %}–{{ event.end|date:"G:i" }}{% else %}–{{ event.end|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %}{% endif %}
 			</div>
 
 			<p>{{ event.description|markdown|safe }}</p>

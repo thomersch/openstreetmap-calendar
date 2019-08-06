@@ -1,0 +1,93 @@
+- model: osmcal.user
+  pk: 1
+  fields:
+    osm_id: 1
+    name: some_dummy_user
+
+- model: osmcal.event
+  pk: 1
+  fields:
+    name: "International OSM Day"
+    start: "2029-05-01 20:00:00"
+    end: "2029-05-01 22:00:00"
+    created_by: 1
+
+- model: osmcal.event
+  pk: 2
+  fields:
+    name: みんなで東淀川区の魅力を発信しよう!
+    start: "2029-08-18 20:00:00"
+    whole_day: yes
+    location_address:
+      city: Osaka
+      country: Japan
+    location: POINT(135.5023 34.6931)
+    created_by: 1
+
+- model: osmcal.event
+  pk: 3
+  fields:
+    name: "Bonner Stammtisch"
+    start: "2029-08-20 19:30:00"
+    end: "2029-08-20 22:00:00"
+    location_address:
+      street: Dottendorfer Straße
+      city: Bonn
+      state: NRW
+      country: Germany
+    location: POINT(7.12115 50.70660)
+    description: >
+      Mit einem regelmäßigen Stammtisch kann man die Interessen hier in Bonn und Umgebung bündeln und so die Datenqualität steigern, das Tagging vereinheitlichen und regionale Schwerpunkte neben den individuellen Interessen bilden.
+
+
+      Seit 2012 gilt:
+
+
+      * jeweils am 3. Dienstag des Monats
+
+      * 19:00 Uhr
+
+      * Beamer: vor Ort verfügbar.
+
+      * Der Tisch soll auf "OSM-Stammtisch" reserviert sein.
+
+      Die **BTHV Club-Gastronomie (Dotty´s vorher Sträter's)** Christian-Miesen-Strasse 1, 53129 Bonn-Dottendorf, Karte) ist mit dem ÖPNV erreichbar:
+
+      - Stadtbahn-Linie 61 und 62 bis Endhaltestelle "Quirinusplatz", ca. 15 Min. Fahrzeit vom HBf > ca. 700 Meter Fußweg entlang der Dottendorfer Straße
+      
+      - Stadtbahn-Linie 16, 63, 66 ab Hauptbahnhof oder Linien 16, 63 ab Bad Godesberg bis Haltestelle "Deutsche Telekom/Ollenhauerstraße", jeweils ca. 8-9 Min. Fahrzeit > ca. 12. Min Fußweg entlang der Ollenhauerstraße und der Dottendorfer Straße (ab dem Bahnübergang)
+
+      - Bus: Von Bad Godesberg aus Linie 612 Richtung Dottendorf/Hindenburgplatz, an der Haltestelle "Stephanstraße" aussteigen > ca. 400 Meter Fußweg entlang der Dottendorfer Straße.
+
+      - Die Buslinien 630 und 631 halten etwas günstiger (630: In der Raste, schräg gegenüber, 631: Servatiusstraße, ca. 200 Meter Fußweg) aber verkehren unregelmäßig (ggfs. nur Hinfahrt), sind Querverbindungen und erfordern daher ab Hauptbahnhof resp. Bad Godesberg umsteigen. Bitte beim VRS prüfen, ob es eine passende Verbindung gibt (als Ziel "Christian-Miesen-Straße 1" angeben).
+      - Fahrrad: Parkplätze vor Ort vorhanden
+
+      - Auto: Parken kann man vor Ort oder in der Christian-Miesen-Straße.
+    created_by: 1
+
+- model: osmcal.event
+  pk: 4
+  fields:
+    name: "State of the Map"
+    start: "2029-09-20 08:00:00"
+    end: "2029-09-24 08:00:00"
+    whole_day: yes
+    location: POINT(13.41641 52.52065)
+    location_address:
+      street: Alexanderstraße
+      city: Berlin
+      country: Germany
+    created_by: 1
+
+- model: osmcal.event
+  pk: 5
+  fields:
+    name: OSM x Wikidata
+    start: "2029-08-20 17:00:00"
+    end: "2029-08-20 19:00:00"
+    location_address:
+      housenumber: 4F-A1, No. 106, Sec. 5
+      street: Xinyi Rd
+      city: Taipei City
+      country: Taiwan
+    created_by: 1
