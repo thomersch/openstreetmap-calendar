@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
-{% load leaflet_tags %}
+{% load leaflet_tags markdown %}
 
+{% block title %}
+	{{ event.name }}
+{% endblock %}
 
 {% block head %}
 	{{ block.super }}
@@ -27,18 +30,24 @@
 			{% if event.location_text %}<p class="event-single-location">{{ event.location_text }}</p>{% endif %}
 
 			<div class="event-single-date">
-				{{ event.start|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %} – {% if event.start.day == event.end.day %}{{ event.end|date:"G:i" }}{% else %}{{ event.end|date:"jS F G:i" }}{% endif %}
+				{{ event.start|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %} – {% if event.start.day == event.end.day %}{{ event.end|date:"G:i" }}{% else %}{{ event.end|date:"jS F" }}{% if not event.whole_day %} {{ event.start|date:"G:i" }}{% endif %}{% endif %}
 			</div>
 
-			<p>{{ event.description }}</p>
-			<p>{% if event.link %}<a href="{{ event.link }}">Link to Website</a>{% endif %}</p>
+			<p>{{ event.description|markdown|safe }}</p>
+			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a>{% endif %}</p>
 		</div>
 		<aside class="event-single-additional">
 			{% if event.location %}
 				{% leaflet_map "yourmap" %}
 			{% endif %}
+
+			<div class="event-single-side-buttons">
+				<a href="/event/{{ event.id }}/change/"><button class="btn">Edit event</button></a>
+			</div>
 		</aside>
 	</div>
 
-	<div>Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a>, <a href="/event/{{ event.id }}/change/">Edit event</a></div>
+	<div>
+		Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a>
+	</div>
 {% endblock %}

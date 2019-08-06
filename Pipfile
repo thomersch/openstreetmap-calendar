@@ -11,6 +11,7 @@ requests = "~=2.22.0"
 requests-oauthlib = "~=1.2"
 django-leaflet = "~=0.24"
 Django = "~=2.2"
+markdown2 = "~=2.3.8"
 
 [requires]
 python_version = "3.7"

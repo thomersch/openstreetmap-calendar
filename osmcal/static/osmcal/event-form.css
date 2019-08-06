@@ -13,11 +13,13 @@
 }
 
 .event-form input, select {
+	font-size: 12pt;
 	margin-bottom: 1em;
 	width: 70%;
 }
 
 .event-form textarea {
+	font-size: 12pt;
 	vertical-align: top;
 	width: 70%;
 }

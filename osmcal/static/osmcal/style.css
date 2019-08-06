@@ -38,6 +38,14 @@ h1, h2 {
 	cursor: pointer;
 }
 
+.hide-wide {
+	display: none;
+}
+
+.hide-slim {
+	display: inherit;
+}
+
 .content-main {
 	/*width: 50%;*/
 	/*max-width: 600px;*/
@@ -80,6 +88,7 @@ h1, h2 {
 .event-list {
 	list-style: none;
 	padding-left: 0;
+	padding-right: 1em;
 	max-width: 600px;
 }
 
@@ -165,4 +174,9 @@ h1, h2 {
 .event-single-main, .event-single-additional {
 	flex: 1;
 	padding-right: 1em;
+}
+
+.event-single-side-buttons {
+	margin-top: 1em;
+	text-align: right;
 }

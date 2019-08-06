@@ -2,8 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>OSM Calendar</title>
+	<title>{% block title %}OSM Calendar{% endblock %}</title>
 	<link rel="stylesheet" href="{% static 'osmcal/style.css' %}">
+	<link rel="stylesheet" media="screen and (max-width: 800px)" href="{% static 'osmcal/style-mobile.css' %}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	{% block head %}
 	{% endblock %}
 </head>
@@ -11,7 +13,8 @@
 	<header class="header-bar">
 		<a href="/" class="header-home-area">
 			<img class="header-home-icon" src="{% static 'osmcal/osm_logo.png' %}" height="100%">
-			OpenStreetMap Calendar
+			<span class="hide-slim">OpenStreetMap Calendar</span>
+			<span class="hide-wide">Calendar</span>
 		</a>
 		<nav class="navigation-top">
 			<a href="/event/add/"><button class="btn">Add Event</button></a>
