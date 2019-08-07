@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 
+{% block head %}
+	<script type="text/javascript">
+		function country_filter_changed(e) {
+			if (e.value == "anywhere") {
+				window.location = "/";
+			} else if (e.value == "nearby") {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var lat = Math.round(position.coords.latitude * 10000)/10000;
+					var lon = Math.round(position.coords.longitude * 10000)/10000;
+					window.location = "/?around="+lat+","+lon;
+				});
+			} else {
+				window.location = "/?in="+e.value;
+			}
+			console.log(window.location, e.value);
+		}
+	</script>
+{% endblock %}
+
 {% block content %}
 	<!--
 		TODO: Group by months
@@ -8,15 +27,16 @@
 	{% for g in event_groups %}
 		{{ g.grouper }}
 	{% endfor %}
- 	-->
- 	<div class="event-filter-controls">
- 		<select class="event-filter-selector">
- 			<option>Anywhere</option>
- 			<option>Nearby</option>
- 			<option>Europe</option>
- 			<option>North America</option>
- 		</select>
- 	</div>
+	-->
+	<div class="event-filter-controls">
+		<select class="event-filter-selector" onchange="country_filter_changed(this);">
+			<option value="anywhere">Anywhere</option>
+			<option {% if filter.around %}selected{% endif %} value="nearby">Nearby</option>
+			{% for country in country_list %}
+			<option {% if filter.in == country %}selected{% endif %} value="{{ country }}">{{ country }}</option>
+			{% endfor %}
+		</select>
+	</div>
 
 	<ul class="event-list">
 	{% for event in events %}

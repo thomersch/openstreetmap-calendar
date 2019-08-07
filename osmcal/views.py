@@ -2,6 +2,8 @@ from xml.etree import ElementTree as ET
 
 from django.conf import settings
 from django.contrib.auth import login as dj_login, logout as dj_logout
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
 from django.db.models import Q
 from django.urls import reverse
 from django.http import HttpResponse
@@ -16,7 +18,20 @@ from .models import Event, User
 
 def homepage(request):
     upcoming_events = Event.objects.filter(Q(start__gte=timezone.now()) | Q(end__gte=timezone.now())).order_by('start')
-    return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events})
+
+    filter_to_country = request.GET.get('in', None)
+    if filter_to_country:
+        upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
+
+    filter_around = request.GET.get('around', None)
+    if filter_around:
+        filter_around = [float(x) for x in filter_around.split(',')]
+        pt = Point(filter_around[1], filter_around[0], srid=4326)
+        upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000) # distance in meter
+
+    country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
+
+    return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': filter_to_country, 'around': filter_around}})
 
 
 def event(request, event_id):

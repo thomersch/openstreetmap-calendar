@@ -155,6 +155,7 @@ h1, h2 {
 	color: #7EBC6F;
 	font-size: 12pt;
 	font-weight: bold;
+	min-width: 9em;
 	padding: 0.5em 1em;
 }
 
