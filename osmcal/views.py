@@ -2,6 +2,7 @@ from xml.etree import ElementTree as ET
 
 from django.conf import settings
 from django.contrib.auth import login as dj_login, logout as dj_logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.db.models import Q
@@ -40,10 +41,7 @@ def event(request, event_id):
 
 
 def login(request):
-    if request.user.is_authenticated:
-        # TODO
-        return HttpResponse("You are logged in as {}. <a href='/'>Go to homepage.</a>".format(request.user.name))
-    return HttpResponse("<a href='/oauth/start/'>Login using OSM</a>")
+    return render(request, 'osmcal/login.html', context={'next': request.GET.get('next', None)})
 
 
 def logout(request):
@@ -51,6 +49,7 @@ def logout(request):
     return redirect("/")
 
 
+@login_required
 def event_edit(request, event_id=None):
     form = forms.EventForm()
     if event_id is not None:
@@ -79,7 +78,9 @@ def oauth_start(request):
         client_secret=settings.OAUTH_OPENSTREETMAP_SECRET
     )
     req_token = osm.fetch_request_token('https://www.openstreetmap.org/oauth/request_token')
-    request.session["oauth_params"] = req_token
+    request.session['oauth_params'] = req_token
+    if request.GET.get('next', None):
+        request.session['next'] = request.GET['next']
     auth_url = osm.authorization_url('https://www.openstreetmap.org/oauth/authorize')
     return redirect(auth_url)
 
@@ -107,4 +108,8 @@ def oauth_callback(request):
 
     dj_login(request, u)
     request.session.delete("oauth_params")
+
+    next_redir = request.session.pop('next', None)
+    if next_redir:
+        return redirect(next_redir)
     return redirect('/login/')

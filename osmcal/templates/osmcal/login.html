@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Login to OpenStreetMap Calendar
+{% endblock %}
+
+{% block content %}
+	{% if user.is_autenticated %}
+		<div>You are logged in as {{ user.name }}.</div>
+	{% elif next %}
+		<div>You need to be logged in to do that.</div>
+	{% endif %}
+
+	{% if not user.is_authenticated %}
+		<a href='/oauth/start/{% if next %}?next={{ next }}{% endif %}'><button class="btn">Login using your OpenStreetMap account</button></a>
+	{% endif %}
+{% endblock %}
