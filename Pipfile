@@ -13,6 +13,10 @@ requests-oauthlib = "~=1.2"
 django-leaflet = "~=0.24"
 Django = "~=2.2"
 markdown2 = "~=2.3.8"
+gunicorn = "~=19.9.0"
 
 [requires]
 python_version = "3.7"
+
+[scripts]
+gunicorn = "gunicorn osmcal.wsgi"
