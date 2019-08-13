@@ -14,6 +14,7 @@ django-leaflet = "~=0.24"
 Django = "~=2.2"
 markdown2 = "~=2.3.8"
 gunicorn = "~=19.9.0"
+python-dotenv = "~=0.10.3"
 
 [requires]
 python_version = "3.7"
