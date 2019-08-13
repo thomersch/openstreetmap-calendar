@@ -19,4 +19,7 @@ gunicorn = "~=19.9.0"
 python_version = "3.7"
 
 [scripts]
+migrate = "./manage.py migrate"
+staticfiles = "./manage.py collectstatic"
 gunicorn = "gunicorn osmcal.wsgi"
+devserver = "./manage.py runserver"
