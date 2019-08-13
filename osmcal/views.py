@@ -1,4 +1,5 @@
-from xml.etree import ElementTree as ET
+from datetime import timedelta
+from textwrap import wrap
 
 from django.conf import settings
 from django.contrib.auth import login as dj_login, logout as dj_logout
@@ -10,8 +11,10 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.views import View
 
 from requests_oauthlib import OAuth1Session
+from xml.etree import ElementTree as ET
 
 from . import forms
 from .models import Event, User
@@ -70,6 +73,37 @@ def event_edit(request, event_id=None):
         return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
     return render(request, 'osmcal/event_form.html', context={'form': form})
+
+
+class EventICal(View):
+    def ical_line_format(self, ln):
+        return '\r\n\t'.join(wrap(ln.replace(',', '\,').replace('\n', '\\n'), 72, drop_whitespace=False))
+
+    def get(self, request, event_id):
+        evt = Event.objects.get(id=event_id)
+
+        lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//OSM Calendar', 'BEGIN:VEVENT']
+        lines.append('UID:OSMCAL-{}'.format(evt.id))
+
+        lines.append('DTSTAMP:{:%Y%m%dT%H%M%S}'.format(evt.start))
+        if evt.whole_day:
+            lines.append('DTSTART;VALUE=DATE:{:%Y%m%d}'.format(evt.start))
+            if evt.end:
+                lines.append('DTEND;VALUE=DATE:{:%Y%m%d}'.format(evt.end + timedelta(days=1)))
+        else:
+            lines.append('DTSTART:{:%Y%m%dT%H%M%S}'.format(evt.start))
+            if evt.end:
+                lines.append('DTEND:{:%Y%m%dT%H%M%S}'.format(evt.end))
+
+        lines.append('SUMMARY:{}'.format(evt.name))
+        if evt.description:
+            lines.append('DESCRIPTION:{}'.format(evt.description))
+        if evt.location:
+            lines.append('GEO:{};{}'.format(evt.location.x, evt.location.y))
+        if evt.location_address:
+            lines.append('LOCATION:{}'.format(evt.location_detailed_addr))
+        lines += ['END:VEVENT', 'END:VCALENDAR']
+        return HttpResponse('\r\n'.join(map(self.ical_line_format, lines)) + '\r\n', content_type="text/calendar")
 
 
 def oauth_start(request):

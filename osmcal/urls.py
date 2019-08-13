@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 
 # from django.conf.urls import url
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.homepage),
     path('event/add/', views.event_edit),
     path('event/<int:event_id>/', views.event, name='event'),
+    path('event/<int:event_id>.ics', views.EventICal.as_view(), name='event-ical'),
     path('event/<int:event_id>/change/', views.event_edit, name='event-change'),
 
     path('admin/', admin.site.urls),
