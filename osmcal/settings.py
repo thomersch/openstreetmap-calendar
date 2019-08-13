@@ -55,6 +55,7 @@ WSGI_APPLICATION = 'osmcal.wsgi.application'
 
 DATABASES = {
     'default': {
+        'HOST': os.getenv('OSMCAL_PG_HOST', ''),
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'osmcal',
         'USER': 'osmcal',
