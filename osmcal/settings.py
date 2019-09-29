@@ -98,3 +98,12 @@ OAUTH_OPENSTREETMAP_SECRET = os.getenv('OSMCAL_OSM_SECRET', '')
 AUTH_USER_MODEL = 'osmcal.User'
 
 LOGIN_URL = '/login/'
+
+if not DEBUG:
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=os.getenv('OSMCAL_SENTRY_URL'),
+        integrations=[DjangoIntegration()]
+    )
