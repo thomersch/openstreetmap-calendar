@@ -34,3 +34,10 @@
 .event-form .submit-row input {
 	width: 93%;
 }
+
+.leaflet-control-geocoder-form input {
+	height: 14px;
+	font-size: 12px;
+	margin-bottom: inherit;
+	width: inherit;
+}

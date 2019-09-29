@@ -9,6 +9,8 @@
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/flatpickr.min.css' %}">
 	<script src="{% static 'osmcal/thirdparty/flatpickr.js' %}"></script>
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
+	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
+	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -20,5 +22,17 @@
 
 	<script>
 		flatpickr(".datepicker-flat", {'enableTime': true, 'time_24hr': true, 'locale': {'firstDayOfWeek': 1}});
+
+		window.addEventListener("map:init", function (e) {
+			var leafletmap = e.detail.map;
+			var osmGeocoder = new L.Control.OSMGeocoder({
+				collapsed: false,
+				position: 'bottomright',
+				placeholder: 'Search for Location',
+				text: 'Find'
+			});
+			
+			leafletmap.addControl(osmGeocoder);
+		}, false);
 	</script>
 {% endblock %}
