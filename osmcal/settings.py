@@ -107,3 +107,8 @@ if not DEBUG:
         dsn=os.getenv('OSMCAL_SENTRY_URL'),
         integrations=[DjangoIntegration()]
     )
+
+LEAFLET_CONFIG = {
+    'RESET_VIEW': False,
+    'MAX_ZOOM': 19
+}
