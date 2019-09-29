@@ -161,6 +161,7 @@ h1, h2 {
 
 .event-single-title {
 	margin: 0;
+	line-height: 1em;
 }
 
 .event-single-location {
@@ -180,4 +181,9 @@ h1, h2 {
 .event-single-side-buttons {
 	margin-top: 1em;
 	text-align: right;
+}
+
+.event-single-date {
+	margin: 1em 0;
+	font-size: 110%;
 }
