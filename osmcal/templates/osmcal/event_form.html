@@ -29,10 +29,23 @@
 				collapsed: false,
 				position: 'bottomright',
 				placeholder: 'Search for Location',
-				text: 'Find'
+				text: 'Find',
+				callback: function(results) {
+					var bbox = results[0].boundingbox,
+					first = new L.LatLng(bbox[0], bbox[2]),
+					second = new L.LatLng(bbox[1], bbox[3]),
+					bounds = new L.LatLngBounds([first, second]);
+					this._map.fitBounds(bounds, {maxZoom: 18});
+
+					var fs = new geodjango_id_location.store_class(geodjango_id_location.fieldid);
+					var marker = new L.Marker([results[0].lat, results[0].lon]);
+					marker.addTo(this._map);
+					fs.save(marker);
+					marker.editing.enable();
+				}
 			});
 			
-			leafletmap.addControl(osmGeocoder);
+			leafletmap.addControl(osmGeocoder);	
 		}, false);
 	</script>
 {% endblock %}
