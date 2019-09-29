@@ -46,7 +46,7 @@ class Event(models.Model):
         if not self.location_address:
             return None
         addr = self.location_address
-        return ", ".join(filter(lambda x: x is not None, [addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
+        return ", ".join(filter(lambda x: x is not None, [addr.get('village'), addr.get('town'), addr.get('city'), addr.get('state'), addr.get('country')]))
 
     @property
     def location_detailed_addr(self):
