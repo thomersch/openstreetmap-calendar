@@ -41,3 +41,7 @@
 	margin-bottom: inherit;
 	width: inherit;
 }
+
+.errorlist {
+	display: none;
+}

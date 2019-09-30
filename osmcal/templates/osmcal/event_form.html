@@ -15,6 +15,15 @@
 
 {% block content %}
 	<form class="event-form" method="POST">
+		{% if form.is_bound and not form.is_valid %}
+			<div class="formerror">
+				There is an error in the following fields:
+				{% for err in form.errors %}
+					{{ err }}
+				{% endfor %}
+			</div>
+		{% endif %}
+
 		{% csrf_token %}
 		{{ form }}
 		<p class="submit-row"><input class="btn" type="submit" value="Save Event"></p>

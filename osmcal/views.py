@@ -70,7 +70,7 @@ def event_edit(request, event_id=None):
                 evt.save()
             else:
                 form.save()
-        return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
+            return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
     return render(request, 'osmcal/event_form.html', context={'form': form})
 
