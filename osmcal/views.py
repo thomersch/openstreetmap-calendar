@@ -6,6 +6,7 @@ from django.contrib.auth import login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
+from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.urls import reverse
 from django.http import HttpResponse
@@ -20,22 +21,48 @@ from . import forms
 from .models import Event, User
 
 
-def homepage(request):
-    upcoming_events = Event.objects.filter(Q(start__gte=timezone.now()) | Q(end__gte=timezone.now())).order_by('start')
+class EventListView(View):
+    def get_queryset(self, params):
+        upcoming_events = Event.objects.filter(Q(start__gte=timezone.now()) | Q(end__gte=timezone.now())).order_by('start')
 
-    filter_to_country = request.GET.get('in', None)
-    if filter_to_country:
-        upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
+        filter_to_country = params.get('in', None)
+        if filter_to_country:
+            upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
 
-    filter_around = request.GET.get('around', None)
-    if filter_around:
-        filter_around = [float(x) for x in filter_around.split(',')]
-        pt = Point(filter_around[1], filter_around[0], srid=4326)
-        upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000) # distance in meter
+        filter_around = params.get('around', None)
+        if filter_around:
+            filter_around = [float(x) for x in filter_around.split(',')]
+            pt = Point(filter_around[1], filter_around[0], srid=4326)
+            upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000) # distance in meter
 
-    country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
+        return upcoming_events
 
-    return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': filter_to_country, 'around': filter_around}})
+
+class Homepage(EventListView):
+    def get(self, request, *args, **kwargs):
+        upcoming_events = self.get_queryset(request.GET)
+
+        country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
+
+        return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': request.GET.get('in', None), 'around': request.GET.get('around', None)}})
+
+
+class EventFeed(Feed, EventListView):
+    title = 'OpenStreetMap Events'
+    link = '/events.rss'
+    description_template = 'osmcal/feeds/event_feed.html'
+
+    def get_object(self, request, **kwargs):
+        return self.get_queryset(request.GET)
+
+    def items(self, obj):
+        return obj
+
+    def item_title(self, item):
+        return item.name
+
+    def item_link(self, item):
+        return reverse('event', kwargs={'event_id': item.id})
 
 
 def event(request, event_id):

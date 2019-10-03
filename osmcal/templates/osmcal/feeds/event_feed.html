@@ -1,0 +1,4 @@
+{% spaceless %}<h2>{{ obj.title }}</h2>
+<p>{% include "osmcal/date.txt" with event=obj %}</p>
+{% if obj.location_text %}<p>{{ obj.location_text }}</p>{% endif %}
+<div>{{ obj.description }}</div>{% endspaceless %}

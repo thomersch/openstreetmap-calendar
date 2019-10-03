@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block head %}
+	<link rel="alternate" type="application/rss+xml" title="Event Feed" href="/events.rss">
+
 	<script type="text/javascript">
 		function country_filter_changed(e) {
 			if (e.value == "anywhere") {
