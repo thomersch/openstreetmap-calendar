@@ -20,6 +20,8 @@
 	</script>
 {% endblock %}
 
+{% block title %}{% if filter.in %}OSM Events in {{ filter.in }}{% else %}OSM Calsssendar{% endif %}{% endblock %}
+
 {% block content %}
 	<!--
 		TODO: Group by months
