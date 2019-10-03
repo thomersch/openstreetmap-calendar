@@ -2,6 +2,9 @@
 
 {% block head %}
 	<link rel="alternate" type="application/rss+xml" title="Event Feed" href="/events.rss">
+	{% if filter.in %}
+	<link rel="alternate" type="application/rss+xml" title="Event Feed for {{ filter.in }}" href="/events.rss?in={{ filter.in }}">
+	{% endif %}
 
 	<script type="text/javascript">
 		function country_filter_changed(e) {
