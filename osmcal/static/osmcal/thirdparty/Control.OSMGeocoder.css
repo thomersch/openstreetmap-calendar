@@ -12,7 +12,6 @@
 }
 
 .leaflet-control-geocoder a {
-	background-image: url(images/geocoder.png);
 	width: 36px;
 	height: 36px;
 }

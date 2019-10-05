@@ -11,7 +11,7 @@
 }
 
 body {
-	font-family: "Source Sans", sans-serif;
+	font-family: "Source Sans Pro", "Source Sans", sans-serif; /* if Source Sans Pro is installed, it won't be loaded from remote */
 	margin: 0;
 }
 
