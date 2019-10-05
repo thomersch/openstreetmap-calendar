@@ -3,7 +3,7 @@
 	{% if not event.whole_day %}
 		 {{ event.start|date:"G:i" }}
 	{% endif %}
-	{% if event.end and event.start.day == event.end.day %}– {{ event.end|date:"G:i" }}
+	{% if event.end and event.start.day == event.end.day %} – {{ event.end|date:"G:i" }}
 	{% elif event.end %}
 		 – {{ event.end|date:"jS F" }}{% if event.end|date:"Y" != current_year %} {{ event.end|date:"Y" }}{% endif %}
 		{% if not event.whole_day %}
