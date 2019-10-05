@@ -36,7 +36,7 @@
 			</div>
 
 			<p>{{ event.description|markdown|safe }}</p>
-			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a>{% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
+			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
 		</div>
 		<aside class="event-single-additional">
 			{% if event.location %}
