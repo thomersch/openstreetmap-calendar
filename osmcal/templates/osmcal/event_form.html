@@ -30,7 +30,29 @@
 	</form>
 
 	<script>
-		flatpickr(".datepicker-flat", {'enableTime': true, 'time_24hr': true, 'locale': {'firstDayOfWeek': 1}});
+		var fp = flatpickr(".datepicker-flat", {
+			enableTime: true,
+			time_24hr: true,
+			locale: {'firstDayOfWeek': 1},
+			onChange: function(selectedDates, dateStr, instance) {
+				var seldat = selectedDates[0];
+				for (var i = fp.length - 1; i >= 0; i--) {
+					fp[i].changeMonth(seldat.getMonth(), false);
+					// TODO: also change year
+				}
+    		}
+		});
+
+		document.getElementsByName("whole_day").item(0).addEventListener('input', function(evt) {
+			for (var i = fp.length - 1; i >= 0; i--) {
+				fp[i].config.enableTime = !evt.target.checked;
+				if(evt.target.checked) {
+					fp[i].config.dateFormat = 'Y-m-d';
+				} else {
+					fp[i].config.dateFormat = 'Y-m-d H:i';
+				}
+			}
+		});
 
 		window.addEventListener("map:init", function (e) {
 			var leafletmap = e.detail.map;
