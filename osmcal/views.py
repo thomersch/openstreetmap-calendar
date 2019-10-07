@@ -12,13 +12,15 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic.base import TemplateView
 
 from requests_oauthlib import OAuth1Session
 from xml.etree import ElementTree as ET
 
 from . import forms
-from .models import Event, User
+from .models import Event, EventParticipation, User
 
 
 class EventListView(View):
@@ -68,6 +70,14 @@ class EventFeed(Feed, EventListView):
 def event(request, event_id):
     event = Event.objects.get(id=event_id)
     return render(request, 'osmcal/event.html', context={'event': event})
+
+
+class JoinEvent(View):
+    @method_decorator(login_required)
+    def post(self, request, event_id):
+        evt = Event.objects.get(id=event_id)
+        EventParticipation.objects.create(event=evt, user=request.user)
+        return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
 def login(request):

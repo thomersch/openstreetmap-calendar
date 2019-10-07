@@ -1,4 +1,4 @@
-{% load tabless %}{% tabless %}
+{% now "Y" as current_year %}{% load tabless %}{% tabless %}
 {{ event.start|date:"jS F" }}
 	{% if not event.whole_day %}
 		 {{ event.start|date:"G:i" }}

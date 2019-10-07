@@ -13,6 +13,7 @@ urlpatterns = [
     path('event/<int:event_id>/', views.event, name='event'),
     path('event/<int:event_id>.ics', views.EventICal.as_view(), name='event-ical'),
     path('event/<int:event_id>/change/', views.event_edit, name='event-change'),
+    path('event/<int:event_id>/join/', views.JoinEvent.as_view(), name='event-join'),
     path('events.rss', views.EventFeed(), name='event-rss'),
 
     path('admin/', admin.site.urls),

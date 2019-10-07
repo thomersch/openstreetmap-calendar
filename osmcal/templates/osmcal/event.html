@@ -30,13 +30,16 @@
 			{% if event.location_text %}<p class="event-single-location">{{ event.location_text }}</p>{% endif %}
 
 			<div class="event-single-date">
-				{% now "Y" as current_year %}
-
 				{% include "osmcal/date.txt" %}
 			</div>
 
 			<p>{{ event.description|markdown|safe }}</p>
 			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
+
+			<form action="{% url 'event-join' event.id %}" method="POST">
+				{% csrf_token %}
+				<button class="btn">Join this Event</button>
+			</form>
 		</div>
 		<aside class="event-single-additional">
 			{% if event.location %}
@@ -44,7 +47,7 @@
 			{% endif %}
 
 			<div class="event-single-side-buttons">
-				<a href="/event/{{ event.id }}/change/"><button class="btn">Edit event</button></a>
+				<a href="{% url 'event-change' event.id %}"><button class="btn">Edit event</button></a>
 			</div>
 		</aside>
 	</div>

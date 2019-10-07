@@ -62,6 +62,11 @@ class Event(models.Model):
         )
 
 
+class EventParticipation(models.Model):
+    event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+
+
 class User(AbstractUser):
     osm_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
