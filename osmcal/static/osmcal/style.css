@@ -187,3 +187,12 @@ h1, h2 {
 	margin: 1em 0;
 	font-size: 110%;
 }
+
+.text {
+	display: block;
+	max-width: 600px;
+}
+
+.event-single-participants {
+	margin-top: 1em;
+}

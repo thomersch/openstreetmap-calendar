@@ -40,6 +40,16 @@
 				{% csrf_token %}
 				<button class="btn">Join this Event</button>
 			</form>
+
+			<div class="event-single-participants">
+				{% with event.participation.count as participants %}
+					{% if participants != 0 %}
+						{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+						{% if participants > 3 %}and {{ participants|add:-3}} others {% endif %}
+						{% if participants > 1 %}are{% else %}is{% endif %} joining.
+					{% endif %}
+				{% endwith %}
+			</div>
 		</div>
 		<aside class="event-single-additional">
 			{% if event.location %}
