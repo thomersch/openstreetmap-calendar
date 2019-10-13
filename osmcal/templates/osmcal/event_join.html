@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1 class="event-single-title">Join <a href="{% url 'event' event.id %}">{{ event.name }}</a></h1>
+	On {% include "osmcal/date.txt" %}
+
+	<form action="{% url 'event-join' event.id %}" method="POST" class="event-single-join">
+		{% csrf_token %}
+		<button class="btn">Attend {{ event.name }}</button>
+	</form>
+{% endblock %}

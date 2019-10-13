@@ -88,6 +88,10 @@ class EventParticipants(TemplateView):
 
 class JoinEvent(View):
     @method_decorator(login_required)
+    def get(self, request, event_id):
+        return render(request, 'osmcal/event_join.html', context={'event': Event.objects.get(id=event_id)})
+
+    @method_decorator(login_required)
     def post(self, request, event_id):
         evt = Event.objects.get(id=event_id)
         EventParticipation.objects.create(event=evt, user=request.user)
