@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+	OpenStreetMap Calendar Manual
+{% endblock %}
+
+{% block content %}
+{% load markdown %}
+<content class="text">
+{% markdownify %}
+
+# OpenStreetMap Calendar Documentation
+
+## RSS
+There are RSS Feeds: One global for all upcoming events, and one for each country. The base URL is `event.rss`. If only events in a certain country shall be returned, filters can be appended, e.g. `event.rss?in=Germany`.
+
+{% endmarkdownify %}
+</content>
+{% endblock %}

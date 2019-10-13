@@ -26,5 +26,7 @@ urlpatterns = [
     path('oauth/start/', views.oauth_start, name='oauth-start'),
     path('oauth/callback/', views.oauth_callback, name='oauth-callback'),
 
+    path('documentation/', views.Documentation.as_view(), name='api-manual'),
+
     url('', include('django_prometheus.urls')),
 ]
