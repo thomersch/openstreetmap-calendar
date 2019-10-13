@@ -1,8 +1,44 @@
 - model: osmcal.user
-  pk: 1
   fields:
     osm_id: 1
     name: some_dummy_user
+    username: osm_1
+
+- model: osmcal.user
+  fields:
+    osm_id: 200
+    name: Jacques
+    username: osm_200
+
+- model: osmcal.user
+  fields:
+    osm_id: 300
+    name: Edith
+    username: osm_300
+
+- model: osmcal.user
+  fields:
+    osm_id: 400
+    name: Natasha
+    username: osm_400
+
+- model: osmcal.user
+  fields:
+    osm_id: 500
+    name: Karl
+    username: osm_500
+
+- model: osmcal.user
+  fields:
+    osm_id: 600
+    name: Linn
+    username: osm_600
+
+- model: osmcal.user
+  fields:
+    osm_id: 700
+    name: Kay
+    username: osm_700
 
 - model: osmcal.event
   pk: 1
@@ -99,3 +135,63 @@
     start: "2029-08-20 17:00:00"
     end: "2029-08-22 19:00:00"
     created_by: 1
+
+- model: osmcal.eventparticipation
+  pk: 1
+  fields:
+    event_id: 1
+    user_id: 200
+
+- model: osmcal.eventparticipation
+  pk: 2
+  fields:
+    event_id: 1
+    user_id: 300
+
+- model: osmcal.eventparticipation
+  pk: 3
+  fields:
+    event_id: 1
+    user_id: 400
+
+- model: osmcal.eventparticipation
+  pk: 4
+  fields:
+    event_id: 2
+    user_id: 500
+
+- model: osmcal.eventparticipation
+  pk: 5
+  fields:
+    event_id: 3
+    user_id: 200
+
+- model: osmcal.eventparticipation
+  pk: 6
+  fields:
+    event_id: 3
+    user_id: 300
+
+- model: osmcal.eventparticipation
+  pk: 7
+  fields:
+    event_id: 3
+    user_id: 400
+
+- model: osmcal.eventparticipation
+  pk: 8
+  fields:
+    event_id: 3
+    user_id: 500
+
+- model: osmcal.eventparticipation
+  pk: 9
+  fields:
+    event_id: 3
+    user_id: 600
+
+- model: osmcal.eventparticipation
+  pk: 10
+  fields:
+    event_id: 3
+    user_id: 700

@@ -36,20 +36,6 @@
 			<p>{{ event.description|markdown|safe }}</p>
 			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
 
-			<form action="{% url 'event-join' event.id %}" method="POST">
-				{% csrf_token %}
-				<button class="btn">Join this Event</button>
-			</form>
-
-			<div class="event-single-participants">
-				{% with event.participation.count as participants %}
-					{% if participants != 0 %}
-						{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-						{% if participants > 3 %}and {{ participants|add:-3}} others {% endif %}
-						{% if participants > 1 %}are{% else %}is{% endif %} joining.
-					{% endif %}
-				{% endwith %}
-			</div>
 		</div>
 		<aside class="event-single-additional">
 			{% if event.location %}
@@ -57,12 +43,43 @@
 			{% endif %}
 
 			<div class="event-single-side-buttons">
-				<a href="{% url 'event-change' event.id %}"><button class="btn">Edit event</button></a>
+				<a href="{% url 'event-change' event.id %}"><button class="btn">Edit Event</button></a>
+			</div>
+
+			<div class="event-single-participation">
+				<div class="event-single-participants">
+					<h2>Participate</h2>
+					{% with event.participation.count as participants %}
+						{% if participants != 0 %}
+							{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+							{% if participants > 4 %}
+								and {{ participants|add:-3}} others 
+							{% elif participants == 4 %}
+								and {% with event.participation.all|slice:"3:4" as lp %}{{ lp.0.user.name }}{% endwith %}
+							{% endif %}
+							{% if participants > 1 %}are{% else %}is{% endif %} joining.
+
+							{% if participants > 3 %}<a href="{% url 'event-participants' event.id %}">Show all.</a>{% endif %}
+						{% endif %}
+					{% endwith %}
+				</div>
+
+				{% if not user_is_joining %}
+				<form action="{% url 'event-join' event.id %}" method="POST" class="event-single-join">
+					{% csrf_token %}
+					<button class="btn">Attend</button>
+				</form>
+				{% else %}
+				<form action="{% url 'event-unjoin' event.id %}" method="POST" class="event-single-join">
+					{% csrf_token %}
+					<button class="btn btn-negative">Cancel Attendance</button>
+				</form>
+				{% endif %}
 			</div>
 		</aside>
 	</div>
 
-	<div>
+	<div class="event-single-attribution">
 		Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a>
 	</div>
 {% endblock %}

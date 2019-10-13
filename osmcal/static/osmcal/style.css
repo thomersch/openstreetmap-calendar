@@ -32,10 +32,15 @@ h1, h2 {
 	background-color: white;
 	border: 2px solid #7EBC6F;
 	color: #7EBC6F;
+	cursor: pointer;
 	font-size: 12pt;
 	font-weight: bold;
 	padding: 0.5em 1.2em;
-	cursor: pointer;
+}
+
+.btn-negative {
+	border-color: #DD9D53;
+	color: #DD9D53;
 }
 
 .hide-wide {
@@ -191,6 +196,14 @@ h1, h2 {
 .text {
 	display: block;
 	max-width: 600px;
+}
+
+.event-single-join {
+	margin-top: .5em;
+}
+
+.event-single-participants h2 {
+	margin-bottom: .25em;
 }
 
 .event-single-participants {

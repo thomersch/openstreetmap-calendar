@@ -9,3 +9,7 @@
 .hide-wide {
 	display: inherit;
 }
+
+.event-single-attribution {
+	margin-top: 2em;
+}

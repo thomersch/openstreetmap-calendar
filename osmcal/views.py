@@ -69,7 +69,21 @@ class EventFeed(Feed, EventListView):
 
 def event(request, event_id):
     event = Event.objects.get(id=event_id)
-    return render(request, 'osmcal/event.html', context={'event': event})
+
+    user_is_joining = False
+    if not request.user.is_anonymous:
+        user_is_joining = event.participation.filter(user=request.user).exists()
+
+    return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining})
+
+
+class EventParticipants(TemplateView):
+    template_name = 'osmcal/event_participants.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.get(id=kwargs['event_id'])
+        return context
 
 
 class JoinEvent(View):
@@ -77,6 +91,13 @@ class JoinEvent(View):
     def post(self, request, event_id):
         evt = Event.objects.get(id=event_id)
         EventParticipation.objects.create(event=evt, user=request.user)
+        return redirect(reverse('event', kwargs={'event_id': event_id}))
+
+
+class UnjoinEvent(View):
+    @method_decorator(login_required)
+    def post(self, request, event_id):
+        EventParticipation.objects.get(event__id=event_id, user=request.user).delete()
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
@@ -184,3 +205,7 @@ def oauth_callback(request):
     if next_redir:
         return redirect(next_redir)
     return redirect('/login/')
+
+
+class Documentation(TemplateView):
+    template_name = 'osmcal/documentation.html'
