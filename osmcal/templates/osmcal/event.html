@@ -17,6 +17,7 @@
 				var marker = new L.marker([{{ event.location.y }}, {{ event.location.x }}]);
 				/* jshing ignore:end */
 				marker.addTo(e.detail.map);
+				marker.bindPopup("{{ event.location_detailed_addr }}");
 				e.detail.map.setView(marker.getLatLng(), 12);
 			});
 		</script>
@@ -27,7 +28,10 @@
 	<div class="event-single-block">
 		<div class="event-single-main">
 			<h1 class="event-single-title">{{ event.name }}</h1>
-			{% if event.location_text %}<p class="event-single-location">{{ event.location_text }}</p>{% endif %}
+			<p class="event-single-location">
+				{% if event.location_text %}{{ event.location_text }}<br>{% endif %}
+				{% if event.location_name %}{{ event.location_name }}{% endif %}
+			</p>
 
 			<div class="event-single-date">
 				{% include "osmcal/date.txt" %}

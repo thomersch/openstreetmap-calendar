@@ -23,6 +23,7 @@ class Event(models.Model):
     end = models.DateTimeField(blank=True, null=True)
     whole_day = models.BooleanField(default=False)
 
+    location_name = models.CharField(max_length=50, blank=True, null=True)
     location = PointField(blank=True, null=True)
     location_address = JSONField(blank=True, null=True)
 
@@ -54,7 +55,7 @@ class Event(models.Model):
         if not self.location_address:
             return None
         addr = self.location_address
-        return ", ".join(filter(lambda x: x is not None, [addr.get('housenumber'), addr.get('street'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
+        return ", ".join(filter(lambda x: x is not None, [self.location_name, addr.get('housenumber'), addr.get('street'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
 
     class Meta:
         indexes = (
