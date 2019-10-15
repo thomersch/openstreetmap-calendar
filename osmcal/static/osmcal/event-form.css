@@ -2,19 +2,24 @@
 	max-width: 600px;
 }
 
-.event-form label {
+.event-form-leading-label {
+	box-sizing: border-box;
 	color: #5A5A5A;
 	display: inline-block;
 	font-weight: bold;
-	margin-top: 0.5em;
 	padding-right: 10px;
 	text-align: right;
 	width: 20%;
 }
 
+.event-form-line {
+	margin-bottom: 1em;
+}
+
 .event-form input, select {
+	box-sizing: border-box;
 	font-size: 12pt;
-	margin: .75em 0;
+	padding: 10px;
 	width: 70%;
 }
 
@@ -22,6 +27,15 @@
 	font-size: 12pt;
 	vertical-align: top;
 	width: 70%;
+}
+
+.event-form-helptext {
+	color: #666666;
+	display: block;
+	font-size: 90%;
+	margin-left: 20%;
+	margin-top: .25em;
+	padding-left: 3px;
 }
 
 .event-form #id_location-map {

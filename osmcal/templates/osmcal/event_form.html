@@ -18,8 +18,10 @@
 		{% csrf_token %}
 
 		{% for field in form %}
-        <div {% if field.errors %}class="event-form-error"{% endif %}>
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label> {{ field }}
+        <div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
+            <label for="{{ field.id_for_label }}" class="event-form-leading-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
         </div>
     	{% endfor %}
 		<p class="submit-row"><input class="btn" type="submit" value="Save Event"></p>
