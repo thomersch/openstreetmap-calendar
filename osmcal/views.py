@@ -66,6 +66,9 @@ class EventFeed(Feed, EventListView):
     def item_link(self, item):
         return reverse('event', kwargs={'event_id': item.id})
 
+    def item_guid(self, obj):
+        return 'osmcal-event-{}'.format(obj.id)
+
 
 def event(request, event_id):
     event = Event.objects.get(id=event_id)
