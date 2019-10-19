@@ -31,8 +31,6 @@ class Event(models.Model):
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
     description = models.TextField(blank=True, null=True)
 
-    created_by = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
-
     def save(self, *args, **kwargs):
         if self.location:
             self.geocode_location()
@@ -69,7 +67,7 @@ class EventParticipation(models.Model):
 
 
 class EventLog(models.Model):
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='log', on_delete=models.CASCADE)
     data = JSONField()
     created_by = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)

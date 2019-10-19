@@ -84,6 +84,6 @@
 	</div>
 
 	<div class="event-single-attribution">
-		Created by <a href="https://openstreetmap.org/user/{{ event.created_by.name }}">{{ event.created_by.name }}</a>
+		Created by {% for l in authors %}<a href="https://openstreetmap.org/user/{{ l.created_by.name }}">{{ l.created_by.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
 	</div>
 {% endblock %}
