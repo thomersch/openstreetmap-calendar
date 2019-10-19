@@ -16,6 +16,8 @@ urlpatterns = [
     path('event/<int:event_id>/join/', views.JoinEvent.as_view(), name='event-join'),
     path('event/<int:event_id>/unjoin/', views.UnjoinEvent.as_view(), name='event-unjoin'),
     path('event/<int:event_id>/participants/', views.EventParticipants.as_view(), name='event-participants'),
+    path('events/past/', views.PastEvents.as_view(), name='events-past'),
+    path('events/past/<int:page>/', views.PastEvents.as_view(), name='events-past'),
     path('events.rss', views.EventFeed(), name='event-rss'),
 
     path('admin/', admin.site.urls),

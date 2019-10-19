@@ -1,0 +1,19 @@
+<ul class="event-list">
+{% for event in events %}
+	<li class="event-list-entry"><a href="{% url 'event' event.id %}" class="event-list-entry-box">
+		<div class="event-entry-main">
+			<p class="event-entry-name">{{ event.name }}</p>
+			{% if event.location_text %}<p class="event-entry-location">{{ event.location_text }}</p>{% endif %}
+		</div>
+		<span class="event-entry-date">
+		{% if event.start.day == event.end.day or not event.end %}
+			{{ event.start|date:"jS F" }}
+		{% elif event.start.month == event.end.month  %}
+			{{ event.start|date:"jS"}}–{{ event.end|date:"jS F" }}
+		{% else %}
+			{{ event.start|date:"jS F"}}–{{ event.end|date:"jS F" }}
+		{% endif %}
+		</span>
+	</a></li>
+{% endfor %}
+</ul>

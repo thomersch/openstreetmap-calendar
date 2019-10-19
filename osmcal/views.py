@@ -35,7 +35,7 @@ class EventListView(View):
         if filter_around:
             filter_around = [float(x) for x in filter_around.split(',')]
             pt = Point(filter_around[1], filter_around[0], srid=4326)
-            upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000) # distance in meter
+            upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000)  # distance in meter
 
         return upcoming_events
 
@@ -47,6 +47,22 @@ class Homepage(EventListView):
         country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
 
         return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': request.GET.get('in', None), 'around': request.GET.get('around', None)}})
+
+
+class PastEvents(View):
+    PAGESIZE = 20
+
+    def get(self, request, page=1, **kwargs):
+        evts = Event.objects.order_by('-start')
+        has_more = False
+        if evts.count() > page * self.PAGESIZE:
+            has_more = True
+
+        return render(request, 'osmcal/events_past.html', context={
+            'page': page,
+            'events': evts[self.PAGESIZE * (page - 1):self.PAGESIZE * page],
+            'has_more': has_more
+        })
 
 
 class EventFeed(Feed, EventListView):

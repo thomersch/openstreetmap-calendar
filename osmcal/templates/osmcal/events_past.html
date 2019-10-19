@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Past Events</h1>
+	{% include "osmcal/partials/event_list.html" %}
+
+	<div style="max-width: 600px; display: flex;">
+		{% if page != 1 %}
+		<a style="display:inline-block; flex: 1;" href="/events/past/{{ page|add:'-1' }}"><button class="btn">Newer events</button></a>
+		{% endif %}
+		{% if has_more %}
+		<a style="display:inline-block; flex: 1; text-align: right;" href="/events/past/{{ page|add:'1' }}"><button class="btn">Older events</button></a>
+		{% endif %}
+	</div>
+{% endblock %}
