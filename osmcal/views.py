@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
-from django.core import serializers
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
