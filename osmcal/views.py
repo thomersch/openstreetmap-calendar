@@ -53,7 +53,7 @@ class PastEvents(View):
     PAGESIZE = 20
 
     def get(self, request, page=1, **kwargs):
-        evts = Event.objects.order_by('-start')
+        evts = Event.objects.filter(start__lte=timezone.now()).order_by('-start')
         has_more = False
         if evts.count() > page * self.PAGESIZE:
             has_more = True
