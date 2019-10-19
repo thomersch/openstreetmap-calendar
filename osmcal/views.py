@@ -7,10 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
+from django.core import serializers
 from django.db.models import Q
-from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -20,7 +21,7 @@ from requests_oauthlib import OAuth1Session
 from xml.etree import ElementTree as ET
 
 from . import forms
-from .models import Event, EventParticipation, User
+from .models import Event, EventLog, EventParticipation, User
 
 
 class EventListView(View):
@@ -114,13 +115,16 @@ def logout(request):
     return redirect("/")
 
 
-@login_required
-def event_edit(request, event_id=None):
-    form = forms.EventForm()
-    if event_id is not None:
-        form = forms.EventForm(instance=Event.objects.get(id=event_id))
+class EditEvent(View):
+    @method_decorator(login_required)
+    def get(self, request, event_id=None):
+        form = forms.EventForm()
+        if event_id is not None:
+            form = forms.EventForm(instance=Event.objects.get(id=event_id))
+        return render(request, 'osmcal/event_form.html', context={'form': form})
 
-    if request.method == 'POST':
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
         form = forms.EventForm(request.POST)
         if event_id is not None:
             form = forms.EventForm(request.POST, instance=Event.objects.get(id=event_id))
@@ -130,11 +134,14 @@ def event_edit(request, event_id=None):
                 evt = Event.objects.create(**form.cleaned_data)
                 evt.created_by = request.user
                 evt.save()
+                EventLog.objects.create(created_by=request.user, event=evt, data=form.to_json())
             else:
                 form.save()
+                EventLog.objects.create(created_by=request.user, event_id=event_id, data=form.to_json())
+
             return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
-    return render(request, 'osmcal/event_form.html', context={'form': form})
+        return render(request, 'osmcal/event_form.html', context={'form': form})
 
 
 class EventICal(View):

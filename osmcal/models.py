@@ -68,6 +68,13 @@ class EventParticipation(models.Model):
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
 
 
+class EventLog(models.Model):
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    data = JSONField()
+    created_by = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class User(AbstractUser):
     osm_id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
