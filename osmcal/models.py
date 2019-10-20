@@ -53,7 +53,7 @@ class Event(models.Model):
         if not self.location_address:
             return None
         addr = self.location_address
-        return ", ".join(filter(lambda x: x is not None, [self.location_name, addr.get('housenumber'), addr.get('street'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
+        return ", ".join(filter(lambda x: x is not None, [self.location_name, addr.get('house_number'), addr.get('road'), addr.get('suburb'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
 
     class Meta:
         indexes = (
