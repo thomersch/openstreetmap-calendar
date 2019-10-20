@@ -16,9 +16,11 @@
 			<span class="hide-slim">OpenStreetMap Calendar</span>
 			<span class="hide-wide">Calendar</span>
 		</a>
+		{% if request.resolver_match.view_name != "event" %}
 		<nav class="navigation-top">
 			<a href="/event/add/"><button class="btn">Add Event</button></a>
 		</nav>
+		{% endif %}
 	</header>
 	<content class="content-main">
 		{% block content %}
