@@ -150,7 +150,7 @@ h1, h2 {
 	padding: 1em;
 }
 
-.event-filter-selector {
+.select-dropdown {
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	background: url('/static/osmcal/triangle.svg') no-repeat right white;

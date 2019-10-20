@@ -163,6 +163,30 @@ class EditEvent(View):
         return render(request, 'osmcal/event_form.html', context={'form': form})
 
 
+class DuplicateEvent(EditEvent):
+    def dict_from_event(self, evt, fields):
+        d = {}
+        for field in fields:
+            d[field] = getattr(evt, field)
+        return d
+
+    @method_decorator(login_required)
+    def post(self, request, event_id):
+        """we need to remove the event_id before propagating,
+        so the existing event won't be overwritten"""
+        return super().post(request)
+
+    @method_decorator(login_required)
+    def get(self, request, event_id):
+        old_evt = Event.objects.get(id=event_id)
+        form = forms.EventForm(initial=self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description')))
+        form.cleaned_data = {}
+        form.add_error('start', 'please set')
+        if old_evt.end:
+            form.add_error('end', 'please set')
+        return render(request, 'osmcal/event_form.html', context={'form': form, 'page_title': 'New Event'})
+
+
 class EventICal(View):
     def ical_line_format(self, ln):
         return '\r\n\t'.join(wrap(ln.replace(',', '\,').replace('\n', '\\n'), 72, drop_whitespace=False))

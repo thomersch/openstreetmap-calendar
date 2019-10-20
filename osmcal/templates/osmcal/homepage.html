@@ -35,7 +35,7 @@
 	{% endfor %}
 	-->
 	<div class="event-filter-controls">
-		<select class="event-filter-selector" onchange="country_filter_changed(this);">
+		<select class="select-dropdown" onchange="country_filter_changed(this);">
 			<option value="anywhere">Anywhere</option>
 			<option {% if filter.around %}selected{% endif %} value="nearby">Nearby</option>
 			{% for country in country_list %}
