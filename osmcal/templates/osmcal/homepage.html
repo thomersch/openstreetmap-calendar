@@ -23,7 +23,7 @@
 	</script>
 {% endblock %}
 
-{% block title %}{% if filter.in %}OSM Events in {{ filter.in }}{% else %}OSM Calendar{% endif %}{% endblock %}
+{% block title %}{% if filter.in %}OpenStreetMap Events in {{ filter.in }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block content %}
 	<!--

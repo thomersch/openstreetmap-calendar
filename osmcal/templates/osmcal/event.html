@@ -2,12 +2,12 @@
 
 {% load leaflet_tags markdown %}
 
-{% block title %}
-	{{ event.name }}
-{% endblock %}
+{% block title %}{{ event.name }} | OpenStreetMap Calendar{% endblock %}
 
 {% block head %}
 	{{ block.super }}
+	<meta property="og:title" content="{{ event.name }}">
+	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %} {% if event.location_name %}at {{ event.location_name }}{% endif %} in {{ event.location_text }}. {{ event.description|truncatewords:15 }}">
 	{% if event.location %}
 		{% leaflet_js %}
 		{% leaflet_css %}
