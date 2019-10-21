@@ -9,7 +9,7 @@ from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -87,7 +87,7 @@ class EventFeed(Feed, EventListView):
 
 
 def event(request, event_id):
-    event = Event.objects.get(id=event_id)
+    event = get_object_or_404(Event, id=event_id)
     authors = event.log.all().distinct('created_by')
 
     user_is_joining = False
