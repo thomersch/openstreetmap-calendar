@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{ block.super }}
+{% include "osmcal/partials/no_index.html" %}
+{% endblock %}
+
 {% block title %}
 	Login to OpenStreetMap Calendar
 {% endblock %}

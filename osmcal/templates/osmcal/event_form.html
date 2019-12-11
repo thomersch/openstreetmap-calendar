@@ -4,6 +4,8 @@
 
 {% block head %}
 	{{ block.super }}
+	{% include "osmcal/partials/no_index.html" %}
+	
 	{% leaflet_js plugins="forms" %}
 	{% leaflet_css plugins="forms" %}
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/flatpickr.min.css' %}">
