@@ -1,11 +1,10 @@
+from enum import Enum
+
+import requests
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
-
-from enum import Enum
-
-import requests
 
 
 class EventType(Enum):

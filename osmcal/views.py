@@ -1,8 +1,10 @@
 from datetime import timedelta
 from textwrap import wrap
+from xml.etree import ElementTree as ET
 
 from django.conf import settings
-from django.contrib.auth import login as dj_login, logout as dj_logout
+from django.contrib.auth import login as dj_login
+from django.contrib.auth import logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
@@ -15,9 +17,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
-
 from requests_oauthlib import OAuth1Session
-from xml.etree import ElementTree as ET
 
 from . import forms
 from .models import Event, EventLog, EventParticipation, User

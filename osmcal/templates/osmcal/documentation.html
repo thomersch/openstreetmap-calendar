@@ -13,12 +13,43 @@
 
 ## Why?
 
-The OpenStreetMap Calendar has been created because we want to reach more people with the events the community creates. Organizers should have it easier to publish their events and participants should be able to find nearby events. The calendar shall be powerful, yet usable on mobile devices.
+The OpenStreetMap Calendar (OSMCAL) has been created because we want to reach more people with the events the community creates. Organizers should have it easier to publish their events and participants should be able to find nearby events. The calendar shall be powerful, yet usable on mobile devices.
 
 You can help us by spreading the word: Link to the calendar, create events and participate in them.
 
 ## RSS
+
 There are RSS Feeds: One global for all upcoming events, and one for each country. The base URL is `events.rss`. If only events in a certain country shall be returned, filters can be appended, e.g. `events.rss?in=Germany`.
+
+## API
+
+OSMCAL has a JSON-based API for retrieving a list of upcoming events:
+
+	/api/v1/events/
+
+	[
+		{
+			"name": "Mapping Party 23",
+			"url": "https://osmcal.org/event/8/",
+			"date": {
+				"human": "10th January 12:00",
+				"whole_day": false,
+				"start": "2020-01-10 12:00:00",
+				"end": "2020-01-10 14:00:00"
+			},
+			"location": {
+				"short": "Alishan Township, Taiwan, TW",
+				"detailed": "Cool Pub, Alishan Township, Taiwan, TW"
+			}
+		},
+
+		...
+	]
+
+If you are displaying the date to end users, please consider using `date.human` as it already handles multiday events, whole day events and dates with and without end dates.
+
+Please note that `date.end` is optional.
+
 
 ## Source Code and Issue Tracker
 
