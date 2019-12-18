@@ -20,6 +20,7 @@ from django.views.generic.base import TemplateView
 from requests_oauthlib import OAuth1Session
 
 from . import forms
+from .ical import encode_event
 from .models import Event, EventLog, EventParticipation, User
 
 
@@ -188,34 +189,9 @@ class DuplicateEvent(EditEvent):
 
 
 class EventICal(View):
-    def ical_line_format(self, ln):
-        return '\r\n\t'.join(wrap(ln.replace(',', '\,').replace('\n', '\\n'), 72, drop_whitespace=False))
-
     def get(self, request, event_id):
         evt = Event.objects.get(id=event_id)
-
-        lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//OSM Calendar', 'BEGIN:VEVENT']
-        lines.append('UID:OSMCAL-{}'.format(evt.id))
-
-        lines.append('DTSTAMP:{:%Y%m%dT%H%M%S}'.format(evt.start))
-        if evt.whole_day:
-            lines.append('DTSTART;VALUE=DATE:{:%Y%m%d}'.format(evt.start))
-            if evt.end:
-                lines.append('DTEND;VALUE=DATE:{:%Y%m%d}'.format(evt.end + timedelta(days=1)))
-        else:
-            lines.append('DTSTART:{:%Y%m%dT%H%M%S}'.format(evt.start))
-            if evt.end:
-                lines.append('DTEND:{:%Y%m%dT%H%M%S}'.format(evt.end))
-
-        lines.append('SUMMARY:{}'.format(evt.name))
-        if evt.description:
-            lines.append('DESCRIPTION:{}'.format(evt.description))
-        if evt.location:
-            lines.append('GEO:{};{}'.format(evt.location.x, evt.location.y))
-        if evt.location_address:
-            lines.append('LOCATION:{}'.format(evt.location_detailed_addr))
-        lines += ['END:VEVENT', 'END:VCALENDAR']
-        return HttpResponse('\r\n'.join(map(self.ical_line_format, lines)) + '\r\n', content_type="text/calendar")
+        return HttpResponse(encode_event(evt), content_type='text/calendar')
 
 
 def oauth_start(request):
