@@ -22,8 +22,7 @@ urlpatterns = [
     path('events/past/', views.PastEvents.as_view(), name='events-past'),
     path('events/past/<int:page>/', views.PastEvents.as_view(), name='events-past'),
     path('events.rss', views.EventFeed(), name='event-rss'),
-
-    path('admin/', admin.site.urls),
+    path('events.ics', views.EventFeedICal.as_view(), name='event-feed-ical'),
 
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),

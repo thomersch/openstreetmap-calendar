@@ -1,5 +1,3 @@
-from datetime import timedelta
-from textwrap import wrap
 from xml.etree import ElementTree as ET
 
 from django.conf import settings
@@ -20,7 +18,7 @@ from django.views.generic.base import TemplateView
 from requests_oauthlib import OAuth1Session
 
 from . import forms
-from .ical import encode_event
+from .ical import encode_event, encode_events
 from .models import Event, EventLog, EventParticipation, User
 
 
@@ -192,6 +190,12 @@ class EventICal(View):
     def get(self, request, event_id):
         evt = Event.objects.get(id=event_id)
         return HttpResponse(encode_event(evt), content_type='text/calendar')
+
+
+class EventFeedICal(EventListView):
+    def get(self, request):
+        evts = self.get_queryset(request.GET)
+        return HttpResponse(encode_events(evts), content_type='text/calendar')
 
 
 def oauth_start(request):
