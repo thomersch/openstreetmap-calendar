@@ -76,8 +76,8 @@ h1, h2 {
 }
 
 .header-home-icon {
-	vertical-align: middle;
 	margin-right: 5px;
+	vertical-align: middle;
 }
 
 .navigation-top {
@@ -92,9 +92,9 @@ h1, h2 {
 
 .event-list {
 	list-style: none;
+	max-width: 600px;
 	padding-left: 0;
 	padding-right: 1em;
-	max-width: 600px;
 }
 
 .event-list a:hover {
@@ -165,8 +165,8 @@ h1, h2 {
 }
 
 .event-single-title {
-	margin: 0;
 	line-height: 1em;
+	margin: 0;
 }
 
 .event-single-location {
@@ -189,8 +189,8 @@ h1, h2 {
 }
 
 .event-single-date {
-	margin: 1em 0;
 	font-size: 110%;
+	margin: 1em 0;
 }
 
 .text {
@@ -208,4 +208,12 @@ h1, h2 {
 
 .event-single-participants {
 	margin-top: 1em;
+}
+
+.event-filter-controls, .event-subscribe-buttons {
+	display: inline-block;
+}
+
+.event-subscribe-buttons {
+	float: right;
 }

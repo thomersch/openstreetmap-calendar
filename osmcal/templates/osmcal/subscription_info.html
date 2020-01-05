@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Subscribe to Events – {{ block.super }}{% endblock %}
+
+{% block content %}
+<content class="text">
+	<h2>Subscribe to Events{% if request.GET.in %} in {{ request.GET.in }}{% endif %}</h2>
+
+	<p>You can get notified about new events using one of the subscription mechanisms:</p>
+
+	<ul>
+		<li>
+			<p><strong>iCalendar Feed: </strong>If your calendar supports calendar subscriptions, you can add a calendar feed. Thunderbird Lightning, Apple Calendar and Fastmail are known to be working.</p>
+			<ul>
+				{% if request.GET.in %}<li>
+					<a href="webcal://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in }}">{{ request.GET.in }} subscription</a><br>
+					<code>https://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in }}</code></li>{% endif %}
+				<li>
+					<a href="webcal://{{ request.get_host }}{% url 'event-feed-ical' %}">Global subscription</a><br>
+					<code>https://{{ request.get_host }}{% url 'event-feed-ical' %}</code>
+				</li>
+			</ul>
+		</li>
+		<li>
+			<p><strong>RSS: </strong>For users of feed readers, Atom/RSS 2.0 feeds are available.</li></p>
+			<ul>
+				{% if request.GET.in %}<li>
+					<a href="{% url 'event-rss' %}?in={{ request.GET.in }}">{{ request.GET.in }} feed</a><br>
+					<code>https://{{ request.get_host }}{% url 'event-rss' %}?in={{ request.GET.in }}</code>
+				</li>{% endif %}
+				<li>
+					<a href="{% url 'event-rss' %}">Global feed</a><br>
+					<code>https://{{ request.get_host }}{% url 'event-rss' %}</code>
+				</li>
+			</ul>
+	</ul>
+
+	<p>If you experience compatibility problems, feel free to <a href="https://github.com/thomersch/openstreetmap-calendar/issues">report them</a>.</p>
+</ul>
+</content>
+{% endblock %}

@@ -52,6 +52,10 @@ class Homepage(EventListView):
         return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': request.GET.get('in', None), 'around': request.GET.get('around', None)}})
 
 
+class SubscriptionInfo(TemplateView):
+    template_name = 'osmcal/subscription_info.html'
+
+
 class PastEvents(View):
     PAGESIZE = 20
 

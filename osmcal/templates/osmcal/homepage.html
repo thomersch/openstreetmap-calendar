@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block head %}
 	<link rel="alternate" type="application/rss+xml" title="Event Feed" href="{% url 'event-rss' %}">
@@ -26,22 +27,20 @@
 {% block title %}{% if filter.in %}OpenStreetMap Events in {{ filter.in }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block content %}
-	<!--
-		TODO: Group by months
-	{% regroup events by start.month as event_groups %}
+	<div class="text">
+		<div class="event-filter-controls">
+			<select class="select-dropdown" onchange="country_filter_changed(this);">
+				<option value="anywhere">Anywhere</option>
+				<option {% if filter.around %}selected{% endif %} value="nearby">Nearby</option>
+				{% for country in country_list %}
+				<option {% if filter.in == country %}selected{% endif %} value="{{ country }}">{{ country }}</option>
+				{% endfor %}
+			</select>
+		</div>
 
-	{% for g in event_groups %}
-		{{ g.grouper }}
-	{% endfor %}
-	-->
-	<div class="event-filter-controls">
-		<select class="select-dropdown" onchange="country_filter_changed(this);">
-			<option value="anywhere">Anywhere</option>
-			<option {% if filter.around %}selected{% endif %} value="nearby">Nearby</option>
-			{% for country in country_list %}
-			<option {% if filter.in == country %}selected{% endif %} value="{{ country }}">{{ country }}</option>
-			{% endfor %}
-		</select>
+		<div class="event-subscribe-buttons">
+			<a href="{% url 'subscription-info' %}{% if filter.in %}?in={{ filter.in }}{% endif %}"><button class="btn">Subscribe</button></a>
+		</div>
 	</div>
 
 	{% include "osmcal/partials/event_list.html" %}
