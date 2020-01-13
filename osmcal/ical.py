@@ -39,8 +39,13 @@ def event_body(evt: Event) -> List[str]:
             lines.append('DTEND:{:%Y%m%dT%H%M%S}'.format(evt.end))
 
     lines.append('SUMMARY:{}'.format(evt.name))
-    if evt.description:
-        lines.append('DESCRIPTION:{}'.format(evt.description))
+
+    description = evt.description
+    if evt.link:
+        description += '\n' + 'Event Website: ' + evt.link
+
+    if description:
+        lines.append('DESCRIPTION:{}'.format(description))
     if evt.location:
         lines.append('GEO:{};{}'.format(evt.location.x, evt.location.y))
     if evt.location_address:
