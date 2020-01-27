@@ -17,11 +17,4 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
         debug: true
-        script: |
-          cd $HOME
-          cd openstreetmap-calendar
-          git pull
-          pipenv sync
-          pipenv run migrate
-          pipenv run staticfiles
-          sudo /usr/local/bin/supervisorctl signal hup osmcal
+        script: /home/osmcal/rollout.sh

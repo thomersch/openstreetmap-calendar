@@ -23,7 +23,7 @@ python_version = "3.7"
 
 [scripts]
 migrate = "./manage.py migrate"
-staticfiles = "./manage.py collectstatic"
+staticfiles = "./manage.py collectstatic --noinput"
 gunicorn = "gunicorn osmcal.wsgi"
 devserver = "./manage.py runserver"
 test = "./manage.py test"

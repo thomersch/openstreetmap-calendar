@@ -39,13 +39,13 @@ MIDDLEWARE = [
 ]
 
 if not DEBUG:
-    INSTALLED_APPS.append('django_prometheus')
-    MIDDLEWARE.insert(0, 'django_prometheus.middleware.PrometheusBeforeMiddleware')
-    MIDDLEWARE.append('django_prometheus.middleware.PrometheusAfterMiddleware')
-
     prometheus_dir = os.getenv('prometheus_multiproc_dir', '/tmp/osmcal')
     if not os.path.exists(prometheus_dir):
         os.mkdir(prometheus_dir)
+
+    INSTALLED_APPS.append('django_prometheus')
+    MIDDLEWARE.insert(0, 'django_prometheus.middleware.PrometheusBeforeMiddleware')
+    MIDDLEWARE.append('django_prometheus.middleware.PrometheusAfterMiddleware')
 
 ROOT_URLCONF = 'osmcal.urls'
 
