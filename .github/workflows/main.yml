@@ -16,6 +16,7 @@ jobs:
         username: osmcal
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
+        debug: true
         script: |
           cd $HOME
           cd openstreetmap-calendar
