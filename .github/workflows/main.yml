@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: SSH Commands
+      uses: appleboy/ssh-action@v0.0.2
+      with: 
+        host: osmcal.org
+        username: osmcal
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd $HOME
+          cd openstreetmap-calendar
+          git pull
+          pipenv sync
+          pipenv run migrate
+          pipenv run staticfiles
+          sudo /usr/local/bin/supervisorctl signal hup osmcal
