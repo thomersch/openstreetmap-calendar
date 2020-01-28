@@ -10,8 +10,9 @@ verify_ssl = true
 psycopg2-binary = "~=2.8"
 requests = "~=2.22"
 requests-oauthlib = "~=1.2"
-django-leaflet = "~=0.24"
-Django = "~=2.2"
+django-leaflet = "~=0.26"
+six = "*" # needed by django-leaflet
+Django = "~=3.0"
 markdown2 = "~=2.3"
 gunicorn = "~=19.9"
 python-dotenv = "~=0.10"
