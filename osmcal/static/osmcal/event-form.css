@@ -36,6 +36,7 @@
 	margin-left: 20%;
 	margin-top: .25em;
 	padding-left: 3px;
+	width: 70%;
 }
 
 .event-form #id_location-map {
