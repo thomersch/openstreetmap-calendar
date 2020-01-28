@@ -17,4 +17,3 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
         debug: true
-        script: /home/osmcal/rollout.sh
