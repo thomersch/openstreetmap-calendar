@@ -74,6 +74,10 @@
 					marker.addTo(this._map);
 					fs.save(marker);
 					marker.editing.enable();
+
+					marker.on('dragend', function(e) {
+						fs.save(marker);
+					});
 				}
 			});
 			
