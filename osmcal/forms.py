@@ -8,6 +8,12 @@ from . import models
 from .serializers import JSONEncoder
 
 
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = models.ParticipationQuestion
+        fields = ('question_text', 'answer_type', 'mandatory')
+
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = models.Event

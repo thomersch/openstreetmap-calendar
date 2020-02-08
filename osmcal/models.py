@@ -60,6 +60,21 @@ class Event(models.Model):
         )
 
 
+class AnswerType(Enum):
+    TEXT = 'Text Field'
+    CHOI = 'Choice'
+    BOOL = 'Boolean'
+
+
+class ParticipationQuestion(models.Model):
+    event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='questions')
+    question_text = models.CharField(max_length=200)
+    answer_type = models.CharField(max_length=4, choices=[(x.name, x.value) for x in AnswerType])
+    mandatory = models.BooleanField(default=True)
+
+    choices = JSONField(blank=True, null=True)
+
+
 class EventParticipation(models.Model):
     event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='participation')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)

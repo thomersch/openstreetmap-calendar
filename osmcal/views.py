@@ -8,7 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
+from django.db import transaction
 from django.db.models import Q
+from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -20,7 +22,8 @@ from requests_oauthlib import OAuth1Session
 
 from . import forms
 from .ical import encode_event, encode_events
-from .models import Event, EventLog, EventParticipation, User
+from .models import (Event, EventLog, EventParticipation,
+                     ParticipationQuestion, User)
 
 
 class EventListView(View):
@@ -145,29 +148,49 @@ class EditEvent(View):
     @method_decorator(login_required)
     def get(self, request, event_id=None):
         form = forms.EventForm()
+        questions = []
         if event_id is not None:
-            form = forms.EventForm(instance=Event.objects.get(id=event_id))
-        return render(request, 'osmcal/event_form.html', context={'form': form})
+            evt = Event.objects.get(id=event_id)
+            form = forms.EventForm(instance=evt)
+            questions = evt.questions
+        return render(request, 'osmcal/event_form.html', context={'form': form, 'questions': questions})
 
     @method_decorator(login_required)
+    @transaction.atomic
     def post(self, request, event_id=None):
         form = forms.EventForm(request.POST)
+        QuestionFormSet = formset_factory(forms.QuestionForm)
+        question_formset = QuestionFormSet(request.POST, prefix='questions')
+
         if event_id is not None:
             form = forms.EventForm(request.POST, instance=Event.objects.get(id=event_id))
 
         if form.is_valid():
+            questions_data = []
+            question_formset.is_valid()
+            for qf in question_formset:
+                questions_data.append(qf.cleaned_data)
+
+            print(questions_data)
+
             if event_id is None:
                 evt = Event.objects.create(**form.cleaned_data)
                 evt.created_by = request.user
                 evt.save()
                 EventLog.objects.create(created_by=request.user, event=evt, data=form.to_json())
+
+                for qd in questions_data:
+                    pq = ParticipationQuestion.objects.create(**qd)
+                    pq.event = evt
+                    pq.save()
             else:
                 form.save()
+                # TODO: save updated questions
                 EventLog.objects.create(created_by=request.user, event_id=event_id, data=form.to_json())
 
             return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
-        return render(request, 'osmcal/event_form.html', context={'form': form})
+        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset})
 
 
 class DuplicateEvent(EditEvent):

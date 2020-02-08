@@ -13,24 +13,66 @@
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
+	<!-- TODO: local source --><script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 {% endblock %}
 
 {% block content %}
 	{% if page_title %}<h1>{{ page_title }}</h1>{% endif %}
-	<form class="event-form" method="POST">
+	<form id="event-main-form" class="event-form" method="POST">
 		{% csrf_token %}
 
 		{% for field in form %}
-        <div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
-            <label for="{{ field.id_for_label }}" class="event-form-leading-label">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
-        </div>
-    	{% endfor %}
-		<p class="submit-row"><input class="btn" type="submit" value="Save Event"></p>
+		<div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
+			<label for="{{ field.id_for_label }}" class="event-form-leading-label">{{ field.label }}</label>
+			{{ field }}
+			{% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
+		</div>
+		{% endfor %}
+
+		<section id="event-question-form">
+			<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
+			<input type="hidden" name="questions-INITIAL_FORMS" value="0">
+			<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
+			<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
+
+			<div v-for="(question, index) in questions">
+				<input v-bind:name="'questions-' + index + '-question_text'" v-model="question.text" placeholder="E.g. your full name">
+				<input v-bind:name="'questions-' + index + '-mandatory'" type="checkbox" v-model="question.mandatory">
+				<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type">
+					<option value="TEXT">Text</option>
+					<option value="CHOI">Choice</option>
+					<option value="BOOL">Boolean (yes or no)</option>
+				</select>
+
+				<div v-if="question.type == 'choice'">
+					Choices: <ul v-for="(choice, ci) in question.choices"><li><input v-bind:name="'questions-' + index + '-choice'" v-model="choice.text"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
+				</div>
+				<hr>
+			</div>
+			<button v-on:click.prevent="addQuestion" formnovalidate>Add Question</button>
+		</section>
+		<p class="submit-row"><button class="btn" type="submit">Save Event</button></p>
 	</form>
 
 	<script>
+		var app = new Vue({
+			el: '#event-question-form',
+			delimiters: ['[[', ']]'],
+			data: {
+				/* jshint ignore:start */
+				questions: [{% for q in questions.all %}{'text': "{{ q.question_text }}", 'type': "{{ q.answer_type }}", 'mandatory': {% if q.mandatory %} true {% else %} false {% endif %}},{% endfor %}]
+				/* jshint ignore:end */
+			},
+			methods: {
+				addQuestion: function() {
+					this.questions.push({'type': 'TEXT', choices: []});
+				},
+				addChoice: function(question) {
+					question.choices.push({'text': ''});
+				}
+			}
+		});
+
 		var fp = flatpickr(".datepicker-flat", {
 			enableTime: true,
 			time_24hr: true,
@@ -41,7 +83,7 @@
 					fp[i].changeMonth(seldat.getMonth(), false);
 					// TODO: also change year
 				}
-    		}
+			}
 		});
 
 		document.getElementsByName("whole_day").item(0).addEventListener('input', function(evt) {
@@ -81,7 +123,7 @@
 				}
 			});
 			
-			leafletmap.addControl(osmGeocoder);	
+			leafletmap.addControl(osmGeocoder); 
 		}, false);
 	</script>
 {% endblock %}
