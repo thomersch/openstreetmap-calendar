@@ -44,7 +44,7 @@
 					<option value="BOOL">Boolean (yes or no)</option>
 				</select>
 
-				<div v-if="question.type == 'choice'">
+				<div v-if="question.type == 'CHOI'">
 					Choices: <ul v-for="(choice, ci) in question.choices"><li><input v-bind:name="'questions-' + index + '-choice'" v-model="choice.text"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
 				</div>
 				<hr>
