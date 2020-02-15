@@ -20,6 +20,23 @@ class QuestionForm(forms.ModelForm):
         fields = ('question_text', 'answer_type', 'mandatory')
 
 
+class QuestionnaireForm(forms.Form):
+    def __init__(self, questions, **kwargs):
+        self.fields = {}
+        super().__init__(**kwargs)
+        for question in questions:
+            if question.answer_type == 'TEXT':
+                f = forms.CharField(label=question.question_text)
+            elif question.answer_type == 'BOOL':
+                f = forms.BooleanField(label=question.question_text)
+            elif question.answer_type == 'CHOI':
+                f = forms.ChoiceField(label=question.question_text, choices=[(x['text'], x['text']) for x in question.choices])
+            else:
+                raise ValueError("invalid answer_type: %s" % (question.answer_type))
+
+            self.fields[str(question.id)] = f
+
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = models.Event

@@ -79,6 +79,8 @@ class EventParticipation(models.Model):
     event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='participation')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
 
+    answers = JSONField(blank=True, null=True)
+
 
 class EventLog(models.Model):
     event = models.ForeignKey('Event', related_name='log', on_delete=models.CASCADE)

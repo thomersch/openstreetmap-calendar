@@ -124,7 +124,26 @@ class JoinEvent(View):
     @method_decorator(login_required)
     def post(self, request, event_id):
         evt = Event.objects.get(id=event_id)
-        EventParticipation.objects.create(event=evt, user=request.user)
+        questions = evt.questions.all()
+        answers = None
+
+        if questions:
+            question_form = forms.QuestionnaireForm
+
+            if request.POST.get('signup-answers'):
+                form = question_form(questions, data=request.POST)
+                form.is_valid()
+                answers = form.cleaned_data
+            else:
+                return render(request, 'osmcal/event_questionnaire.html', context={
+                    'event': evt,
+                    'form': question_form(questions)
+                })
+
+        ep = EventParticipation.objects.create(event=evt, user=request.user)
+        if answers:
+            ep.answers = answers
+            ep.save()
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
@@ -170,8 +189,6 @@ class EditEvent(View):
             question_formset.is_valid()
             for qf in question_formset:
                 questions_data.append(qf.cleaned_data)
-
-            print(questions_data)
 
             if event_id is None:
                 evt = Event.objects.create(**form.cleaned_data)
