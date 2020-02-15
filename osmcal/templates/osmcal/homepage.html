@@ -27,7 +27,7 @@
 {% block title %}{% if filter.in %}OpenStreetMap Events in {{ filter.in }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block content %}
-	<div class="text">
+	<div class="event-feed-button-panel text">
 		<div class="event-filter-controls">
 			<select class="select-dropdown" onchange="country_filter_changed(this);">
 				<option value="anywhere">Anywhere</option>
