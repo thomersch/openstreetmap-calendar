@@ -162,6 +162,7 @@ h1, h2 {
 	font-weight: bold;
 	min-width: 9em;
 	padding: 0.5em 1em;
+	width: 100%;
 }
 
 .event-single-title {
@@ -210,10 +211,11 @@ h1, h2 {
 	margin-top: 1em;
 }
 
-.event-filter-controls, .event-subscribe-buttons {
-	display: inline-block;
+.event-feed-button-panel {
+	display: flex;
+	justify-content: space-between;
 }
 
-.event-subscribe-buttons {
-	float: right;
+.event-filter-controls {
+	padding-right: 10px;
 }
