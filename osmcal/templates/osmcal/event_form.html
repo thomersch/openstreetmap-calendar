@@ -45,7 +45,8 @@
 				</select>
 
 				<div v-if="question.type == 'CHOI'">
-					Choices: <ul v-for="(choice, ci) in question.choices"><li><input v-bind:name="'questions-' + index + '-choice'" v-model="choice.text"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
+					Choices: <ul><li v-for="(choice, ci) in question.choices"><input v-model="choice.text"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
+					<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
 				</div>
 				<hr>
 			</div>
@@ -69,6 +70,12 @@
 				},
 				addChoice: function(question) {
 					question.choices.push({'text': ''});
+				},
+				choiceLines: function(q) {
+					t = function(o) {
+						return o.text;
+					};
+					return q.choices.map(t).join('\n');
 				}
 			}
 		});

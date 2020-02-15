@@ -1,6 +1,7 @@
 import json
 
 from django import forms
+from django.contrib.postgres.forms import SimpleArrayField
 from django.forms.widgets import DateTimeInput, TextInput
 from leaflet.forms.widgets import LeafletWidget
 
@@ -9,6 +10,11 @@ from .serializers import JSONEncoder
 
 
 class QuestionForm(forms.ModelForm):
+    choices = SimpleArrayField(forms.CharField())
+
+    def clean_choices(self):
+        return [{'text': x} for x in self.cleaned_data['choices'][0].splitlines()]
+
     class Meta:
         model = models.ParticipationQuestion
         fields = ('question_text', 'answer_type', 'mandatory')
