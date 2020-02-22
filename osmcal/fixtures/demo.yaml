@@ -46,7 +46,6 @@
     name: "International OSM Day"
     start: "2029-05-01 20:00:00"
     end: "2029-05-01 22:00:00"
-    created_by: 1
 
 - model: osmcal.event
   pk: 2
@@ -58,7 +57,6 @@
       city: Osaka
       country: Japan
     location: POINT(135.5023 34.6931)
-    created_by: 1
 
 - model: osmcal.event
   pk: 3
@@ -99,7 +97,6 @@
       - Fahrrad: Parkplätze vor Ort vorhanden
 
       - Auto: Parken kann man vor Ort oder in der Christian-Miesen-Straße.
-    created_by: 1
 
 - model: osmcal.event
   pk: 4
@@ -113,7 +110,6 @@
       street: Alexanderstraße
       city: Berlin
       country: Germany
-    created_by: 1
 
 - model: osmcal.event
   pk: 5
@@ -126,7 +122,6 @@
       street: Xinyi Rd
       city: Taipei City
       country: Taiwan
-    created_by: 1
 
 - model: osmcal.event
   pk: 6
@@ -134,7 +129,6 @@
     name: Multiday with Times
     start: "2029-08-20 17:00:00"
     end: "2029-08-22 19:00:00"
-    created_by: 1
 
 - model: osmcal.eventparticipation
   pk: 1

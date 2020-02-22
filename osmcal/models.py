@@ -72,14 +72,26 @@ class ParticipationQuestion(models.Model):
     answer_type = models.CharField(max_length=4, choices=[(x.name, x.value) for x in AnswerType])
     mandatory = models.BooleanField(default=True)
 
-    choices = JSONField(blank=True, null=True)
+
+class ParticipationQuestionChoice(models.Model):
+    question = models.ForeignKey(ParticipationQuestion, related_name='choices', on_delete=models.CASCADE)
+    text = models.CharField(max_length=200)
 
 
 class EventParticipation(models.Model):
     event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='participation')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
 
-    answers = JSONField(blank=True, null=True)
+
+class ParticipationAnswer(models.Model):
+    question = models.ForeignKey(ParticipationQuestion, on_delete=models.CASCADE, related_name='answers')
+    user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+    answer = models.CharField(max_length=200)
+
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(fields=('question', 'user'), name='unique_question_answer'),
+        )
 
 
 class EventLog(models.Model):

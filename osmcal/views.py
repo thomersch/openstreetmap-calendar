@@ -22,8 +22,8 @@ from requests_oauthlib import OAuth1Session
 
 from . import forms
 from .ical import encode_event, encode_events
-from .models import (Event, EventLog, EventParticipation,
-                     ParticipationQuestion, User)
+from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
+                     ParticipationQuestion, ParticipationQuestionChoice, User)
 
 
 class EventListView(View):
@@ -141,9 +141,13 @@ class JoinEvent(View):
                 })
 
         ep = EventParticipation.objects.create(event=evt, user=request.user)
-        if answers:
-            ep.answers = answers
-            ep.save()
+        for qid, answer in answers.items():
+            ParticipationAnswer.objects.update_or_create(
+                question_id=qid,
+                user=request.user,
+                defaults={'answer': answer},
+            )
+        ep.save()
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
@@ -151,6 +155,7 @@ class UnjoinEvent(View):
     @method_decorator(login_required)
     def post(self, request, event_id):
         EventParticipation.objects.get(event__id=event_id, user=request.user).delete()
+        # TODO: Remove ParticipationAnswers
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
@@ -197,8 +202,11 @@ class EditEvent(View):
                 EventLog.objects.create(created_by=request.user, event=evt, data=form.to_json())
 
                 for qd in questions_data:
+                    choices = qd.pop('choices')
                     pq = ParticipationQuestion.objects.create(**qd)
                     pq.event = evt
+                    for choice in choices:
+                        ParticipationQuestionChoice.objects.create(text=choice, question=pq)
                     pq.save()
             else:
                 form.save()

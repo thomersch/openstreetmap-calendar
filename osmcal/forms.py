@@ -1,4 +1,5 @@
 import json
+from typing import Dict, Iterable
 
 from django import forms
 from django.contrib.postgres.forms import SimpleArrayField
@@ -13,7 +14,7 @@ class QuestionForm(forms.ModelForm):
     choices = SimpleArrayField(forms.CharField())
 
     def clean_choices(self):
-        return [{'text': x} for x in self.cleaned_data['choices'][0].splitlines()]
+        return [x for x in self.cleaned_data['choices'][0].splitlines()]
 
     class Meta:
         model = models.ParticipationQuestion
@@ -21,20 +22,25 @@ class QuestionForm(forms.ModelForm):
 
 
 class QuestionnaireForm(forms.Form):
-    def __init__(self, questions, **kwargs):
-        self.fields = {}
+    def __init__(self, questions: Iterable[models.ParticipationQuestion], **kwargs) -> None:
+        self.fields: Dict[str, forms.Field] = {}
         super().__init__(**kwargs)
         for question in questions:
             if question.answer_type == 'TEXT':
-                f = forms.CharField(label=question.question_text)
+                f = forms.CharField(label=question.question_text, required=question.mandatory)
             elif question.answer_type == 'BOOL':
-                f = forms.BooleanField(label=question.question_text)
+                f = forms.BooleanField(label=question.question_text, required=question.mandatory)
             elif question.answer_type == 'CHOI':
-                f = forms.ChoiceField(label=question.question_text, choices=[(x['text'], x['text']) for x in question.choices])
+                f = forms.ChoiceField(label=question.question_text, required=question.mandatory, choices=[(x.id, x.text) for x in question.choices.all()])
             else:
                 raise ValueError("invalid answer_type: %s" % (question.answer_type))
 
             self.fields[str(question.id)] = f
+
+    def clean(self, *args, **kwargs):
+        for k, v in self.cleaned_data.items():
+            self.cleaned_data[int(k)] = self.cleaned_data.pop(k)
+        return super().clean()
 
 
 class EventForm(forms.ModelForm):
