@@ -81,6 +81,7 @@ class ParticipationQuestionChoice(models.Model):
 class EventParticipation(models.Model):
     event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='participation')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+    added_on = models.DateTimeField(auto_now_add=True, null=True)
 
 
 class ParticipationAnswer(models.Model):

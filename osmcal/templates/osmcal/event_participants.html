@@ -12,15 +12,17 @@
 <table class="participant-table">
 	<tr>
 		<th>User Name</th>
+		<th>Signed Up On</th>
 		{% for question in event.questions.all %}
 		<th>{{ question.question_text }}</th>
 		{% endfor %}
 	</tr>
 	{% for user, answers in participants %}
 		<tr>
-			<td>{{ user }}</td>
+			<td><a href="https://openstreetmap.org/user/{{ user }}">{{ user }}</a></td>
+			<td>{{ answers.0.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
 			{% for line in answers %}
-				<td>{% if line.answer %}{{ line.answer }}{% endif %}</td>
+				<td>{{ line.answer|default_if_none:"" }}</td>
 			{% endfor %}
 		</tr>
 	{% endfor %}

@@ -122,6 +122,7 @@ class EventParticipants(TemplateView):
                 u.osm_id,
                 u.name AS user_name,
                 q.question_text AS question_text,
+                e.added_on AS added_on,
                 COALESCE(c.text, a.answer) AS answer
             FROM
                 osmcal_user AS u
