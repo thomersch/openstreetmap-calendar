@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
-	<!-- TODO: local source --><script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,29 +30,32 @@
 		{% endfor %}
 
 		<section id="event-question-form">
+			<label class="event-form-leading-label">Questions and<br>Answers</label>
+			<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Add Sign Up Question</button><br>
+			<label class="event-form-helptext">You can ask the participants questions they will be asked to answer during event sign up, e.g. whether they'll join the after event party.</label>
+
 			<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
 			<input type="hidden" name="questions-INITIAL_FORMS" value="0">
 			<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
 			<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
 
 			<div v-for="(question, index) in questions">
-				<input v-bind:name="'questions-' + index + '-question_text'" v-model="question.text" placeholder="E.g. your full name">
-				<input v-bind:name="'questions-' + index + '-mandatory'" type="checkbox" v-model="question.mandatory">
-				<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type">
+				<input v-bind:name="'questions-' + index + '-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen">
+				<input v-bind:name="'questions-' + index + '-mandatory'" type="checkbox" v-model="question.mandatory" :disabled="question.frozen">
+				<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type" :disabled="question.frozen">
 					<option value="TEXT">Text</option>
 					<option value="CHOI">Choice</option>
 					<option value="BOOL">Boolean (yes or no)</option>
 				</select>
 
 				<div v-if="question.type == 'CHOI'">
-					Choices: <ul><li v-for="(choice, ci) in question.choices"><input v-model="choice.text"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
+					Choices: <ul><li v-for="(choice, ci) in question.choices"><input v-model="choice.text" :disabled="question.frozen"></li></ul><button v-on:click.prevent="addChoice(question)">Add Choice</button>
 					<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
 				</div>
 				<hr>
 			</div>
-			<button v-on:click.prevent="addQuestion" formnovalidate>Add Question</button>
 		</section>
-		<p class="submit-row"><button class="btn" type="submit">Save Event</button></p>
+		<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; width: 95%;">Save Event</button></p>
 	</form>
 
 	<script>
@@ -61,7 +64,7 @@
 			delimiters: ['[[', ']]'],
 			data: {
 				/* jshint ignore:start */
-				questions: [{% for q in questions.all %}{'text': "{{ q.question_text }}", 'type': "{{ q.answer_type }}", 'mandatory': {% if q.mandatory %} true {% else %} false {% endif %}},{% endfor %}]
+				questions: JSON.parse('{{ questions | escapejs }}')
 				/* jshint ignore:end */
 			},
 			methods: {

@@ -51,12 +51,16 @@
 }
 
 .leaflet-control-geocoder-form input {
-	height: 14px;
 	font-size: 12px;
+	height: 14px;
 	margin-bottom: inherit;
 	width: inherit;
 }
 
 .event-form-error {
 	background-color: #ffe0bb;
+}
+
+.event-question-form-button {
+	margin-left: 30%;
 }

@@ -1,3 +1,4 @@
+import json
 from datetime import timedelta
 from xml.etree import ElementTree as ET
 
@@ -188,22 +189,40 @@ def logout(request):
 
 
 class EditEvent(View):
+    def _question_formset(self, request):
+        QuestionFormSet = formset_factory(forms.QuestionForm)
+        question_formset = QuestionFormSet(request.POST, prefix='questions')
+        return question_formset
+
+    def _questions_json(self, questions):
+        q = []
+        for question in questions:
+            q.append({
+                "text": question.question_text,
+                "type": question.answer_type,
+                "mandatory": question.mandatory,
+                "choices": [{"text": x.text} for x in question.choices.all()],
+                "frozen": True
+            })
+        return json.dumps(q)
+
     @method_decorator(login_required)
     def get(self, request, event_id=None):
         form = forms.EventForm()
         questions = []
+        question_formset = None
         if event_id is not None:
             evt = Event.objects.get(id=event_id)
+            questions = evt.questions.all()
             form = forms.EventForm(instance=evt)
-            questions = evt.questions
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'questions': questions})
+            question_formset = self._question_formset(request)
+        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions)})
 
     @method_decorator(login_required)
     @transaction.atomic
     def post(self, request, event_id=None):
         form = forms.EventForm(request.POST)
-        QuestionFormSet = formset_factory(forms.QuestionForm)
-        question_formset = QuestionFormSet(request.POST, prefix='questions')
+        question_formset = self._question_formset(request)
 
         if event_id is not None:
             form = forms.EventForm(request.POST, instance=Event.objects.get(id=event_id))
@@ -221,7 +240,7 @@ class EditEvent(View):
                 EventLog.objects.create(created_by=request.user, event=evt, data=form.to_json())
 
                 for qd in questions_data:
-                    choices = qd.pop('choices')
+                    choices = qd.pop('choices', [])
                     pq = ParticipationQuestion.objects.create(**qd)
                     pq.event = evt
                     for choice in choices:
