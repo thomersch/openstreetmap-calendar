@@ -223,3 +223,19 @@ h1, h2 {
 .event-filter-controls {
 	padding-right: 10px;
 }
+
+.participant-table {
+	margin-top: 1em;
+}
+
+.participant-table th {
+	text-align: left;
+}
+
+.participant-table td, .participant-table th {
+	padding: 0.5em;
+}
+
+.participant-table tr:nth-child(even) {
+	background-color: #eeeeee;
+}

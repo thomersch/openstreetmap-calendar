@@ -64,7 +64,7 @@
 							{% endif %}
 							{% if participants > 1 %}are{% else %}is{% endif %} joining.
 
-							{% if participants > 3 %}<a href="{% url 'event-participants' event.id %}">Show all.</a>{% endif %}
+							{% if participants > 3 or participants != 0 and event.questions %}<a href="{% url 'event-participants' event.id %}">Show all.</a>{% endif %}
 						{% endif %}
 					{% endwith %}
 				</div>

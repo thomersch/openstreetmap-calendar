@@ -8,9 +8,21 @@
 	<h1 class="event-single-title">Participants of <a href="{% url 'event' event.id %}">{{ event.name }}</a></h1>
 	On {% include "osmcal/date.txt" %}
 
-	<ul>
-	{% for participant in event.participation.all %}
-		<li>{{ participant.user.name }}</li>
+{% regroup answers by user_name as participants %}
+<table class="participant-table">
+	<tr>
+		<th>User Name</th>
+		{% for question in event.questions.all %}
+		<th>{{ question.question_text }}</th>
+		{% endfor %}
+	</tr>
+	{% for user, answers in participants %}
+		<tr>
+			<td>{{ user }}</td>
+			{% for line in answers %}
+				<td>{% if line.answer %}{{ line.answer }}{% endif %}</td>
+			{% endfor %}
+		</tr>
 	{% endfor %}
-	</ul>
+</table>
 {% endblock %}
