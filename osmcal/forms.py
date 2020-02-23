@@ -14,7 +14,7 @@ class QuestionForm(forms.ModelForm):
     choices = SimpleArrayField(forms.CharField())
 
     def clean_choices(self):
-        return [x for x in self.cleaned_data['choices'][0].splitlines()]
+        return [x for x in self.cleaned_data['choices'][0].splitlines() if x]
 
     class Meta:
         model = models.ParticipationQuestion

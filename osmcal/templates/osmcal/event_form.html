@@ -53,11 +53,11 @@
 
 					<div class="event-question-line">
 						<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
-						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input">
+						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input" required>
 					</div>
 
 					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-mandatory'" class="event-question-label">Mandatory Answer</label>
+						<label v-bind:for="'id_questions-'+index+'-mandatory'" class="event-question-label">Required Answer</label>
 						<input v-bind:name="'questions-' + index + '-mandatory'" v-bind:id="'id_questions-'+index+'-mandatory'" type="checkbox" v-model="question.mandatory" :disabled="question.frozen">
 					</div>
 
