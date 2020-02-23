@@ -1,5 +1,5 @@
 .survey-form-line {
-	align-items: baseline;
+	align-items: center;
 	display: flex;
 	margin-top: 1em;
 	max-width: 600px;
@@ -9,7 +9,7 @@
 	font-weight: bold;
 	padding-right: 10px;
 	text-align: right;
-	width: 100px;
+	width: 150px;
 }
 
 .survey-form-line input, .survey-form-line select {

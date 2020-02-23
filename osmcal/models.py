@@ -72,10 +72,16 @@ class ParticipationQuestion(models.Model):
     answer_type = models.CharField(max_length=4, choices=[(x.name, x.value) for x in AnswerType])
     mandatory = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ('event', 'id')
+
 
 class ParticipationQuestionChoice(models.Model):
     question = models.ForeignKey(ParticipationQuestion, related_name='choices', on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ('question', 'id')
 
 
 class EventParticipation(models.Model):
