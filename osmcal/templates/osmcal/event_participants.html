@@ -9,22 +9,24 @@
 	On {% include "osmcal/date.txt" %}
 
 {% regroup answers by user_name as participants %}
-<table class="participant-table">
-	<tr>
-		<th>User Name</th>
-		<th>Signed Up On</th>
-		{% for question in event.questions.all %}
-		<th>{{ question.question_text }}</th>
-		{% endfor %}
-	</tr>
-	{% for user, answers in participants %}
+<section style="overflow-x:scroll;">
+	<table class="participant-table">
 		<tr>
-			<td><a href="https://openstreetmap.org/user/{{ user }}">{{ user }}</a></td>
-			<td>{{ answers.0.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
-			{% for line in answers %}
-				<td>{{ line.answer|default_if_none:"" }}</td>
+			<th>User Name</th>
+			<th>Signed Up On</th>
+			{% for question in event.questions.all %}
+			<th>{{ question.question_text }}</th>
 			{% endfor %}
 		</tr>
-	{% endfor %}
-</table>
+		{% for user, answers in participants %}
+			<tr>
+				<td><a href="https://openstreetmap.org/user/{{ user }}">{{ user }}</a></td>
+				<td>{{ answers.0.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
+				{% for line in answers %}
+					<td>{{ line.answer|default_if_none:"" }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+</section>
 {% endblock %}
