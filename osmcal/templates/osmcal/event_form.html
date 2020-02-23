@@ -13,7 +13,11 @@
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
+	{% if debug %}
+	<script src="{% static 'osmcal/thirdparty/vue.js' %}"></script>
+	{% else %}
 	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
+	{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -45,6 +49,8 @@
 				<div v-for="(question, index) in questions" class="event-question-form-block">
 					<h3>Question [[ index+1 ]]</h3>
 
+					<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
+
 					<div class="event-question-line">
 						<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
 						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input">
@@ -56,7 +62,7 @@
 					</div>
 
 					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-mandatory'" class="event-question-label">Answer Type</label>
+						<label v-bind:for="'id_questions-'+index+'-answer_type'" class="event-question-label">Answer Type</label>
 						<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type" :disabled="question.frozen" class="event-question-input">
 							<option value="TEXT">Text</option>
 							<option value="CHOI">Choice</option>
@@ -67,7 +73,7 @@
 					<div class="event-question-line" v-if="question.type == 'CHOI'">
 						<label class="event-question-label">Choices</label>
 						<ul class="event-question-choices"><li v-for="(choice, ci) in question.choices"><input v-model="choice.text" :disabled="question.frozen" class="event-question-input"></li></ul>
-						<button v-on:click.prevent="addChoice(question)" class="event-question-choice-button">Add Choice</button>
+						<button v-on:click.prevent="addChoice(question)" class="btn-mini event-question-choice-button">Add Choice</button>
 						<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
 					</div>
 				</div>
@@ -96,10 +102,13 @@
 			},
 			methods: {
 				addQuestion: function() {
-					this.questions.push({'type': 'TEXT', choices: ['']});
+					this.questions.push({'type': 'TEXT', choices: [{}]});
 				},
 				addChoice: function(question) {
 					question.choices.push({'text': ''});
+					Vue.nextTick(function() {
+						// TODO: Focus on the new field
+					});
 				},
 				choiceLines: function(q) {
 					t = function(o) {
