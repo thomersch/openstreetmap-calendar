@@ -155,7 +155,7 @@ class JoinEvent(View):
                 form.is_valid()
                 answers = form.cleaned_data
             else:
-                return render(request, 'osmcal/event_questionnaire.html', context={
+                return render(request, 'osmcal/event_survey.html', context={
                     'event': evt,
                     'form': question_form(questions)
                 })

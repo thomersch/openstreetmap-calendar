@@ -20,7 +20,7 @@
 			<span class="hide-slim">OpenStreetMap Calendar</span>
 			<span class="hide-wide">Calendar</span>
 		</a>
-		{% if request.resolver_match.view_name != "event" %}
+		{% if request.resolver_match.view_name not in "event,event-edit" %}
 		<nav class="navigation-top">
 			<a href="/event/add/"><button class="btn">Add Event</button></a>
 		</nav>

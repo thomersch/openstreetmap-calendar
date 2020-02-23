@@ -20,13 +20,13 @@
 	box-sizing: border-box;
 	font-size: 12pt;
 	padding: 10px;
-	width: 60%;
+	width: 68%;
 }
 
 .event-form textarea {
 	font-size: 12pt;
 	vertical-align: top;
-	width: 60%;
+	width: 68%;
 }
 
 .event-form-helptext {
@@ -43,7 +43,7 @@
 	display: inline-block;
 	margin-bottom: 1em;
 	vertical-align: top;
-	width: 60%;
+	width: 68%;
 }
 
 .event-form .submit-row input {
@@ -61,6 +61,82 @@
 	background-color: #ffe0bb;
 }
 
-.event-question-form-button {
-	margin-left: 30%;
+.event-question-form {
+	display: flex;
+	margin-top: 2em;
+	max-width: 600px;
+}
+
+.event-question-form-label {
+	color: #666666;
+	font-weight: bold;
+	min-width: calc(30% - 10px); /* Small hack to align with other labels */
+	padding-right: 10px;
+	text-align: right;
+}
+
+.event-question-form-block {
+	display: inline-block;
+	width: 100%;
+}
+
+.event-question-form-block + .event-question-form-block {
+	margin-top: 3em;
+}
+
+.event-question-form-block h3 {
+	margin-block-start: 0;
+}
+
+.event-question-form-helptext {
+	color: #666666;
+	display: block;
+	font-size: 90%;
+	margin-top: .25em;
+	padding-left: 3px;
+}
+
+.event-question-label {
+	color: #666666;
+	display: block;
+	font-weight: bold;
+}
+
+.event-question-inline-label {
+	color: #666666;
+	display: inline-block;
+	font-weight: bold;	
+}
+
+.event-question-line {
+	align-items: baseline;
+	display: flex;
+}
+
+.event-question-line + .event-question-line {
+	margin-top: 1em;
+}
+
+.event-question-label {
+	display: inline-block;
+	flex-basis: auto;
+	padding-right: 10px;
+	text-align: right;
+	width: 100px;
+}
+
+.event-question-input {
+	flex: 1;
+	font-size: 12pt;
+	padding: 10px;
+}
+
+.event-question-choices {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.event-question-choice-button {
+	align-self: flex-end;
 }
