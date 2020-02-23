@@ -73,7 +73,7 @@
 					<div class="event-question-line" v-if="question.type == 'CHOI'">
 						<label class="event-question-label">Choices</label>
 						<ul class="event-question-choices"><li v-for="(choice, ci) in question.choices"><input v-model="choice.text" :disabled="question.frozen" class="event-question-input"></li></ul>
-						<button v-on:click.prevent="addChoice(question)" class="btn-mini event-question-choice-button">Add Choice</button>
+						<button v-on:click.prevent="addChoice(question)" class="btn-mini event-question-choice-button" v-if="!question.frozen">Add Choice</button>
 						<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
 					</div>
 				</div>
@@ -84,13 +84,13 @@
 					</div>
 				</template>
 			</div>
-		</section>
 
-		<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
-		<input type="hidden" name="questions-INITIAL_FORMS" value="0">
-		<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
-		<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
-		<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; width: 95%;">Save Event</button></p>
+			<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
+			<input type="hidden" name="questions-INITIAL_FORMS" v-model="initial_questions_n">
+			<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
+			<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
+		</section>
+		<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; width: 95%; max-width: 600px;">Save Event</button></p>
 	</form>
 
 	<script>
@@ -99,6 +99,9 @@
 			delimiters: ['[[', ']]'],
 			data: {
 				questions: JSON.parse('{{ questions | escapejs }}')
+			},
+			created: function() {
+				this.initial_questions_n = this.questions.length;
 			},
 			methods: {
 				addQuestion: function() {
@@ -116,7 +119,7 @@
 					};
 					return q.choices.map(t).join('\n');
 				}
-			}
+			},
 		});
 
 		var fp = flatpickr(".datepicker-flat", {

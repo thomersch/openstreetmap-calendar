@@ -161,12 +161,13 @@ class JoinEvent(View):
                 })
 
         ep = EventParticipation.objects.create(event=evt, user=request.user)
-        for qid, answer in answers.items():
-            ParticipationAnswer.objects.update_or_create(
-                question_id=qid,
-                user=request.user,
-                defaults={'answer': answer},
-            )
+        if answers:
+            for qid, answer in answers.items():
+                ParticipationAnswer.objects.update_or_create(
+                    question_id=qid,
+                    user=request.user,
+                    defaults={'answer': answer},
+                )
         ep.save()
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
@@ -206,6 +207,14 @@ class EditEvent(View):
             })
         return json.dumps(q)
 
+    def _save_question_data(self, evt, qd):
+        choices = qd.pop('choices', [])
+        pq = ParticipationQuestion.objects.create(**qd)
+        pq.event = evt
+        for choice in choices:
+            ParticipationQuestionChoice.objects.create(text=choice, question=pq)
+        pq.save()
+
     @method_decorator(login_required)
     def get(self, request, event_id=None):
         form = forms.EventForm()
@@ -240,15 +249,13 @@ class EditEvent(View):
                 EventLog.objects.create(created_by=request.user, event=evt, data=form.to_json())
 
                 for qd in questions_data:
-                    choices = qd.pop('choices', [])
-                    pq = ParticipationQuestion.objects.create(**qd)
-                    pq.event = evt
-                    for choice in choices:
-                        ParticipationQuestionChoice.objects.create(text=choice, question=pq)
-                    pq.save()
+                    self._save_question_data(evt, qd)
             else:
+                evt = Event.objects.get(id=event_id)
+                new_questions = questions_data[question_formset.initial_form_count():]
+                for question in new_questions:
+                    self._save_question_data(evt, question)
                 form.save()
-                # TODO: save updated questions
                 EventLog.objects.create(created_by=request.user, event_id=event_id, data=form.to_json())
 
             return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))

@@ -138,7 +138,7 @@
     -moz-user-select: none;
     -ms-user-select: none; 
     user-select: none;
-	width: 100px;
+	width: 150px;
 }
 
 .event-question-input {
@@ -156,4 +156,5 @@
 .event-question-choice-button {
 	align-self: flex-end;
 	flex: 1;
+	margin-left: .5em;
 }
