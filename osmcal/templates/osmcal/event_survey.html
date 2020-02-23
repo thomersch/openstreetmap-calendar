@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}
 	{{ event.name }} Questionnaire
+{% endblock %}
+
+{% block head %}
+	{{ block.super }}
+	<link rel="stylesheet" href="{% static 'osmcal/survey-form.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -10,9 +17,18 @@
 
 	<form method="POST">
 		<input hidden name="signup-answers" value="1">
-		{{ form }}
 		{% csrf_token %}
 
-		<button>Sign up</button>
+		<section class="survey-form">
+			{% for field in form %}
+			<div class="survey-form-line{% if field.errors %} survey-form-error{% endif %}">
+				<label for="{{ field.id_for_label }}" class="survey-form-leading-label">{{ field.label }}{% if field.field.required %}<span class="survey-form-required" title="This field is required.">*</span>{% endif %}</label>
+				{{ field }}
+				{% if field.help_text %}<label class="survey-form-helptext">{{ field.help_text }}</label>{% endif %}
+			</div>
+			{% endfor %}
+
+			<button class="btn survey-submit-button">Sign up</button>
+		</section>
 	</form>
 {% endblock %}

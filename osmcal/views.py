@@ -130,16 +130,31 @@ class EventParticipants(TemplateView):
             JOIN osmcal_eventparticipation as e ON e.user_id = u.osm_id
             LEFT JOIN osmcal_participationquestion as q ON q.event_id = e.event_id
             LEFT JOIN osmcal_participationanswer as a ON (a.question_id = q.id AND a.user_id = e.user_id)
-            LEFT JOIN osmcal_participationquestionchoice as c ON (c.question_id = q.id AND q.answer_type = 'CHOI' AND a.answer::int = c.id)
+            LEFT JOIN osmcal_participationquestionchoice as c ON (
+                c.question_id = q.id AND
+                q.answer_type = 'CHOI' AND
+                CASE WHEN a.answer::int = c.id THEN true ELSE false END
+            )
             WHERE e.event_id = %s
             ORDER BY e.id, a.user_id, q.id''', (event_id, ))
         return context
 
 
 class JoinEvent(View):
+    def survey(self, request, evt):
+        question_form = forms.QuestionnaireForm
+        return render(request, 'osmcal/event_survey.html', context={
+            'event': evt,
+            'form': question_form(evt.questions.all())
+        })
+
     @method_decorator(login_required)
     def get(self, request, event_id):
-        return render(request, 'osmcal/event_join.html', context={'event': Event.objects.get(id=event_id)})
+        evt = Event.objects.get(id=event_id)
+        if evt.questions:
+            return self.survey(request, evt)
+
+        return render(request, 'osmcal/event_join.html', context={'event': evt})
 
     @method_decorator(login_required)
     def post(self, request, event_id):
@@ -148,17 +163,13 @@ class JoinEvent(View):
         answers = None
 
         if questions:
-            question_form = forms.QuestionnaireForm
-
             if request.POST.get('signup-answers'):
+                question_form = forms.QuestionnaireForm
                 form = question_form(questions, data=request.POST)
                 form.is_valid()
                 answers = form.cleaned_data
             else:
-                return render(request, 'osmcal/event_survey.html', context={
-                    'event': evt,
-                    'form': question_form(questions)
-                })
+                return self.survey(request, evt)
 
         ep = EventParticipation.objects.create(event=evt, user=request.user)
         if answers:

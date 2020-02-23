@@ -1,0 +1,28 @@
+.survey-form-line {
+	align-items: center;
+	display: flex;
+	margin-top: 1em;
+	max-width: 600px;
+}
+
+.survey-form-leading-label {
+	font-weight: bold;
+	padding-right: 10px;
+	text-align: right;
+	width: 100px;
+}
+
+.survey-form-line input {
+	flex: 1;
+	font-size: 14pt;
+}
+
+.survey-submit-button {
+	margin-top: 1em;
+	max-width: 600px;
+	width: 100%;
+}
+
+.survey-form-required {
+	color: red;
+}
