@@ -19,7 +19,7 @@
 			<ul>
 				{% if request.GET.in %}<li>
 					<a href="webcal://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in }}">{{ request.GET.in }} subscription</a><br>
-					<code>https://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in }}</code></li>{% endif %}
+					<code>https://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in|urlencode }}</code></li>{% endif %}
 				<li>
 					<a href="webcal://{{ request.get_host }}{% url 'event-feed-ical' %}">Global subscription</a><br>
 					<code>https://{{ request.get_host }}{% url 'event-feed-ical' %}</code>
@@ -31,7 +31,7 @@
 			<ul>
 				{% if request.GET.in %}<li>
 					<a href="{% url 'event-rss' %}?in={{ request.GET.in }}">{{ request.GET.in }} feed</a><br>
-					<code>https://{{ request.get_host }}{% url 'event-rss' %}?in={{ request.GET.in }}</code>
+					<code>https://{{ request.get_host }}{% url 'event-rss' %}?in={{ request.GET.in|urlencode }}</code>
 				</li>{% endif %}
 				<li>
 					<a href="{% url 'event-rss' %}">Global feed</a><br>
