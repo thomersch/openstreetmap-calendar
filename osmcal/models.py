@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
+from sentry_sdk import add_breadcrumb
 
 
 class EventType(Enum):
@@ -37,7 +38,9 @@ class Event(models.Model):
 
     def geocode_location(self):
         nr = requests.get('https://nominatim.openstreetmap.org/reverse', params={'format': 'jsonv2', 'lat': self.location.y, 'lon': self.location.x, 'accept-language': 'en'})
-        self.location_address = nr.json()['address']
+        self.location_address = nr.json().get('address', None)
+        if self.location_address is None:
+            add_breadcrumb(category='nominatim', level='error', data=nr.json())
 
     @property
     def location_text(self):
