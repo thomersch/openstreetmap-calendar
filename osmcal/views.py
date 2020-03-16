@@ -1,4 +1,6 @@
+import itertools
 import json
+from collections import OrderedDict
 from datetime import timedelta
 from xml.etree import ElementTree as ET
 
@@ -111,14 +113,8 @@ def event(request, event_id):
 class EventParticipants(TemplateView):
     template_name = 'osmcal/event_participants.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        event_id = kwargs['event_id']
-        # TODO: validate event_id
-        context['event'] = Event.objects.get(id=event_id)
-        if context['event'].questions:
-            # The following monstrosity will convert the answers into a table:
-            context['answers'] = User.objects.raw('''
+    def answer_table(self, event_id):
+        users = User.objects.raw('''
             SELECT
                 u.osm_id,
                 u.name AS user_name,
@@ -137,6 +133,27 @@ class EventParticipants(TemplateView):
             )
             WHERE e.event_id = %s
             ORDER BY e.id, a.user_id, q.id''', (event_id, ))
+
+        answers_by_users = {}
+        for uid, uobj in itertools.groupby(users, key=lambda x: x.osm_id):
+            answers_by_users[uid] = OrderedDict()
+            for q in uobj:
+                answers_by_users[uid][q.question_text] = q.answer
+
+        print(answers_by_users)
+        return answers_by_users
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event_id = kwargs['event_id']
+        # TODO: validate event_id
+        context['event'] = Event.objects.get(id=event_id)
+        if context['event'].questions:
+            sort_by = self.request.GET.get('sort_by')
+            print(sort_by)
+
+            # The following monstrosity will convert the answers into a table:
+            context['answers'] = self.answer_table(event_id)
         return context
 
 

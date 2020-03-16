@@ -15,7 +15,7 @@
 			<th>User Name</th>
 			<th>Signed Up On</th>
 			{% for question in event.questions.all %}
-			<th>{{ question.question_text }}</th>
+			<th>{{ question.question_text }} <a href="?sort_by={{ question.id }}">sort</a></th>
 			{% endfor %}
 		</tr>
 		{% for user, answers in participants %}
