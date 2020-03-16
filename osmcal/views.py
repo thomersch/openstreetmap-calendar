@@ -151,7 +151,7 @@ class JoinEvent(View):
     @method_decorator(login_required)
     def get(self, request, event_id):
         evt = Event.objects.get(id=event_id)
-        if evt.questions:
+        if evt.questions.count() > 0:
             return self.survey(request, evt)
 
         return render(request, 'osmcal/event_join.html', context={'event': evt})
@@ -200,6 +200,22 @@ def logout(request):
     return redirect("/")
 
 
+class CancelEvent(View):
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
+        event = get_object_or_404(Event, id=event_id)
+
+        # We don't need an event form as such, but we will use the to_json method
+        # to be able to save the current data as a log entry.
+        event_form = forms.EventForm(request.POST)
+        event_form.is_valid()
+        EventLog.objects.create(created_by=request.user, event=event, data=event_form.to_json())
+
+        event.cancelled = True
+        event.save()
+        return redirect(reverse('event', kwargs={'event_id': event_id}))
+
+
 class EditEvent(View):
     def _question_formset(self, request):
         QuestionFormSet = formset_factory(forms.QuestionForm)
@@ -231,12 +247,13 @@ class EditEvent(View):
         form = forms.EventForm()
         questions = []
         question_formset = None
+        evt = None
         if event_id is not None:
             evt = Event.objects.get(id=event_id)
             questions = evt.questions.all()
             form = forms.EventForm(instance=evt)
             question_formset = self._question_formset(request)
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions)})
+        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions), 'event': evt})
 
     @method_decorator(login_required)
     @transaction.atomic

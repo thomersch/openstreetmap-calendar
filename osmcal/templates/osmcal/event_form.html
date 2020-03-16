@@ -90,6 +90,17 @@
 			<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
 			<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
 		</section>
+
+		{% if event %}
+		<div method="POST" class="event-form" style="margin-top: 1em;">
+			<div class="event-form-line">
+				<div class="event-form-leading-label"></div>
+				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
+				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+			</div>
+		</div>
+		{% endif %}
+
 		<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; width: 95%; max-width: 600px;">Save Event</button></p>
 	</form>
 

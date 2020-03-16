@@ -27,7 +27,7 @@
 {% block content %}
 	<div class="event-single-block">
 		<div class="event-single-main">
-			<h1 class="event-single-title">{{ event.name }}</h1>
+			<h1 class="event-single-title{% if event.cancelled %} event-single-title-cancelled{% endif %}">{{ event.name }}</h1>
 			<p class="event-single-location">
 				{% if event.location_text %}{{ event.location_text }}<br>{% endif %}
 				{% if event.location_name %}{{ event.location_name }}{% endif %}
@@ -37,6 +37,7 @@
 				{% include "osmcal/date.txt" %}
 			</div>
 
+			<p>{% if event.cancelled %}This event has been cancelled.{% endif %}</p>
 			<p>{{ event.description|markdown|safe }}</p>
 			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
 
@@ -51,6 +52,7 @@
 				<a href="{% url 'event-duplicate' event.id %}"><button class="btn">Repeat Event</button></a>
 			</div>
 
+			{% if not event.cancelled %}
 			<div class="event-single-participation">
 				<div class="event-single-participants">
 					<h2>Participate</h2>
@@ -81,6 +83,7 @@
 				</form>
 				{% endif %}
 			</div>
+			{% endif %}
 		</aside>
 	</div>
 

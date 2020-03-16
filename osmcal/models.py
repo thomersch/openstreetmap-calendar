@@ -31,6 +31,8 @@ class Event(models.Model):
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
     description = models.TextField(blank=True, null=True, help_text='Tell people what the event is about and what they can expect. You may use Markdown in this field.')
 
+    cancelled = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         if self.location:
             self.geocode_location()
