@@ -4,6 +4,16 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 
+class Omitable(object):
+    """
+    This value is empty and the key should be omitted.
+    If you're thinking: "What is that crazy german guy doing?", well the answer
+    is simple: I didn't want to pull in the whole of rest framework and hacked
+    some code. Now it escalated. If you wanna change all of that crap to DRF,
+    feel free :)
+    """
+
+
 class BaseSerializerMany(object):
     def __init__(self, objs, context={}):
         self.objs = objs
@@ -17,7 +27,9 @@ class BaseSerializerMany(object):
             oo = {}
             for field in self.fields:
                 try:
-                    oo[field] = getattr(self, "attr_" + field)(obj)
+                    v = getattr(self, "attr_" + field)(obj)
+                    if not isinstance(v, Omitable):
+                        oo[field] = v
                 except AttributeError:
                     oo[field] = getattr(obj, field)
             out.append(oo)
@@ -26,7 +38,7 @@ class BaseSerializerMany(object):
 
 
 class EventsSerializer(BaseSerializerMany):
-    fields = ('name', 'url', 'date', 'location')
+    fields = ('name', 'url', 'date', 'location', 'cancelled')
 
     def attr_date(self, obj):
         o = {
@@ -51,3 +63,8 @@ class EventsSerializer(BaseSerializerMany):
             return self.context['request'].build_absolute_uri(rel_url)
         except KeyError:
             return rel_url
+
+    def attr_cancelled(self, obj):
+        if not obj.cancelled:
+            return Omitable()
+        return obj.cancelled
