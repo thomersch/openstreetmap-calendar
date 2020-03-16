@@ -1,4 +1,5 @@
 {% load markdown %}{% spaceless %}<h2>{{ obj.title }}</h2>
 <p>{% include "osmcal/date.txt" with event=obj %}</p>
+<p>{% if obj.cancelled %}This event has been cancelled.{% endif %}</p>
 {% if obj.location_text %}<p>{{ obj.location_text }}</p>{% endif %}
 <div>{{ obj.description|markdown|safe }}{% if obj.link %}<p><a href="{{ obj.link }}">Event Website</a></p>{% endif %}</div>{% endspaceless %}
