@@ -1,7 +1,8 @@
+import bleach
+import markdown as md
 from django import template
 
-import markdown2
-
+allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'li', 'ol', 'p', 'strong', 'ul']
 
 register = template.Library()
 
@@ -10,7 +11,7 @@ register = template.Library()
 def markdown(value):
     if not value:
         return ""
-    return markdown2.markdown(value, safe_mode=True)
+    return bleach.clean(md.markdown(value), tags=allowed_tags)
 
 
 @register.tag()
@@ -26,4 +27,4 @@ class Markdownify(template.Node):
 
     def render(self, context):
         output = self.nodelist.render(context)
-        return markdown2.markdown(output, safe_mode=True)
+        return bleach.clean(md.markdown(output), tags=allowed_tags)
