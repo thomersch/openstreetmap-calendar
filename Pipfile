@@ -18,7 +18,7 @@ bleach = "~=3.1"
 gunicorn = "~=19.9"
 python-dotenv = "~=0.10"
 sentry-sdk = "~=0.13"
-django-prometheus = "~=1.1"
+django-prometheus = "~=2.0"
 
 [requires]
 python_version = "3.7"
