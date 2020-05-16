@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'leaflet',
 
     'osmcal',
-    'osmcal.api'
+    'osmcal.api',
+    'osmcal.community',
 ]
 
 MIDDLEWARE = [

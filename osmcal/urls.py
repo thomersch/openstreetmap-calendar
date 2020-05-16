@@ -35,4 +35,5 @@ urlpatterns = [
 
     url('', include('django_prometheus.urls')),
     url('api/', include('osmcal.api.urls')),
+    url('community/', include('osmcal.community.urls'))
 ]

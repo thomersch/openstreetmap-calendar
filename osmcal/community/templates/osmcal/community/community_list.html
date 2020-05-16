@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}osmcal Communities{% endblock %}
+
+{% block content %}
+	<h1>Communities</h1>
+	<p>
+		osmcal is the calendar for OpenStreetMap, but other communities are welcome as well. <a href="{% url 'osmcal.community:community-create' %}">Create a new one.</a>
+	</p>
+
+	{% for community in communities %}
+		<div>{{ community.name }}</div>
+	{% endfor %}
+{% endblock %}
