@@ -115,10 +115,13 @@ class EventLog(models.Model):
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
-    osm_id = models.IntegerField()
+    osm_id = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
 
     def save(self, *args, **kwargs):
         if not self.username:
-            self.username = 'osm_' + str(self.osm_id)
+            if self.osm_id:
+                self.username = 'osm_' + str(self.osm_id)
+            else:
+                self.username = str(self.id)
         super().save(*args, **kwargs)

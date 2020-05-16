@@ -1,42 +1,42 @@
 - model: osmcal.user
   fields:
-    osm_id: 1
+    id: 1
     name: some_dummy_user
     username: osm_1
 
 - model: osmcal.user
   fields:
-    osm_id: 200
+    id: 200
     name: Jacques
     username: osm_200
 
 - model: osmcal.user
   fields:
-    osm_id: 300
+    id: 300
     name: Edith
     username: osm_300
 
 - model: osmcal.user
   fields:
-    osm_id: 400
+    id: 400
     name: Natasha
     username: osm_400
 
 - model: osmcal.user
   fields:
-    osm_id: 500
+    id: 500
     name: Karl
     username: osm_500
 
 - model: osmcal.user
   fields:
-    osm_id: 600
+    id: 600
     name: Linn
     username: osm_600
 
 - model: osmcal.user
   fields:
-    osm_id: 700
+    id: 700
     name: Kay
     username: osm_700
 

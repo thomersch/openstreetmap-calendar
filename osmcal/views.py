@@ -120,14 +120,14 @@ class EventParticipants(TemplateView):
             # The following monstrosity will convert the answers into a table:
             context['answers'] = User.objects.raw('''
             SELECT
-                u.osm_id,
+                u.id,
                 u.name AS user_name,
                 q.question_text AS question_text,
                 e.added_on AS added_on,
                 COALESCE(c.text, a.answer) AS answer
             FROM
                 osmcal_user AS u
-            JOIN osmcal_eventparticipation as e ON e.user_id = u.osm_id
+            JOIN osmcal_eventparticipation as e ON e.user_id = u.id
             LEFT JOIN osmcal_participationquestion as q ON q.event_id = e.event_id
             LEFT JOIN osmcal_participationanswer as a ON (a.question_id = q.id AND a.user_id = e.user_id)
             LEFT JOIN osmcal_participationquestionchoice as c ON (
