@@ -114,7 +114,8 @@ class EventLog(models.Model):
 
 
 class User(AbstractUser):
-    osm_id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
+    osm_id = models.IntegerField()
     name = models.CharField(max_length=255)
 
     def save(self, *args, **kwargs):
