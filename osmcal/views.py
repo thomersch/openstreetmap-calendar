@@ -300,7 +300,7 @@ class DuplicateEvent(EditEvent):
 
     @method_decorator(login_required)
     def post(self, request, event_id):
-        """we are removing the event_id before propagating,
+        """we are stopping event_id from propagating,
         so the existing event won't be overwritten"""
         return super().post(request)
 
