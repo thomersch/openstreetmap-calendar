@@ -1,0 +1,27 @@
+.oc-form-wrapper {
+	max-width: 600px;
+	width: 100%;
+}
+
+.oc-form-row {
+	display: block;
+	margin-bottom: 1em;
+}
+
+.oc-form-row label {
+	color: #5A5A5A;
+	display: block;
+	font-weight: bold;
+}
+
+.oc-form-row input {
+	font-size: 120%;
+	padding: 5px;
+	width: 100%;
+}
+
+.oc-form-row .help {
+	color: #5A5A5A;
+	margin: 0;
+	font-size: 85%;
+}

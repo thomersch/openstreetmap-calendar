@@ -2,12 +2,24 @@
 {% load static %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'osmcal/community/form.css' %}">
 {% endblock %}
 
 {% block title %}osmcal Create Community{% endblock %}
 
 {% block content %}
 	<h1>Create Community</h1>
-	
+
+	<form method="POST" action="{% url 'osmcal.community:community-create' %}" class="oc-form-wrapper">
+		{% csrf_token %}
+		{{ form.errors }}
+		{% for field in form %}
+			<div class="oc-form-row">
+				{{ field.errors }}
+				{{ field.label_tag }} {{ field }} 
+				{% if field.help_text %}<p class="help">{{ field.help_text|safe }}</p>{% endif %}
+			</div>
+		{% endfor %}
+		<input type="submit" value="Create" class="btn oc-form-submit">
+	</form>
 {% endblock %}

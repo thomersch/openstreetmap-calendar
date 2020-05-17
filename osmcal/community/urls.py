@@ -9,4 +9,6 @@ app_name = 'osmcal.community'
 urlpatterns = [
     path('', views.CommunityList.as_view(), name='community-list'),
     path('create/', views.CommunityCreate.as_view(), name='community-create'),
+
+    path('<int:community_id>/', views.CommunityDetail.as_view(), name='community'),
 ]

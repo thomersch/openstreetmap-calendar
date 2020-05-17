@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'osmcal/community/community.css' %}">
+{% endblock %}
+
+{% block title %}osmcal {{ community.name }}{% endblock %}
+
+{% block content %}
+	<h1>{{ community.name }}</h1>
+{% endblock %}

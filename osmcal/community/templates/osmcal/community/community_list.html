@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'osmcal/community/community.css' %}">
 {% endblock %}
 
 {% block title %}osmcal Communities{% endblock %}
@@ -14,6 +14,6 @@
 	</p>
 
 	{% for community in communities %}
-		<div>{{ community.name }}</div>
+		<div class="community-list-entry"><a href="{% url 'osmcal.community:community' community.id %}"><h2>{{ community.name }}</h2>{{ community.member_count }} Members</a></div>
 	{% endfor %}
 {% endblock %}

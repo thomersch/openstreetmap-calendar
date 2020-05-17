@@ -1,16 +1,36 @@
+from django.db.models import Count
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 
+from . import forms
 from .models import Community
 
 
 class CommunityList(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'osmcal/community/community_list.html', {'communities': Community.objects.all()})
+        return render(request, 'osmcal/community/community_list.html', {
+            'communities': Community.objects.annotate(member_count=Count('members')).order_by('-member_count')
+        })
 
 
 class CommunityCreate(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'osmcal/community/community_form.html', {})
+        form = forms.CommunityForm(label_suffix='')
+        return render(request, 'osmcal/community/community_form.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = forms.CommunityForm(request.POST)
+        form.is_valid()
+        c = Community.objects.create(**form.cleaned_data)
+        c.members.add(request.user)
+        c.save()
+        return HttpResponse(c.id)
+
+
+class CommunityDetail(View):
+    def get(self, request, community_id):
+        community = get_object_or_404(Community, id=community_id)
+        return render(request, 'osmcal/community/community_detail.html', {
+            'community': community
+        })
