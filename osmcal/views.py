@@ -28,11 +28,14 @@ from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
 
 
 class EventListView(View):
+    def filter_queryset(self, qs, **kwargs):
+        return qs.filter(Q(start__gte=kwargs['after']) | Q(end__gte=kwargs['after'])).order_by('start')
+
     def get_queryset(self, params, after=None):
         if after is None:
             after = timezone.now()
 
-        upcoming_events = Event.objects.filter(Q(start__gte=after) | Q(end__gte=after)).order_by('start')
+        upcoming_events = self.filter_queryset(Event.objects.all(), after=after)
 
         filter_to_country = params.get('in', None)
         if filter_to_country:
@@ -300,7 +303,7 @@ class DuplicateEvent(EditEvent):
 
     @method_decorator(login_required)
     def post(self, request, event_id):
-        """we are removing the event_id before propagating,
+        """we are stopping event_id from propagating,
         so the existing event won't be overwritten"""
         return super().post(request)
 

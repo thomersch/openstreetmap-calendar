@@ -51,10 +51,17 @@ class EventsSerializer(BaseSerializerMany):
         return o
 
     def attr_location(self, obj):
+        if not obj.location:
+            return Omitable()
+
         o = {
             'short': obj.location_text,
-            'detailed': obj.location_detailed_addr
+            'detailed': obj.location_detailed_addr,
+            'coords': [obj.location.x, obj.location.y]
         }
+
+        if obj.location_name:
+            o['venue'] = obj.location_name
         return o
 
     def attr_url(self, obj):

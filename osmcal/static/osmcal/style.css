@@ -257,3 +257,15 @@ h1, h2 {
 .participant-table tr:nth-child(even) {
 	background-color: #eeeeee;
 }
+
+.code-comment {
+	opacity: 0.5;
+}
+
+.code-number {
+	color: #4e7843;
+}
+
+.code-bool {
+	color: #9b692d;
+}

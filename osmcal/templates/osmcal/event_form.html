@@ -109,7 +109,7 @@
 			el: '#event-question-form',
 			delimiters: ['[[', ']]'],
 			data: {
-				questions: JSON.parse('{{ questions | escapejs }}')
+				questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}')
 			},
 			created: function() {
 				this.initial_questions_n = this.questions.length;
