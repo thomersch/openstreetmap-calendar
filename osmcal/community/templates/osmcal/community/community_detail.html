@@ -8,5 +8,18 @@
 {% block title %}osmcal {{ community.name }}{% endblock %}
 
 {% block content %}
+	<div class="community-breadcrumbs"><a href="{% url 'osmcal.community:community-list' %}">Communities</a> » {{ community.name }}</div>
+
 	<h1>{{ community.name }}</h1>
+	<p>This community has {{ community.members.count }} member{{ community.members.count|pluralize }}.</p>
+
+	
+
+	<div style="margin-top: 2em">
+		{% if user.is_anonymous or not is_member %}
+			<button class="btn">Join “{{ community.name }}”</button>
+		{% else %}
+			<button class="btn btn-negative">Leave ”{{ community.name }}“</button>
+		{% endif %}
+	</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 .community-list-entry {
 	margin-bottom: 1em;
-}
+}	
 
 .community-list-entry a {
 	color: #5A5A5A;
@@ -12,4 +12,10 @@
 
 .community-list-entry h2 {
 	margin: 0;
+}
+
+.community-breadcrumbs {
+	background-color: #EEEEEE;
+	max-width: 500px;
+	padding: 5px;
 }

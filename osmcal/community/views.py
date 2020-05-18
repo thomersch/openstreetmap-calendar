@@ -31,6 +31,11 @@ class CommunityCreate(View):
 class CommunityDetail(View):
     def get(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
-        return render(request, 'osmcal/community/community_detail.html', {
-            'community': community
-        })
+        ctx = {
+            'community': community,
+            'user': request.user,
+        }
+        if not request.user.is_anonymous:
+            ctx['is_member'] = community.members.filter(id=request.user.id).count() > 0
+
+        return render(request, 'osmcal/community/community_detail.html', ctx)
