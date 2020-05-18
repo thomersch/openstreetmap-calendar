@@ -8,4 +8,5 @@ app_name = 'osmcal.api'
 
 urlpatterns = [
     path('v1/events/', views.EventList.as_view(), name='api-event-list'),
+    path('v1/events/past/', views.PastEventList.as_view(), name='api-past-event-list'),
 ]
