@@ -48,6 +48,11 @@ class CommunityDetail(View):
 
 class CommunityJoin(View):
     @method_decorator(login_required)
+    def get(self, request, community_id):
+        community = get_object_or_404(Community, id=community_id)
+        return render(request, 'osmcal/community/community_join.html', context={'community': community})
+
+    @method_decorator(login_required)
     def post(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
         community.members.add(request.user)
@@ -56,6 +61,11 @@ class CommunityJoin(View):
 
 
 class CommunityLeave(View):
+    @method_decorator(login_required)
+    def get(self, request, community_id):
+        community = get_object_or_404(Community, id=community_id)
+        return render(request, 'osmcal/community/community_leave.html', context={'community': community})
+
     @method_decorator(login_required)
     def post(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
