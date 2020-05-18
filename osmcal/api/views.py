@@ -14,5 +14,10 @@ class EventList(views.EventListView):
 
 
 class PastEventList(EventList):
+    RESULT_LIMIT = 20
+
     def filter_queryset(self, qs, **kwargs):
         return qs.filter(start__lte=timezone.now()).order_by('-start')
+
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs)[:self.RESULT_LIMIT]
