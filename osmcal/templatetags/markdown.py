@@ -1,17 +1,19 @@
 import bleach
 import markdown as md
+from bleach.linkifier import LinkifyFilter
 from django import template
 
 allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'li', 'ol', 'p', 'strong', 'ul']
 
 register = template.Library()
+cleaner = bleach.Cleaner(tags=allowed_tags, filters=[LinkifyFilter])
 
 
 @register.filter(is_safe=True)
 def markdown(value):
     if not value:
         return ""
-    return bleach.clean(md.markdown(value), tags=allowed_tags)
+    return cleaner.clean(md.markdown(value))
 
 
 @register.tag()
@@ -27,4 +29,4 @@ class Markdownify(template.Node):
 
     def render(self, context):
         output = self.nodelist.render(context)
-        return bleach.clean(md.markdown(output), tags=allowed_tags)
+        return cleaner.clean(markdown(output))
