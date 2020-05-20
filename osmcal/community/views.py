@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
+from osmcal.models import Event
 
 from . import forms
 from .models import Community
@@ -36,9 +38,13 @@ class CommunityCreate(View):
 class CommunityDetail(View):
     def get(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
+        now = timezone.now()
+        upcoming_events = Event.objects.filter(community=community).filter(Q(start__gte=now) | Q(end__gte=now)).order_by('start')
+
         ctx = {
             'community': community,
             'user': request.user,
+            'events': upcoming_events
         }
         if not request.user.is_anonymous:
             ctx['is_member'] = community.members.filter(id=request.user.id).count() > 0

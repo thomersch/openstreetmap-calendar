@@ -19,3 +19,15 @@
 	max-width: 500px;
 	padding: 5px;
 }
+
+.community-events-list .event-list-entry {
+	padding: 0.5em 0;
+}
+
+.community-events-list .event-entry-name {
+	font-size: 100%;
+}
+
+.community-events-list .event-entry-date {
+	font-size: 90%;
+}
