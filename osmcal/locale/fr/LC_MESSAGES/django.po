@@ -18,6 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: osmcal/templates/osmcal/date.l10n.txt:1
-msgid "jS E"
+#: osmcal/templatetags/locadate.py:9 osmcal/templatetags/locadate.py:10
+msgid "day_month_format"
 msgstr "j F"

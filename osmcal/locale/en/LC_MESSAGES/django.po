@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-24 17:06+0000\n"
+"POT-Creation-Date: 2020-05-24 16:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,5 +20,4 @@ msgstr ""
 
 #: osmcal/templatetags/locadate.py:9 osmcal/templatetags/locadate.py:10
 msgid "day_month_format"
-msgstr "j. F"
-
+msgstr "PLACEHOLDER" # This is not the real value, just a fallback. The real en-value is 'jS F', fallback shall be 'j F'.
