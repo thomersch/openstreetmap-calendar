@@ -46,7 +46,7 @@ class QuestionnaireForm(forms.Form):
 class EventForm(forms.ModelForm):
     class Meta:
         model = models.Event
-        fields = ('name', 'whole_day', 'start', 'end', 'link', 'kind', 'location_name', 'location', 'description')
+        fields = ('name', 'whole_day', 'start', 'end', 'link', 'location_name', 'location', 'description')
         widgets = {
             'location': LeafletWidget(),
             'start': DateTimeInput(attrs={'class': 'datepicker-flat'}),

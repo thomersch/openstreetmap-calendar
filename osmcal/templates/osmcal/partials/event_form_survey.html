@@ -1,0 +1,55 @@
+<section id="event-question-form" class="event-question-form">
+	<label class="event-question-form-label">
+		Sign Up Survey
+	</label>
+
+	<div class="event-question-input-column">
+		<div v-if="questions.length == 0">
+			<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Create Sign Up Survey</button>
+			<label class="event-question-form-helptext">You can ask the participants questions they will be asked to answer during event sign up, e.g. whether they'll join the after work party.</label>
+		</div>
+
+		<div v-for="(question, index) in questions" class="event-question-form-block">
+			<h3>Question [[ index+1 ]]</h3>
+
+			<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
+
+			<div class="event-question-line">
+				<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
+				<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input" required>
+			</div>
+
+			<div class="event-question-line">
+				<label v-bind:for="'id_questions-'+index+'-mandatory'" class="event-question-label">Required Answer</label>
+				<input v-bind:name="'questions-' + index + '-mandatory'" v-bind:id="'id_questions-'+index+'-mandatory'" type="checkbox" v-model="question.mandatory" :disabled="question.frozen">
+			</div>
+
+			<div class="event-question-line">
+				<label v-bind:for="'id_questions-'+index+'-answer_type'" class="event-question-label">Answer Type</label>
+				<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type" :disabled="question.frozen" class="event-question-input">
+					<option value="TEXT">Text</option>
+					<option value="CHOI">Choice</option>
+					<option value="BOOL">Boolean (yes or no)</option>
+				</select>
+			</div>
+
+			<div class="event-question-line" v-if="question.type == 'CHOI'">
+				<label class="event-question-label">Choices</label>
+				<ul class="event-question-choices"><li v-for="(choice, ci) in question.choices"><input v-model="choice.text" :disabled="question.frozen" class="event-question-input"></li></ul>
+				<button v-on:click.prevent="addChoice(question)" class="btn-mini event-question-choice-button" v-if="!question.frozen">Add Choice</button>
+				<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
+			</div>
+		</div>
+
+		<template v-if="questions.length != 0">
+			<div class="event-question-form-block">
+				<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Add Question to Survey</button>
+			</div>
+		</template>
+	</div>
+
+	<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
+	<input type="hidden" name="questions-INITIAL_FORMS" v-model="initial_questions_n">
+	<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
+	<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
+</section>

@@ -28,7 +28,7 @@ class Event(models.Model):
     location_address = JSONField(blank=True, null=True)
 
     link = models.URLField(blank=True, null=True)
-    kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
+    kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType], null=True)
     description = models.TextField(blank=True, null=True, help_text='Tell people what the event is about and what they can expect. You may use Markdown in this field.')
 
     cancelled = models.BooleanField(default=False)
