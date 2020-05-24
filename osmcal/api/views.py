@@ -4,13 +4,14 @@ from django.utils import timezone
 from osmcal import views
 
 from . import serializers
-from .decorators import cors_any
+from .decorators import cors_any, language_from_header
 
 JSON_CONTENT_TYPE = 'application/json; charset=' + settings.DEFAULT_CHARSET  # This shall be utf-8, otherwise we're not friends anymore.
 
 
 class EventList(views.EventListView):
     @cors_any
+    @language_from_header
     def get(self, request, *args, **kwargs):
         es = serializers.EventsSerializer(self.get_queryset(request.GET), context={'request': request})
         return HttpResponse(es.json, content_type=JSON_CONTENT_TYPE)
