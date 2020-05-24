@@ -7,3 +7,8 @@ This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/e
 ## Principles
 
 * Less, but better.
+* Work hard and be nice to people.
+
+## User Documentation
+
+Please look at [osmcal.org/documentation/](https://osmcal.org/documentation/).
