@@ -13,5 +13,7 @@ def language_from_header(handler):
 	def wrapper(obj, request, *args, **kwargs):
 		translation.activate(translation.get_language_from_request(request))
 		request.LANGUAGE_CODE = translation.get_language()
-		return handler(obj, request, *args, **kwargs)
+		r = handler(obj, request, *args, **kwargs)
+		translation.deactivate()
+		return r
 	return wrapper
