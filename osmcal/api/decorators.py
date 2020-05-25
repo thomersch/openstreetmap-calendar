@@ -1,10 +1,12 @@
 from django.utils import translation
 
+ALLOWED_HEADERS = ['Client-App']
 
 def cors_any(handler):
     def wrapper(*args, **kwargs):
         resp = handler(*args, **kwargs)
         resp['Access-Control-Allow-Origin'] = '*'
+        resp['Access-Control-Allow-Headers'] = ", ".join(ALLOWED_HEADERS)
         return resp
     return wrapper
 

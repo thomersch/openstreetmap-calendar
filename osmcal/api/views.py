@@ -4,12 +4,20 @@ from django.utils import timezone
 from osmcal import views
 
 from . import serializers
-from .decorators import cors_any, language_from_header
+from .decorators import ALLOWED_HEADERS, cors_any, language_from_header
 
 JSON_CONTENT_TYPE = 'application/json; charset=' + settings.DEFAULT_CHARSET  # This shall be utf-8, otherwise we're not friends anymore.
 
 
-class EventList(views.EventListView):
+class CORSOptionsMixin(object):
+    def options(self, request, *args, **kwargs):
+        r = HttpResponse()
+        r['Access-Control-Allow-Headers'] = ", ".join(ALLOWED_HEADERS)
+        r['Access-Control-Allow-Origin'] = '*'
+        return r
+
+
+class EventList(CORSOptionsMixin, views.EventListView):
     @cors_any
     @language_from_header
     def get(self, request, *args, **kwargs):
