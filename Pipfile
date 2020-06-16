@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-"PyYaml" = "~=5.1.2"
+"PyYaml" = "~=5.3"
 
 [packages]
 psycopg2-binary = "~=2.8"
