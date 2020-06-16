@@ -197,6 +197,14 @@ h1, h2 {
 	display: flex;
 }
 
+.event-single-main {
+	max-width: 600px;
+}
+
+.event-single-main pre {
+	overflow: scroll;
+}
+
 .event-single-main, .event-single-additional {
 	flex: 1;
 	padding-right: 1em;
