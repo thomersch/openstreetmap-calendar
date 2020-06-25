@@ -2,8 +2,6 @@
 
 A simple calendar for tracking OpenStreetMap related activities, so we don't have to wrestle the wiki anymore.
 
-This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/en/latest/) for managing dependencies. See their manual for setup instructions.
-
 ## Principles
 
 * Less, but better.
@@ -11,18 +9,12 @@ This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/e
 
 ## User Documentation
 
-Please look at [osmcal.org/documentation/](https://osmcal.org/documentation/).
+Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documentation/) for information about integration and API.
+
 
 # Developer Documentation
 
-This guide consider *OpenStreetMap Calendar* application. For integrations,
-check out [jbelien's openstreetmap-calendar-widget.](https://github.com/jbelien/openstreetmap-calendar-widget).
-
-There is also OpenStreetMap Calendar [API
-documentation](https://app.swaggerhub.com/apis-docs/osmcal/osmcal-api/1.1)
-available.
-
-A prerequisite is *pipenv*, install it with `pip3 install pipenv`.
+This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/en/latest/) for managing dependencies, install it with `pip3 install pipenv`. See their manual for more information.
 
 ## Database
 
