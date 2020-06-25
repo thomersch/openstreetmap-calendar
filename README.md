@@ -13,7 +13,7 @@ This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/e
 
 Please look at [osmcal.org/documentation/](https://osmcal.org/documentation/).
 
-# Developer's guide
+# Developer Documentation
 
 This guide consider *OpenStreetMap Calendar* application. For integrations,
 check out [jbelien's openstreetmap-calendar-widget.](https://github.com/jbelien/openstreetmap-calendar-widget).
@@ -22,13 +22,13 @@ There is also OpenStreetMap Calendar [API
 documentation](https://app.swaggerhub.com/apis-docs/osmcal/osmcal-api/1.1)
 available.
 
-Prerequisity is *pipenv*, install it with `pip3 install pipenv`.
+A prerequisite is *pipenv*, install it with `pip3 install pipenv`.
 
 ## Database
 
 You need running Postgres database. There are two options:
 
-1. Run a Postgres database locally. For database, use:
+- Run a Postgres database locally. For database, use:
 
     - database name: `osmcal`
     - user name: `osmcal`
@@ -48,7 +48,7 @@ You need running Postgres database. There are two options:
     export OSMCAL_PG_HOST='localhost'
     ```
 
-2. Use docker image:
+- Use docker image:
 
     ```
     docker run -e POSTGRES_DB='osmcal' -e POSTGRES_USER='osmcal' -e POSTGRES_PASSWORD='postgres' --name osmcaldb postgis/postgis
@@ -80,7 +80,7 @@ pipenv install
 
 ## Unit tests
 
-When database is running and the local variables `OSMCAL_PG_HOST` and
+When the database is running and the local variables `OSMCAL_PG_HOST` and
 `OSMCAL_PG_PASSWORD` are set, you may run tests:
 
 ```
@@ -99,7 +99,7 @@ environment variables:
 4. Mark `read their user preferences.`
 5. Click `Register`.
 
-When application is registered on osm.org, set environment variables used for
+When the application is registered on osm.org, set the respective environment variables used for
 oauth and copy *Consumer Key* and *Consumer Secret*:
 
 ```
@@ -113,7 +113,7 @@ Then, you may run the database migration:
 pipenv run migrate
 ```
 
-and then developer server:
+and then the local server:
 
 ```
 pipenv run devserver
