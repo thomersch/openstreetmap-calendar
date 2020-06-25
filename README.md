@@ -26,9 +26,7 @@ You need running Postgres database. There are two options:
     - user name: `osmcal`
     - password: `postgres`
 
-    **Note:** You may use any password you want. However, you always need to
-    specify the environment variable `POSTGRES_PASSWORD` before run *test* or
-    *server*:
+    **Note:** You may use any password you want. However, you always need to specify the environment variable `POSTGRES_PASSWORD` before run *test* or *server*:
 
     ```
     export POSTGRES_PASSWORD='postgres'
@@ -46,8 +44,7 @@ You need running Postgres database. There are two options:
     docker run -e POSTGRES_DB='osmcal' -e POSTGRES_USER='osmcal' -e POSTGRES_PASSWORD='postgres' --name osmcaldb postgis/postgis
     ```
 
-    **Note:** It's ok to just `docker start osmcaldb` and `docker stop
-    osmcaldb` after first run of the command above.
+    **Note:** It's ok to just `docker start osmcaldb` and `docker stop osmcaldb` after first run of the command above.
 
     When using database in docker with the command above, the database host is:
 
@@ -72,8 +69,7 @@ pipenv install
 
 ## Unit tests
 
-When the database is running and the local variables `OSMCAL_PG_HOST` and
-`OSMCAL_PG_PASSWORD` are set, you may run tests:
+When the database is running and the local variables `OSMCAL_PG_HOST` and `OSMCAL_PG_PASSWORD` are set, you may run tests:
 
 ```
 pipenv run test
@@ -81,18 +77,15 @@ pipenv run test
 
 ## Developer server
 
-When database is running and the local variables `OSMCAL_PG_HOST` and
-`OSMCAL_PG_PASSWORD` are set, you need to set the OpenStreetMap oauth
-environment variables:
+When database is running and the local variables `OSMCAL_PG_HOST` and `OSMCAL_PG_PASSWORD` are set, you need to set the OpenStreetMap oauth environment variables:
 
-1. Go to osm.org -> My Settings -> oauth settings -> Register your application.
+1. Go to osm.org -> My Settings -> oauth settings -> bottom of the page (My Client Applications) -> Register your application.
 2. Fill `Name` and `Main Application URL`. No restrictions here.
 3. You *must* fill `Callback URL` with `http://localhost:8000/oauth/callback`.
 4. Mark `read their user preferences.`
 5. Click `Register`.
 
-When the application is registered on osm.org, set the respective environment variables used for
-oauth and copy *Consumer Key* and *Consumer Secret*:
+When the application is registered on osm.org, set the respective environment variables used for oauth and copy *Consumer Key* and *Consumer Secret*:
 
 ```
 export OSMCAL_OSM_KEY='...'
