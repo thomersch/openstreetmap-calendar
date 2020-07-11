@@ -11,73 +11,64 @@ A simple calendar for tracking OpenStreetMap related activities, so we don't hav
 
 Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documentation/) for information about integration and API.
 
-
-# Developer Documentation
+## Developer Documentation
 
 This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/en/latest/) for managing dependencies, install it with `pip3 install pipenv`. See their manual for more information.
 
-## Database
+We support Python ≥ 3.7 and PostgreSQL ≥ 10.
 
-You need running Postgres database. There are two options:
+### Database
 
-- Run a Postgres database locally. For database, use:
+You need a running PostgreSQL database. There are two options: Running it locally or using Docker.
 
-    - database name: `osmcal`
-    - user name: `osmcal`
-    - password: `postgres`
+#### A) Local Installation
+Create a PostgreSQL user called `osmcal` and a database `osmcal` with the owner set to `osmcal`. Make sure you have
 
-    **Note:** You may use any password you want. However, you always need to specify the environment variable `POSTGRES_PASSWORD` before run *test* or *server*:
+```
+local    all    all        trust
+```
 
-    ```
-    export POSTGRES_PASSWORD='postgres'
-    ```
+in your [pg_hba.conf](https://www.postgresql.org/docs/12/auth-pg-hba-conf.html), so osmcal need a password to log in. Alternatively, you can set your DB password using the `POSTGRES_PASSWORD` environment variable.
 
-    When using local database, the database host is *localhost*:
 
-    ```
-    export OSMCAL_PG_HOST='localhost'
-    ```
+#### B) Docker
 
-- Use docker image:
+```
+docker run -e POSTGRES_DB='osmcal' -e POSTGRES_USER='osmcal' -e POSTGRES_PASSWORD='postgres' --name osmcaldb postgis/postgis
+```
 
-    ```
-    docker run -e POSTGRES_DB='osmcal' -e POSTGRES_USER='osmcal' -e POSTGRES_PASSWORD='postgres' --name osmcaldb postgis/postgis
-    ```
+*Note:* You can use `docker start osmcaldb` and `docker stop osmcaldb` after first run of the command above.
 
-    **Note:** It's ok to just `docker start osmcaldb` and `docker stop osmcaldb` after first run of the command above.
+When using database in docker with the command above, the database host is:
 
-    When using database in docker with the command above, the database host is:
+```
+export OSMCAL_PG_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' osmcaldb)
+```
 
-    ```
-    export OSMCAL_PG_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' osmcaldb)
-    ```
+and database password is:
 
-    and database password is:
+```
+export OSMCAL_PG_PASSWORD='postgres'
+```
 
-    ```
-    export OSMCAL_PG_PASSWORD='postgres'
-    ```
+### Virtual Environment
 
-## Virtual environment
-
-Use *pipenv* to create virtual environment. Then, install requirements:
+Use *pipenv* to create a virtual environment. Then, install the dependencies:
 
 ```
 cd openstreetmap-calendar
-pipenv install
+pipenv install --dev
 ```
 
-## Unit tests
-
-When the database is running and the local variables `OSMCAL_PG_HOST` and `OSMCAL_PG_PASSWORD` are set, you may run tests:
+### Running Tests
 
 ```
 pipenv run test
 ```
 
-## Developer server
+### Developer Server
 
-When database is running and the local variables `OSMCAL_PG_HOST` and `OSMCAL_PG_PASSWORD` are set, you need to set the OpenStreetMap oauth environment variables:
+If you need to use the login functionality locally, you need to create an OAuth app:
 
 1. Go to osm.org -> My Settings -> oauth settings -> bottom of the page (My Client Applications) -> Register your application.
 2. Fill `Name` and `Main Application URL`. No restrictions here.
@@ -102,4 +93,10 @@ and then the local server:
 
 ```
 pipenv run devserver
+```
+
+If you need test data, you can load some using:
+
+```
+pipenv run ./manage.py osmcal/fixtures/demo.yaml
 ```
