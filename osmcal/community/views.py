@@ -32,7 +32,7 @@ class CommunityCreate(View):
         c = Community.objects.create(**form.cleaned_data)
         c.members.add(request.user)
         c.save()
-        return HttpResponse(c.id)
+        return redirect(reverse('osmcal.community:community', args=[c.id]))
 
 
 class CommunityDetail(View):
