@@ -1,0 +1,39 @@
+name: Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: python:3.7-slim-buster
+
+    services:
+      postgres:
+        image: postgis/postgis
+        env:
+          POSTGRES_USER: osmcal
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install other deps
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Run pipenv to install deps
+        run: pipenv sync
+
+      - name: Run tests
+        run: pipenv run ./manage.py test
+        env:
+          OSMCAL_PG_HOST: postgres
+          OSMCAL_PG_PASSWORD: postgres

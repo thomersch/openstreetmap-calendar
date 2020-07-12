@@ -42,7 +42,7 @@ class EventsSerializer(BaseSerializerMany):
 
     def attr_date(self, obj):
         o = {
-            'human': render_to_string('osmcal/date.txt', {'event': obj}).strip(),
+            'human': render_to_string('osmcal/date.l10n.txt', {'event': obj}).strip(),
             'whole_day': obj.whole_day,
             'start': str(obj.start),
         }

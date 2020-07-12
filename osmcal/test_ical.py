@@ -29,4 +29,3 @@ class IcalEncodeTest(TestCase):
 
         ics = encode_events(Event.objects.all())
         self.assertIsInstance(ics, str)
-        print(ics)

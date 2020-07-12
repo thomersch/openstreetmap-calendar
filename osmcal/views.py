@@ -1,5 +1,5 @@
 import json
-from datetime import timedelta
+from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 
 from django.conf import settings
@@ -310,7 +310,13 @@ class DuplicateEvent(EditEvent):
     @method_decorator(login_required)
     def get(self, request, event_id):
         old_evt = Event.objects.get(id=event_id)
-        form = forms.EventForm(initial=self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description')))
+
+        form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description'))
+        form_data['start'] = datetime.now().replace(
+            hour=old_evt.start.hour,
+            minute=old_evt.start.minute,
+        )
+        form = forms.EventForm(initial=form_data)
         form.cleaned_data = {}
         form.add_error('start', 'please set')
         if old_evt.end:
