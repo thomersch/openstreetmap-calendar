@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="{% static 'osmcal/community/form.css' %}">
 {% endblock %}
 
-{% block title %}osmcal Create Community{% endblock %}
+{% block title %}{{ block.super }} | Create Community{% endblock %}
+
 
 {% block content %}
 	<h1>Create Community</h1>

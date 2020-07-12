@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'osmcal/community/community.css' %}">
 {% endblock %}
 
-{% block title %}osmcal {{ community.name }}{% endblock %}
+{% block title %}{{ block.super }} | {{ community.name }}{% endblock %}
 
 {% block content %}
 	<div class="community-breadcrumbs"><a href="{% url 'osmcal.community:community-list' %}">Communities</a> » {{ community.name }}</div>
