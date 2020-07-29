@@ -14,6 +14,7 @@ class EventType(Enum):
     WORK = "Work"
     MAPE = "Map Event"
     CONF = "Conference"
+    MAPA = "Mapathon"
 
 
 class Event(models.Model):
