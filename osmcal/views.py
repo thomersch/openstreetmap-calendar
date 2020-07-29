@@ -25,6 +25,7 @@ from . import forms
 from .ical import encode_event, encode_events
 from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
                      ParticipationQuestion, ParticipationQuestionChoice, User)
+from .models import EventType
 
 
 class EventListView(View):
@@ -40,6 +41,10 @@ class EventListView(View):
         filter_to_country = params.get('in', None)
         if filter_to_country:
             upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
+
+        filter_to_kind = params.get('kind', None)
+        if filter_to_kind:
+            upcoming_events = upcoming_events.filter(kind=EventType(filter_to_kind).name)
 
         filter_around = params.get('around', None)
         if filter_around:
