@@ -1,9 +1,29 @@
+.community-list-entry:first-child {
+	border-top: 1px solid #DBDBDB;
+}
+
 .community-list-entry {
-	margin-bottom: 1em;
-}	
+	border-bottom: 1px solid #DBDBDB;
+	max-width: 600px;
+	padding: 1em 0;
+}
+
+.community-list-bubble {
+	background-color: #7EBC6F;
+	border-radius: 25px;
+	box-sizing: border-box;
+	color: white;
+	font-weight: bold;
+	height: 3em;
+	padding-top: .75em;
+	margin-right: 10px;
+	text-align: center;
+	width: 3em;
+}
 
 .community-list-entry a {
-	color: #5A5A5A;
+	color: #A4A4A4;
+	display: block;
 }
 
 .community-list-entry a:hover {

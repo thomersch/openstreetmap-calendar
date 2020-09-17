@@ -9,11 +9,23 @@
 
 {% block content %}
 	<h1>Communities</h1>
-	<p>
-		osmcal is the calendar for OpenStreetMap, but other communities are welcome as well. <a href="{% url 'osmcal.community:community-create' %}">Create a new one.</a>
-	</p>
+	<content class="text">
+		<p>
+			osmcal is the calendar for OpenStreetMap, but other communities are welcome, too.
+			<a href="{% url 'osmcal.community:community-create' %}"><button class="btn-mini">Create New Community</button></a>
+		</p>
+	</content>
 
+	<div class="community-class">
 	{% for community in communities %}
-		<div class="community-list-entry"><a href="{% url 'osmcal.community:community' community.id %}"><h2>{{ community.name }}</h2>{{ community.member_count }} Members</a></div>
+		<div class="community-list-entry">
+			<a href="{% url 'osmcal.community:community' community.id %}">
+				<div>
+					<h2>{{ community.name }}</h2>
+					{{ community.member_count }} Members
+				</div>
+			</a>
+		</div>
 	{% endfor %}
+	</div>
 {% endblock %}

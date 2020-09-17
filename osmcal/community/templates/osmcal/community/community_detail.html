@@ -8,8 +8,6 @@
 {% block title %}{{ block.super }} | {{ community.name }}{% endblock %}
 
 {% block content %}
-	<div class="community-breadcrumbs"><a href="{% url 'osmcal.community:community-list' %}">Communities</a> » {{ community.name }}</div>
-
 	<h1>{{ community.name }}</h1>
 	<p>This community has {{ community.members.count }} member{{ community.members.count|pluralize }}.</p>
 

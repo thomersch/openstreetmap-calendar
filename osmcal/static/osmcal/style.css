@@ -233,7 +233,7 @@ h1, h2 {
 	margin-top: .5em;
 }
 
-.event-single-participants h2 {
+.event-single-communities h2, .event-single-participants h2 {
 	margin-bottom: .25em;
 }
 
