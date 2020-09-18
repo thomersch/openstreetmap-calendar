@@ -25,78 +25,80 @@
 {% endblock %}
 
 {% block content %}
-	<div class="event-single-block">
-		<div class="event-single-main">
-			<h1 class="event-single-title{% if event.cancelled %} event-single-title-cancelled{% endif %}">{{ event.name }}</h1>
-			<p class="event-single-location">
-				{% if event.location_text %}{{ event.location_text }}<br>{% endif %}
-				{% if event.location_name %}{{ event.location_name }}{% endif %}
-			</p>
+	<div class="content-main-fullwidth">
+		<div class="event-single-block">
+			<div class="event-single-main">
+				<h1 class="event-single-title{% if event.cancelled %} event-single-title-cancelled{% endif %}">{{ event.name }}</h1>
+				<p class="event-single-location">
+					{% if event.location_text %}{{ event.location_text }}<br>{% endif %}
+					{% if event.location_name %}{{ event.location_name }}{% endif %}
+				</p>
 
-			<div class="event-single-date">
-				{% include "osmcal/date.txt" %}
-			</div>
-
-			<p>{% if event.cancelled %}This event has been cancelled.{% endif %}</p>
-			<p>{{ event.description|markdown|safe }}</p>
-			<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
-
-		</div>
-		<aside class="event-single-additional">
-			{% if event.location %}
-				{% leaflet_map "yourmap" %}
-			{% endif %}
-
-			<div class="event-single-side-buttons">
-				<a href="{% url 'event-change' event.id %}"><button class="btn">Edit Event</button></a>
-				<a href="{% url 'event-duplicate' event.id %}"><button class="btn">Repeat Event</button></a>
-			</div>
-
-			{% if not event.cancelled %}
-			<div class="event-single-participation">
-				<div class="event-single-participants">
-					<h2>Participate</h2>
-					{% with event.participation.count as participants %}
-						{% if participants != 0 %}
-							{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-							{% if participants > 4 %}
-								and {{ participants|add:-3}} others 
-							{% elif participants == 4 %}
-								and {% with event.participation.all|slice:"3:4" as lp %}{{ lp.0.user.name }}{% endwith %}
-							{% endif %}
-							{% if participants > 1 %}are{% else %}is{% endif %} joining.
-
-							{% if participants > 3 or participants != 0 and event.questions %}<a href="{% url 'event-participants' event.id %}">Show all.</a>{% endif %}
-						{% endif %}
-					{% endwith %}
+				<div class="event-single-date">
+					{% include "osmcal/date.txt" %}
 				</div>
 
-				{% if not user_is_joining %}
-				<form action="{% url 'event-join' event.id %}" method="POST" class="event-single-join">
-					{% csrf_token %}
-					<button class="btn">Attend</button>
-				</form>
-				{% else %}
-				<form action="{% url 'event-unjoin' event.id %}" method="POST" class="event-single-join">
-					{% csrf_token %}
-					<button class="btn btn-negative">Cancel Attendance</button>
-				</form>
-				{% endif %}
-			</div>
-			{% endif %}
+				<p>{% if event.cancelled %}This event has been cancelled.{% endif %}</p>
+				<p>{{ event.description|markdown|safe }}</p>
+				<p>{% if event.link %}<a href="{{ event.link }}"><button class="btn">Event Website</button></a> {% endif %}<a href="{% url 'event-ical' event.id %}"><button class="btn">Add to Calendar</button></a></p>
 
-			<div class="event-single-communities">
-				<h2>Communities</h2>
-				{% if event.communities.count == 0 %}
-					This event doesn't belong to any community.
+			</div>
+			<aside class="event-single-additional">
+				{% if event.location %}
+					{% leaflet_map "yourmap" %}
 				{% endif %}
 
-				<div><button class="btn">Add to Community</button></div>
-			</div>
-		</aside>
-	</div>
+				<div class="event-single-side-buttons">
+					<a href="{% url 'event-change' event.id %}"><button class="btn btn-mini">Edit Event</button></a>
+					<a href="{% url 'event-duplicate' event.id %}"><button class="btn btn-mini">Repeat Event</button></a>
+				</div>
 
-	<div class="event-single-attribution">
-		Created by {% for l in authors %}<a href="https://openstreetmap.org/user/{{ l.created_by.name }}">{{ l.created_by.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+				{% if not event.cancelled %}
+				<div class="event-single-participation">
+					<div class="event-single-participants">
+						<h2>Participate</h2>
+						{% with event.participation.count as participants %}
+							{% if participants != 0 %}
+								{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+								{% if participants > 4 %}
+									and {{ participants|add:-3}} others 
+								{% elif participants == 4 %}
+									and {% with event.participation.all|slice:"3:4" as lp %}{{ lp.0.user.name }}{% endwith %}
+								{% endif %}
+								{% if participants > 1 %}are{% else %}is{% endif %} joining.
+
+								{% if participants > 3 or participants != 0 and event.questions.count != 0 %}<a href="{% url 'event-participants' event.id %}">Show all.</a>{% endif %}
+							{% endif %}
+						{% endwith %}
+					</div>
+
+					{% if not user_is_joining %}
+					<form action="{% url 'event-join' event.id %}" method="POST" class="event-single-join">
+						{% csrf_token %}
+						<button class="btn">Attend</button>
+					</form>
+					{% else %}
+					<form action="{% url 'event-unjoin' event.id %}" method="POST" class="event-single-join">
+						{% csrf_token %}
+						<button class="btn btn-negative">Cancel Attendance</button>
+					</form>
+					{% endif %}
+				</div>
+				{% endif %}
+
+				<div class="event-single-communities">
+					<h2>Communities</h2>
+					{% if event.communities.count == 0 %}
+						This event doesn't belong to any community.
+					{% endif %}
+
+					<div><button class="btn">Add to Community</button></div>
+				</div>
+			</aside>
+		</div>
+
+		<div class="event-single-attribution">
+			Created by {% for l in authors %}<a href="https://openstreetmap.org/user/{{ l.created_by.name }}">{{ l.created_by.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}
+		</div>
 	</div>
 {% endblock %}

@@ -3,7 +3,6 @@ from enum import Enum
 import requests
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
-from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 from sentry_sdk import add_breadcrumb
 
@@ -25,7 +24,7 @@ class Event(models.Model):
 
     location_name = models.CharField(max_length=50, blank=True, null=True)
     location = PointField(blank=True, null=True)
-    location_address = JSONField(blank=True, null=True)
+    location_address = models.JSONField(blank=True, null=True)
 
     link = models.URLField(blank=True, null=True)
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType], null=True)
@@ -108,7 +107,7 @@ class ParticipationAnswer(models.Model):
 
 class EventLog(models.Model):
     event = models.ForeignKey('Event', related_name='log', on_delete=models.CASCADE)
-    data = JSONField()
+    data = models.JSONField()
     created_by = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 

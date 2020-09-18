@@ -1,5 +1,11 @@
 .content-main {
+	margin-left: 1em;
 	margin-right: 1em;
+}
+
+.content-main-fullwidth {
+	margin-left: 0;
+	margin-right: 0;
 }
 
 .event-single-block {
@@ -16,8 +22,4 @@
 
 .event-single-attribution {
 	margin-top: 2em;
-}
-
-.event-subscribe-buttons {
-	margin-right: 10px;
 }

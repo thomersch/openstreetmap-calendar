@@ -119,7 +119,7 @@ class EventParticipants(TemplateView):
         event_id = kwargs['event_id']
         # TODO: validate event_id
         context['event'] = Event.objects.get(id=event_id)
-        if context['event'].questions:
+        if context['event'].questions.count() > 0:
             # The following monstrosity will convert the answers into a table:
             context['answers'] = User.objects.raw('''
             SELECT

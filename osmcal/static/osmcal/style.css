@@ -62,10 +62,10 @@ h1, h2 {
 }
 
 .content-main {
-	/*width: 50%;*/
-	/*max-width: 600px;*/
-	/*margin: 0 auto;*/
 	display: block;
+}
+
+.content-main-fullwidth {
 	margin-left: 1em;
 }
 
@@ -104,6 +104,7 @@ h1, h2 {
 	list-style: none;
 	max-width: 600px;
 	padding-left: 0;
+	margin: 0 auto;
 }
 
 .event-list a:hover {
@@ -223,6 +224,7 @@ h1, h2 {
 .text {
 	display: block;
 	max-width: 600px;
+	margin: auto;
 }
 
 .text pre {
@@ -244,6 +246,7 @@ h1, h2 {
 .event-feed-button-panel {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 1em;
 }
 
 .event-filter-controls {
