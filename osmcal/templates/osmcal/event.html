@@ -84,6 +84,15 @@
 				{% endif %}
 			</div>
 			{% endif %}
+
+			<div class="event-single-communities">
+				<h2>Communities</h2>
+				{% if event.communities.count == 0 %}
+					This event doesn't belong to any community.
+				{% endif %}
+
+				<div><button class="btn">Add to Community</button></div>
+			</div>
 		</aside>
 	</div>
 
