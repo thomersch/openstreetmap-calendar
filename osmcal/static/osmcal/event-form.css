@@ -9,6 +9,7 @@
 	font-weight: bold;
 	padding-right: 10px;
 	text-align: right;
+	vertical-align: middle;
 	width: 30%;
 }
 
@@ -21,6 +22,17 @@
 	font-size: 12pt;
 	padding: 10px;
 	width: 67%;
+}
+
+.event-form .event-form-input {
+	display: inline-block;
+	width: 67%;
+	vertical-align: top;
+}
+
+.event-form-input-info {
+	font-size: 90%;
+	color: #666666;
 }
 
 .event-form textarea {
@@ -46,6 +58,10 @@
 	width: 68%;
 }
 
+.submit-row {
+	margin-left: 1em;
+}
+
 .event-form .submit-row input {
 	width: 93%;
 }
@@ -63,7 +79,6 @@
 
 .event-question-form {
 	display: flex;
-	margin-top: 2em;
 	max-width: 600px;
 	width: 100%;
 }

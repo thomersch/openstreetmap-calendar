@@ -18,6 +18,13 @@
 	{% else %}
 	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
 	{% endif %}
+
+	<script>
+		var appData = {
+			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}'),
+			id_location_geojson: ""
+		};
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -30,6 +37,7 @@
 			<div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
 				<label for="{{ field.id_for_label }}" class="event-form-leading-label">{{ field.label }}</label>
 				{{ field }}
+				{{ field.attrs.items }}
 				{% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
 			</div>
 			{% endfor %}
@@ -105,12 +113,10 @@
 	</form>
 
 	<script>
-		var app = new Vue({
+		var questionApp = new Vue({
 			el: '#event-question-form',
 			delimiters: ['[[', ']]'],
-			data: {
-				questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}')
-			},
+			data: appData,
 			created: function() {
 				this.initial_questions_n = this.questions.length;
 			},

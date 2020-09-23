@@ -1,0 +1,29 @@
+<span class="event-form-input event-form-input-info" id="{{ widget.attrs.id }}">Will be automatically set, if location is set. <a href="">Set manually</a> for events without physical location.</span>
+
+<script>
+	appData.{{ widget.attrs.id }} = {% if not widget.value %}null{% else %}"{{ widget.value }}"{% endif %};
+
+	var {{widget.attrs.id}}_tzWidget = new Vue({
+		el: "#{{ widget.attrs.id }}",
+		delimiters: ['[[', ']]'],
+		data: appData,
+		watch: {
+			pt: function(val) {
+				fetch('/api/internal/timezone', {lat: val[1], lon: val[0]})
+					.then(data => {
+						console.log(data);
+					});
+			}
+		},
+		computed: {
+			pt: function() {
+				if (this.id_location_geojson == "") {
+					return null;
+				}
+				var gj = JSON.parse(this.id_location_geojson);
+				return gj.coordinates;
+			}
+		}
+	});
+</script>
+

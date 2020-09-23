@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
+from django.views import View
 from osmcal import views
 
 from . import serializers
@@ -33,3 +34,8 @@ class PastEventList(EventList):
 
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs)[:self.RESULT_LIMIT]
+
+
+class Timezone(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("TODO")

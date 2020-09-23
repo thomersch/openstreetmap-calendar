@@ -4,10 +4,10 @@ from typing import Dict, Iterable
 from django import forms
 from django.contrib.postgres.forms import SimpleArrayField
 from django.forms.widgets import DateTimeInput, TextInput
-from leaflet.forms.widgets import LeafletWidget
 
 from . import models
 from .serializers import JSONEncoder
+from .widgets import LeafletWidget, TimezoneWidget
 
 
 class QuestionForm(forms.ModelForm):
@@ -44,16 +44,22 @@ class QuestionnaireForm(forms.Form):
 
 
 class EventForm(forms.ModelForm):
+    timezone = forms.CharField(required=False, widget=TimezoneWidget())
+
     class Meta:
         model = models.Event
-        fields = ('name', 'whole_day', 'start', 'end', 'link', 'kind', 'location_name', 'location', 'description')
+        fields = ('name', 'whole_day', 'start', 'end', 'link', 'kind', 'location_name', 'location', 'timezone', 'description')
         widgets = {
             'location': LeafletWidget(),
             'start': DateTimeInput(attrs={'class': 'datepicker-flat'}),
             'end': DateTimeInput(attrs={'class': 'datepicker-flat', 'placeholder': 'optional'}),
             'link': TextInput(attrs={'placeholder': 'https://'}),
-            'location_name': TextInput(attrs={'placeholder': 'e.g. Café International'})
+            'location_name': TextInput(attrs={'placeholder': 'e.g. Café International'}),
         }
+
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        # TODO: Validate location/timezone requirement
 
     def to_json(self):
         d = {}
