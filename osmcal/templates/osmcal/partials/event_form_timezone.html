@@ -1,18 +1,41 @@
-<span class="event-form-input event-form-input-info" id="{{ widget.attrs.id }}">Will be automatically set, if location is set. <a href="">Set manually</a> for events without physical location.</span>
+<span class="event-form-input event-form-input-info" id="{{ widget.attrs.id }}-wrapper">
+	<template v-if="!{{ widget.attrs.id }}.manually_set">
+		<template v-if="{{ widget.attrs.id }}.tz == null">
+			Will be automatically set, if location is set. <a @click="{{ widget.attrs.id }}.manually_set=true">Set manually</a> for events without physical location.
+		</template>
+	</template>
+	<template v-if="{{ widget.attrs.id }}.tz != null || {{ widget.attrs.id }}.manually_set">	
+		<select id="{{ widget.attrs.id }}" v-model="{{ widget.attrs.id }}.tz">
+			{% for tz in all_timezones %}
+				<option>{{ tz }}</option>
+			{% endfor %}
+		</select>
+	</template>
+</span>
 
 <script>
-	appData.{{ widget.attrs.id }} = {% if not widget.value %}null{% else %}"{{ widget.value }}"{% endif %};
+	appData.{{ widget.attrs.id }} = {
+		"tz": {% if not widget.value %}null{% else %}"{{ widget.value }}"{% endif %},
+		"manually_set": {% if widget.value %}true{% else %}false{% endif %}
+	};
 
 	var {{widget.attrs.id}}_tzWidget = new Vue({
-		el: "#{{ widget.attrs.id }}",
+		el: "#{{ widget.attrs.id }}-wrapper",
 		delimiters: ['[[', ']]'],
 		data: appData,
 		watch: {
 			pt: function(val) {
-				fetch('/api/internal/timezone', {lat: val[1], lon: val[0]})
-					.then(data => {
-						console.log(data);
-					});
+				if(!this.{{ widget.attrs.id }}.manually_set) {
+					fetch("/api/internal/timezone?lat="+val[1]+"&lon="+val[0])
+						.then(resp => {
+							if(resp.ok) {
+								return resp.text();
+							}
+						})
+						.then(data => {
+							this.{{ widget.attrs.id }}.tz = data;
+						});
+				}
 			}
 		},
 		computed: {

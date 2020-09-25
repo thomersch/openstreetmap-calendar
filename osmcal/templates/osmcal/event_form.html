@@ -31,7 +31,7 @@
 	{% if page_title %}<h1>{{ page_title }}</h1>{% endif %}
 	<form id="event-main-form" method="POST">
 		{% csrf_token %}
-
+		
 		<section class="event-form">
 			{% for field in form %}
 			<div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
@@ -182,9 +182,11 @@
 					marker.addTo(this._map);
 					fs.save(marker);
 					marker.editing.enable();
+					leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
 
 					marker.on('dragend', function(e) {
 						fs.save(marker);
+						leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
 					});
 				}
 			});

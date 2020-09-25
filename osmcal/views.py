@@ -245,6 +245,10 @@ class EditEvent(View):
             ParticipationQuestionChoice.objects.create(text=choice, question=pq)
         pq.save()
 
+    def render(self, request, ctx):
+        ctx['debug'] = settings.DEBUG
+        return render(request, 'osmcal/event_form.html', ctx)
+
     @method_decorator(login_required)
     def get(self, request, event_id=None):
         form = forms.EventForm()
@@ -256,7 +260,7 @@ class EditEvent(View):
             questions = evt.questions.all()
             form = forms.EventForm(instance=evt)
             question_formset = self._question_formset(request)
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions), 'event': evt})
+        return self.render(request, {'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions), 'event': evt})
 
     @method_decorator(login_required)
     @transaction.atomic
@@ -291,7 +295,7 @@ class EditEvent(View):
 
             return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset})
+        return self.render(request, {'form': form, 'question_formset': question_formset})
 
 
 class DuplicateEvent(EditEvent):
@@ -321,7 +325,7 @@ class DuplicateEvent(EditEvent):
         form.add_error('start', 'please set')
         if old_evt.end:
             form.add_error('end', 'please set')
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'page_title': 'New Event'})
+        return self.render(request, {'form': form, 'page_title': 'New Event'})
 
 
 class EventICal(View):

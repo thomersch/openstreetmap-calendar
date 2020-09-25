@@ -3,11 +3,15 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from osmcal import views
+from pytz import timezone
+from timezonefinder import TimezoneFinder
 
 from . import serializers
 from .decorators import ALLOWED_HEADERS, cors_any, language_from_header
 
 JSON_CONTENT_TYPE = 'application/json; charset=' + settings.DEFAULT_CHARSET  # This shall be utf-8, otherwise we're not friends anymore.
+
+tf = TimezoneFinder()
 
 
 class CORSOptionsMixin(object):
@@ -38,4 +42,9 @@ class PastEventList(EventList):
 
 class Timezone(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse("TODO")
+        lat = float(request.GET['lat'])
+        lon = float(request.GET['lon'])
+        tz = tf.timezone_at(lng=lon, lat=lat)
+        if tz is None:
+            return HttpResponse("", status=400)
+        return HttpResponse(timezone(tz))
