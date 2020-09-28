@@ -29,14 +29,17 @@ def event_body(evt: Event) -> List[str]:
 
     lines.append('UID:OSMCAL-{}'.format(evt.id))
     lines.append('DTSTAMP:{:%Y%m%dT%H%M%S}'.format(evt.start))
+    if evt.cancelled:
+        lines.append('STATUS:CANCELLED')
+
     if evt.whole_day:
         lines.append('DTSTART;VALUE=DATE:{:%Y%m%d}'.format(evt.start))
         if evt.end:
             lines.append('DTEND;VALUE=DATE:{:%Y%m%d}'.format(evt.end + timedelta(days=1)))
     else:
-        lines.append('DTSTART:{:%Y%m%dT%H%M%S}'.format(evt.start))
+        lines.append('DTSTART;TZID={}:{:%Y%m%dT%H%M%S}'.format(evt.timezone, evt.start))
         if evt.end:
-            lines.append('DTEND:{:%Y%m%dT%H%M%S}'.format(evt.end))
+            lines.append('DTEND;TZID={}:{:%Y%m%dT%H%M%S}'.format(evt.timezone, evt.end))
 
     lines.append('SUMMARY:{}'.format(evt.name))
 
