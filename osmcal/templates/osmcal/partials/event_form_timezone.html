@@ -5,7 +5,7 @@
 		</template>
 	</template>
 	<template v-if="{{ widget.attrs.id }}.tz != null || {{ widget.attrs.id }}.manually_set">	
-		<select id="{{ widget.attrs.id }}" v-model="{{ widget.attrs.id }}.tz">
+		<select name="{{ widget.name }}" id="{{ widget.attrs.id }}" v-model="{{ widget.attrs.id }}.tz">
 			{% for tz in all_timezones %}
 				<option>{{ tz }}</option>
 			{% endfor %}

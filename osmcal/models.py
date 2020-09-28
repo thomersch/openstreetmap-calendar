@@ -21,6 +21,7 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(blank=True, null=True)
     whole_day = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=100, blank=True, null=True)
 
     location_name = models.CharField(max_length=50, blank=True, null=True)
     location = PointField(blank=True, null=True)

@@ -1,6 +1,7 @@
 import json
 from typing import Dict, Iterable
 
+import pytz
 from django import forms
 from django.contrib.postgres.forms import SimpleArrayField
 from django.forms.widgets import DateTimeInput, TextInput
@@ -56,14 +57,25 @@ class EventForm(forms.ModelForm):
             'link': TextInput(attrs={'placeholder': 'https://'}),
             'location_name': TextInput(attrs={'placeholder': 'e.g. Café International'}),
         }
+        unlogged_fields = ('timezone', )
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
+        
+        self.cleaned_data['start'] = self.cleaned_data['start'].replace(tzinfo=None)
+
+        if self.cleaned_data['end']:
+            self.cleaned_data['end'] = self.cleaned_data['start'].replace(tzinfo=None)
         # TODO: Validate location/timezone requirement
+
+    def clean_timezone(self):
+        return pytz.timezone(self.cleaned_data['timezone'])
 
     def to_json(self):
         d = {}
         for field in self.fields:
+            if field in self.Meta.unlogged_fields:
+                continue
             d[field] = self.cleaned_data[field]
 
         return json.loads(json.dumps(d, cls=JSONEncoder))  # This is bad and I should feel bad.

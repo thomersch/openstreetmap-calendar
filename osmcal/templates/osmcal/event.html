@@ -15,7 +15,7 @@
 			window.addEventListener("map:init", function(e) {
 				/* jshint ignore:start */
 				var marker = new L.marker([{{ event.location.y }}, {{ event.location.x }}]);
-				/* jshing ignore:end */
+				/* jshint ignore:end */
 				marker.addTo(e.detail.map);
 				marker.bindPopup("{{ event.location_detailed_addr }}");
 				e.detail.map.setView(marker.getLatLng(), 12);
