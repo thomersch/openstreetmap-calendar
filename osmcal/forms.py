@@ -61,11 +61,18 @@ class EventForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
-        
-        self.cleaned_data['start'] = self.cleaned_data['start'].replace(tzinfo=None)
+        tz = self.cleaned_data['timezone']
+
+        """
+        Django automatically assumes that datetimes are in the default time zone (UTC),
+        but in fact they're in the local time zone, so we're stripping the tzinfo from
+        the field and setting it to the given time zone.
+        This does not change the value of the time itself, only the time zone placement.
+        """
+        self.cleaned_data['start'] = tz.localize(self.cleaned_data['start'].replace(tzinfo=None))
 
         if self.cleaned_data['end']:
-            self.cleaned_data['end'] = self.cleaned_data['start'].replace(tzinfo=None)
+            self.cleaned_data['end'] = tz.localize(self.cleaned_data['end'].replace(tzinfo=None))
         # TODO: Validate location/timezone requirement
 
     def clean_timezone(self):

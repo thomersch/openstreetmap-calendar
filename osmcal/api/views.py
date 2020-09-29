@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from osmcal import views
-from pytz import timezone
+from pytz import timezone as tzp
 from timezonefinder import TimezoneFinder
 
 from . import serializers
@@ -47,4 +47,4 @@ class Timezone(View):
         tz = tf.timezone_at(lng=lon, lat=lat)
         if tz is None:
             return HttpResponse("", status=400)
-        return HttpResponse(timezone(tz))
+        return HttpResponse(tzp(tz))
