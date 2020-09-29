@@ -7,10 +7,12 @@ from django.test import SimpleTestCase
 
 
 class MockEvent(object):
-    def __init__(self, start, end=None, whole_day=False):
+    def __init__(self, start, end=None, whole_day=False, location='Dummy'):
         self.start = start
         self.end = end
         self.whole_day = whole_day
+        self.timezone = 'UTC'
+        self.location = location
 
 
 class DateFormatTest(SimpleTestCase):

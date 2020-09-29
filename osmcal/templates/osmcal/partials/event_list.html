@@ -1,4 +1,5 @@
 <ul class="event-list">
+{% load tz %}
 {% for event in events %}
 	<li class="event-list-entry{% if event.cancelled %} event-list-entry-cancelled{% endif %}"><a href="{% url 'event' event.id %}" class="event-list-entry-box">
 		<div class="event-entry-main">
@@ -6,6 +7,7 @@
 			{% if event.location_text %}<p class="event-entry-location">{{ event.location_text }}</p>{% endif %}
 		</div>
 		<span class="event-entry-date">
+		{% timezone event.timezone %}
 		{% if event.start.day == event.end.day or not event.end %}
 			{{ event.start|date:"jS F" }}
 		{% elif event.start.month == event.end.month  %}
@@ -13,6 +15,7 @@
 		{% else %}
 			{{ event.start|date:"jS F"}}–{{ event.end|date:"jS F" }}
 		{% endif %}
+		{% endtimezone %}
 		</span>
 	</a></li>
 {% endfor %}

@@ -10,7 +10,9 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import F, Q
+from django.db.models.expressions import Func
+from django.db.models.fields import DateTimeField
 from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -28,15 +30,29 @@ from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
                      ParticipationQuestion, ParticipationQuestionChoice, User)
 
 
+class LocalDateTime(Func):
+    template = '%(expressions)s'
+    arg_joiner = ' AT TIME ZONE '
+    arity = 2
+
+    output_field = DateTimeField()
+
+
 class EventListView(View):
     def filter_queryset(self, qs, **kwargs):
-        return qs.filter(Q(start__gte=kwargs['after']) | Q(end__gte=kwargs['after'])).order_by('start')
+        return qs.filter(
+            Q(start__gte=kwargs['after']) | Q(end__gte=kwargs['after'])
+        ).order_by('local_start')
 
     def get_queryset(self, params, after=None):
         if after is None:
             after = timezone.now()
 
-        upcoming_events = self.filter_queryset(Event.objects.all(), after=after)
+        upcoming_events = self.filter_queryset(
+            Event.objects.all().annotate(
+                local_start=LocalDateTime(F('start'), F('timezone'))
+            ), after=after
+        )
 
         filter_to_country = params.get('in', None)
         if filter_to_country:
@@ -57,7 +73,18 @@ class Homepage(EventListView):
 
         country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
 
-        return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': request.GET.get('in', None), 'around': request.GET.get('around', None)}})
+        return render(
+            request,
+            'osmcal/homepage.html',
+            context={
+                'user': request.user,
+                'events': upcoming_events,
+                'country_list': country_list,
+                'filter': {
+                    'in': request.GET.get('in', None),
+                    'around': request.GET.get('around', None)
+                }
+            })
 
 
 class SubscriptionInfo(TemplateView):

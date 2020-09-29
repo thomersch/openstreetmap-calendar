@@ -8,3 +8,8 @@ class APIBaseTest(TestCase):
 
         self.assertTrue(resp.has_header('access-control-allow-headers'))
         self.assertTrue(resp.get('access-control-allow-origin', '*'))
+
+    def test_past(self):
+        c = Client()
+        resp = c.get('/api/v1/events/past/')
+        self.assertEqual(resp.status_code, 200)
