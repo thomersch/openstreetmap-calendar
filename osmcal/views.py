@@ -19,6 +19,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
+from pytz import UTC
 from requests_oauthlib import OAuth1Session
 
 from . import forms
@@ -247,6 +248,12 @@ class EditEvent(View):
 
     def render(self, request, ctx):
         ctx['debug'] = settings.DEBUG
+        # For existing events, we need to consider the local timezone,
+        # otherwise we're just using UTC and converting it later.
+        try:
+            ctx['tz'] = ctx['event'].timezone
+        except (AttributeError, KeyError):
+            ctx['tz'] = UTC
         return render(request, 'osmcal/event_form.html', ctx)
 
     @method_decorator(login_required)
@@ -317,8 +324,8 @@ class DuplicateEvent(EditEvent):
 
         form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description'))
         form_data['start'] = datetime.now().replace(
-            hour=old_evt.start.hour,
-            minute=old_evt.start.minute,
+            hour=old_evt.start_localized.hour,
+            minute=old_evt.start_localized.minute,
         )
         form = forms.EventForm(initial=form_data)
         form.cleaned_data = {}

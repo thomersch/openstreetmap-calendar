@@ -1,7 +1,7 @@
-{% now "Y" as current_year %}{% load tabless %}{% tabless %}
+{% now "Y" as current_year %}{% load tz tabless %}{% timezone event.timezone %}{% tabless %}
 {{ event.start|date:"jS F" }}
 	{% if not event.whole_day %}
-		 {{ event.start|date:"G:i" }}
+		 {{ event.start|date:"G:i" }}{% if not event.location %} ({{ event.timezone }}){% endif %}
 	{% endif %}
 	{% if event.end and event.start.day == event.end.day %} – {{ event.end|date:"G:i" }}
 	{% elif not event.end and event.start|date:"Y" != current_year %} {{ event.start.year }}
@@ -11,4 +11,4 @@
 			 {{ event.end|date:"G:i" }}
 		{% endif %}
 	{% endif %}
-{% endtabless %}
+{% endtabless %}{% endtimezone %}

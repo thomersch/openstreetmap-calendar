@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load leaflet_tags static %}
+{% load leaflet_tags static tz %}
 
 {% block head %}
 	{{ block.super }}
@@ -32,6 +32,7 @@
 	<form id="event-main-form" method="POST">
 		{% csrf_token %}
 		
+		{% timezone tz %}
 		<section class="event-form">
 			{% for field in form %}
 			<div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
@@ -42,6 +43,7 @@
 			</div>
 			{% endfor %}
 		</section>
+		{% endtimezone %}
 
 		<section id="event-question-form" class="event-question-form">
 			<label class="event-question-form-label">

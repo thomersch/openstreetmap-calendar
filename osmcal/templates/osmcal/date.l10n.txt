@@ -1,4 +1,4 @@
-{% now "Y" as current_year %}{% load locadate tabless i18n %}{% get_current_language as lang %}{% loca_day_fmt lang as day_fmt %}{% tabless %}
+{% now "Y" as current_year %}{% load tz locadate tabless i18n %}{% timezone event.timezone %}{% get_current_language as lang %}{% loca_day_fmt lang as day_fmt %}{% tabless %}
 {{ event.start|date:day_fmt }}
 	{% if not event.whole_day %}
 		 {{ event.start|date:"G:i" }}
@@ -11,4 +11,4 @@
 			 {{ event.end|date:"G:i" }}
 		{% endif %}
 	{% endif %}
-{% endtabless %}
+{% endtabless %}{% endtimezone %}

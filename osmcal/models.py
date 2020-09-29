@@ -4,6 +4,7 @@ import requests
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
+from pytz import timezone
 from sentry_sdk import add_breadcrumb
 
 
@@ -58,6 +59,16 @@ class Event(models.Model):
             return None
         addr = self.location_address
         return ", ".join(filter(lambda x: x is not None, [self.location_name, addr.get('house_number'), addr.get('road'), addr.get('suburb'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
+
+    @property
+    def start_localized(self):
+        tz = timezone(self.timezone)
+        return self.start.astimezone(tz)
+
+    @property
+    def end_localized(self):
+        tz = timezone(self.timezone)
+        return self.end.astimezone(tz)
 
     class Meta:
         indexes = (
