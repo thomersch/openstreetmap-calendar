@@ -64,7 +64,7 @@ class APIV2Test(TestCase):
             self.assertIn('human', evt['date'])
             self.assertIn('whole_day', evt['date'])
 
-            datetime.strptime(evt['date']['start'], '%Y-%m-%d %H:%M:%S%z')
+            datetime.fromisoformat(evt['date']['start'])
 
             if 'location' in evt:
                 self.assertIn('coords', evt['location'])
