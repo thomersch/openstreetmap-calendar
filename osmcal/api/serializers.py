@@ -44,10 +44,10 @@ class EventsSerializer(BaseSerializerMany):
         o = {
             'human': render_to_string('osmcal/date.l10n.txt', {'event': obj}).strip(),
             'whole_day': obj.whole_day,
-            'start': str(obj.start),
+            'start': str(obj.start_localized),
         }
         if obj.end:
-            o['end'] = str(obj.end)
+            o['end'] = str(obj.end_localized)
         return o
 
     def attr_location(self, obj):

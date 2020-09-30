@@ -23,10 +23,13 @@ class CORSOptionsMixin(object):
 
 
 class EventList(CORSOptionsMixin, views.EventListView):
+    def get_serializer(self):
+        return serializers.EventsSerializer
+
     @cors_any
     @language_from_header
     def get(self, request, *args, **kwargs):
-        es = serializers.EventsSerializer(self.get_queryset(request.GET), context={'request': request})
+        es = self.get_serializer()(self.get_queryset(request.GET), context={'request': request})
         return HttpResponse(es.json, content_type=JSON_CONTENT_TYPE)
 
 
