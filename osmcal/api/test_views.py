@@ -16,6 +16,7 @@ class APIBaseTest(TestCase):
         resp = c.get('/api/v1/events/past/')
         self.assertEqual(resp.status_code, 200)
 
+
 class APIV1Test(TestCase):
     fixtures = ['demo']
 
@@ -42,6 +43,7 @@ class APIV1Test(TestCase):
 
             if 'location' in evt:
                 self.assertIn('coords', evt['location'])
+
 
 class APIV2Test(TestCase):
     fixtures = ['demo']
