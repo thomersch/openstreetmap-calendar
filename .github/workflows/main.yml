@@ -30,7 +30,7 @@ jobs:
         run: pip install pipenv
 
       - name: Run pipenv to install deps
-        run: pipenv sync
+        run: pipenv sync --dev
 
       - name: Run tests
         run: pipenv run ./manage.py test
