@@ -67,6 +67,8 @@ class Event(models.Model):
 
     @property
     def end_localized(self):
+        if not self.end:
+            return None
         tz = timezone(self.timezone)
         return self.end.astimezone(tz)
 

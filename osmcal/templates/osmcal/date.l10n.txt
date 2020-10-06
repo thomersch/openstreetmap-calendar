@@ -3,12 +3,13 @@
 	{% if not event.whole_day %}
 		 {{ event.start|date:"G:i" }}
 	{% endif %}
-	{% if event.end and event.start.day == event.end.day %} – {{ event.end|date:"G:i" }}
-	{% elif not event.end and event.start|date:"Y" != current_year %} {{ event.start.year }}
+	{% if event.end and event.start_localized.day == event.end_localized.day %} – {{ event.end|date:"G:i" }}
+	{% elif not event.end and event.start_localized|date:"Y" != current_year %} {{ event.start.year }}
 	{% elif event.end %}
-		 – {{ event.end|date:day_fmt }}{% if event.end|date:"Y" != current_year %} {{ event.end|date:"Y" }}{% endif %}
+		 – {{ event.end|date:day_fmt }}{% if event.end_localized|date:"Y" != current_year %} {{ event.end|date:"Y" }}{% endif %}
 		{% if not event.whole_day %}
 			 {{ event.end|date:"G:i" }}
 		{% endif %}
 	{% endif %}
+	{% if not event.location %} ({{ event.timezone }}){% endif %}
 {% endtabless %}{% endtimezone %}
