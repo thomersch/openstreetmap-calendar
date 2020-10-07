@@ -47,7 +47,7 @@ class APIV1Test(TestCase):
 
 class APIV2Test(TestCase):
     fixtures = ['demo']
-    
+
     def test_structure_v2(self):
         c = Client()
         resp = c.get('/api/v2/events/')
