@@ -80,6 +80,6 @@ class DateFormatTest(SimpleTestCase):
         translation.activate('fr-FR')
         self.assertEqual(
             self._fmt_loca(MockEvent(start=datetime(year=self.cur.year, month=10, day=3), whole_day=True)),
-            '3 octobre'
+            '3 Octobre'
         )
         translation.deactivate()
