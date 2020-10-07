@@ -1,0 +1,9 @@
+{% with start=event.start_localized %}{% with end=event.end_localized %}
+{% if start.day == end.day or not end %}
+	{{ start|date:day_mon_fmt }}
+{% elif start.month == end.month  %}
+	{{ start|date:day_fmt }}–{{ end|date:day_mon_fmt }}
+{% else %}
+	{{ start|date:day_mon_fmt }}–{{ end|date:day_mon_fmt }}
+{% endif %}
+{% endwith %}{% endwith %}

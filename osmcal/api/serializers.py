@@ -44,6 +44,7 @@ class EventsSerializer(BaseSerializerMany):
     def attr_date(self, obj):
         o = {
             'human': render_to_string('osmcal/date.l10n.txt', {'event': obj}).strip(),
+            'human_short': render_to_string('osmcal/date-short.l10n.txt', {'event': obj}).strip(),
             'whole_day': obj.whole_day,
             'start': obj.start_localized.isoformat(),
         }

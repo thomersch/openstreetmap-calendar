@@ -1,10 +1,11 @@
 from django import template
-from django.utils.translation import check_for_language, gettext
+from django.utils.translation import gettext
 
 register = template.Library()
 
+
 @register.simple_tag()
-def loca_day_fmt(lang):
+def loca_day_month_fmt(lang):
     fmt_str = gettext('day_month_format')
     if fmt_str == 'PLACEHOLDER':
         """We're hacking around the fallback language here:
@@ -13,4 +14,15 @@ def loca_day_fmt(lang):
             return 'jS F'
         else:
             return 'j E'
+    return fmt_str
+
+
+@register.simple_tag()
+def loca_day_fmt(lang):
+    fmt_str = gettext('day_only_format')
+    if fmt_str == 'PLACEHOLDER':
+        if lang.startswith('en'):
+            return 'jS'
+        else:
+            return 'j'
     return fmt_str

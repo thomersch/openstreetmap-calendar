@@ -7,15 +7,7 @@
 			{% if event.location_text %}<p class="event-entry-location">{{ event.location_text }}</p>{% endif %}
 		</div>
 		<span class="event-entry-date">
-		{% with start=event.start_localized %}{% with end=event.end_localized %}
-		{% if start.day == end.day or not end %}
-			{{ start|date:"jS F" }}
-		{% elif start.month == end.month  %}
-			{{ start|date:"jS"}}–{{ end|date:"jS F" }}
-		{% else %}
-			{{ start|date:"jS F"}}–{{ end|date:"jS F" }}
-		{% endif %}
-		{% endwith %}{% endwith %}
+			{% include "osmcal/date-short.txt" %}
 		</span>
 	</a></li>
 {% endfor %}

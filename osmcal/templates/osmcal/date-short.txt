@@ -1,0 +1,1 @@
+{% with "jS F" as day_mon_fmt %}{% with "jS" as day_fmt %}{% include 'osmcal/date-short-base.txt' %}{% endwith %}{% endwith %}

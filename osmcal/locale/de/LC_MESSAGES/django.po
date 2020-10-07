@@ -22,3 +22,5 @@ msgstr ""
 msgid "day_month_format"
 msgstr "j. F"
 
+msgid "day_only_format"
+msgstr "j."
