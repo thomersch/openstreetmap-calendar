@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.template.loader import render_to_string
 from django.test import SimpleTestCase
+from django.utils import translation
 
 # from .models import Event
 
@@ -18,6 +19,9 @@ class MockEvent(object):
 class DateFormatTest(SimpleTestCase):
     def _fmt(self, evt):
         return render_to_string('osmcal/date.txt', {'event': evt}).strip()
+
+    def _fmt_loca(self, evt):
+        return render_to_string('osmcal/date.l10n.txt', {'event': evt}).strip()
 
     def setUp(self):
         self.cur = datetime.now()
@@ -63,3 +67,19 @@ class DateFormatTest(SimpleTestCase):
             self._fmt(MockEvent(start=datetime(year=self.cur.year - 1, month=1, day=2), whole_day=True)),
             '2nd January ' + str(self.cur.year - 1)
         )
+
+    def test_localized_de(self):
+        translation.activate('de-DE')
+        self.assertEqual(
+            self._fmt_loca(MockEvent(start=datetime(year=self.cur.year, month=10, day=3), whole_day=True)),
+            '3. Oktober'
+        )
+        translation.deactivate()
+
+    def test_localized_fr(self):
+        translation.activate('fr-FR')
+        self.assertEqual(
+            self._fmt_loca(MockEvent(start=datetime(year=self.cur.year, month=10, day=3), whole_day=True)),
+            '3 octobre'
+        )
+        translation.deactivate()
