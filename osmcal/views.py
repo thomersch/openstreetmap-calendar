@@ -91,11 +91,14 @@ class SubscriptionInfo(TemplateView):
     template_name = 'osmcal/subscription_info.html'
 
 
-class PastEvents(View):
+class PastEvents(EventListView):
     PAGESIZE = 20
 
+    def filter_queryset(self, qs, **kwargs):
+        return qs.filter(start__lte=timezone.now()).order_by('-local_start')
+
     def get(self, request, page=1, **kwargs):
-        evts = Event.objects.filter(start__lte=timezone.now()).order_by('-start')
+        evts = self.get_queryset(request.GET)
         has_more = False
         if evts.count() > page * self.PAGESIZE:
             has_more = True
