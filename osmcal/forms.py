@@ -4,11 +4,24 @@ from typing import Dict, Iterable
 import pytz
 from django import forms
 from django.contrib.postgres.forms import SimpleArrayField
+from django.forms import ValidationError
 from django.forms.widgets import DateTimeInput, TextInput
 
 from . import models
 from .serializers import JSONEncoder
 from .widgets import LeafletWidget, TimezoneWidget
+
+
+class TimezoneField(forms.Field):
+    def to_python(self, value):
+        try:
+            return pytz.timezone(value)
+        except pytz.exceptions.Error:
+            return None
+
+    def validate(self, value):
+        if not value:
+            raise ValidationError('no value', code='required')
 
 
 class QuestionForm(forms.ModelForm):
@@ -45,7 +58,7 @@ class QuestionnaireForm(forms.Form):
 
 
 class EventForm(forms.ModelForm):
-    timezone = forms.CharField(required=False, widget=TimezoneWidget())
+    timezone = TimezoneField(required=True, widget=TimezoneWidget())
 
     class Meta:
         model = models.Event
@@ -61,7 +74,11 @@ class EventForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
-        tz = self.cleaned_data['timezone']
+        
+        if self.errors:
+            return self.cleaned_data
+
+        tz = self.cleaned_data.get('timezone', None)
 
         """
         Django automatically assumes that datetimes are in the default time zone (UTC),
@@ -74,9 +91,6 @@ class EventForm(forms.ModelForm):
         if self.cleaned_data['end']:
             self.cleaned_data['end'] = tz.localize(self.cleaned_data['end'].replace(tzinfo=None))
         # TODO: Validate location/timezone requirement
-
-    def clean_timezone(self):
-        return pytz.timezone(self.cleaned_data['timezone'])
 
     def to_json(self):
         d = {}
