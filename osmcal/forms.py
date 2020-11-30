@@ -90,7 +90,6 @@ class EventForm(forms.ModelForm):
 
         if self.cleaned_data['end']:
             self.cleaned_data['end'] = tz.localize(self.cleaned_data['end'].replace(tzinfo=None))
-        # TODO: Validate location/timezone requirement
 
     def to_json(self):
         d = {}
