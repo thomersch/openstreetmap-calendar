@@ -57,7 +57,10 @@
 				</div>
 
 				<div v-for="(question, index) in questions" class="event-question-form-block">
-					<h3>Question [[ index+1 ]]</h3>
+					<div style="display:flex">
+						<h3 style="flex-grow: 2;">Question [[ index+1 ]]</h3>
+						<button v-on:click.prevent="deleteQuestion(index)" v-if="!question.frozen" class="btn-mini btn-negative" style="padding: 0.3em; height: 100%;">Delete Question</button>
+					</div>
 
 					<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
 
@@ -125,6 +128,9 @@
 			methods: {
 				addQuestion: function() {
 					this.questions.push({'type': 'TEXT', choices: [{}]});
+				},
+				deleteQuestion: function(index) {
+					this.questions.splice(index, 1);
 				},
 				addChoice: function(question) {
 					question.choices.push({'text': ''});
