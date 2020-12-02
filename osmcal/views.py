@@ -56,7 +56,7 @@ class EventListView(View):
 
         filter_to_country = params.get('in', None)
         if filter_to_country and len(filter_to_country) == 2:
-            upcoming_events = upcoming_events.filter(location_address__country_code=filter_to_country)
+            upcoming_events = upcoming_events.filter(location_address__country_code=filter_to_country.lower())
         elif filter_to_country:
             upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
 
