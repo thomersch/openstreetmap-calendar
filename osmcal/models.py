@@ -6,6 +6,9 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
+from timezonefinder import TimezoneFinder
+
+tf = TimezoneFinder()
 
 
 class EventType(Enum):
@@ -130,6 +133,13 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     osm_id = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
+
+    home_location = PointField(blank=True, null=True)
+
+    def home_timezone(self):
+        if not self.home_location:
+            return None
+        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:

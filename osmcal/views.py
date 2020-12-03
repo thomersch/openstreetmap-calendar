@@ -1,6 +1,5 @@
 import json
 from datetime import datetime, timedelta
-from xml.etree import ElementTree as ET
 
 from django.conf import settings
 from django.contrib.auth import login as dj_login
@@ -24,7 +23,7 @@ from django.views.generic.base import TemplateView
 from pytz import UTC
 from requests_oauthlib import OAuth1Session
 
-from . import forms
+from . import forms, osmuser
 from .ical import encode_event, encode_events
 from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
                      ParticipationQuestion, ParticipationQuestionChoice, User)
@@ -400,17 +399,15 @@ def oauth_callback(request):
         resource_owner_secret=request.session.get("oauth_params")["oauth_token_secret"],
         verifier='OSMNOPE'
     )
-    osm.fetch_access_token('https://www.openstreetmap.org/oauth/access_token')
-    userreq = osm.get('https://api.openstreetmap.org/api/0.6/user/details')
-
-    userxml = ET.fromstring(userreq.text)
-    userattrs = userxml.find('user').attrib
+    osm_attrs = osmuser.get_user_attributes(osm)
 
     try:
-        u = User.objects.get(osm_id=userattrs["id"])
+        u = User.objects.get(osm_id=osm_attrs['osm_id'])
     except User.DoesNotExist:
-        u = User.objects.create(osm_id=userattrs["id"])
-    u.name = userattrs['display_name']
+        u = User.objects.create(osm_id=osm_attrs['osm_id'])
+    
+    u.name = osm_attrs['display_name']
+    u.home_location = osm_attrs.get('home_location', None)
     u.save()
 
     dj_login(request, u)
@@ -424,3 +421,11 @@ def oauth_callback(request):
 
 class Documentation(TemplateView):
     template_name = 'osmcal/documentation.html'
+
+
+class CurrentUserView(TemplateView):
+    template_name = 'osmcal/user_self.html'
+
+    @method_decorator(login_required)
+    def get(self, request):
+        return super().get(self, request)

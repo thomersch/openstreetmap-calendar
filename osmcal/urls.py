@@ -33,6 +33,8 @@ urlpatterns = [
 
     path('documentation/', views.Documentation.as_view(), name='api-manual'),
 
+    path('me/', views.CurrentUserView.as_view(), name='user-self'),
+
     url('', include('django_prometheus.urls')),
     url('api/', include('osmcal.api.urls')),
 ]
