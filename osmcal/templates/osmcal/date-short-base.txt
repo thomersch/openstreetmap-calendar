@@ -1,4 +1,4 @@
-{% with start=event.start_localized %}{% with end=event.end_localized %}
+{% with start=event.start_localized %}{% with end=event.end_localized %}{% load tz %}{% timezone event.timezone %}
 {% if start.day == end.day or not end %}
 	{{ start|date:day_mon_fmt }}
 {% elif start.month == end.month  %}
@@ -6,4 +6,4 @@
 {% else %}
 	{{ start|date:day_mon_fmt }}–{{ end|date:day_mon_fmt }}
 {% endif %}
-{% endwith %}{% endwith %}
+{% endtimezone %}{% endwith %}{% endwith %}
