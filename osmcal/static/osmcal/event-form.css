@@ -19,6 +19,7 @@
 
 .event-form input, select {
 	box-sizing: border-box;
+	border: 1px solid #AAAAAA;
 	font-size: 12pt;
 	padding: 10px;
 	width: 67%;
@@ -68,7 +69,7 @@
 
 .leaflet-control-geocoder-form input {
 	font-size: 12px;
-	height: 14px;
+	height: 100%;
 	margin-bottom: inherit;
 	width: inherit;
 }
