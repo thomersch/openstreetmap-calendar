@@ -1,6 +1,7 @@
 import json
 from typing import Dict, Iterable
 
+import babel.dates
 import pytz
 from django import forms
 from django.contrib.postgres.forms import SimpleArrayField
@@ -15,7 +16,9 @@ from .widgets import LeafletWidget, TimezoneWidget
 class TimezoneField(forms.Field):
     def to_python(self, value):
         try:
-            return pytz.timezone(value)
+            return pytz.timezone(
+                babel.dates.get_timezone_name(value, return_zone=True)
+            )
         except pytz.exceptions.Error:
             return None
 

@@ -20,6 +20,7 @@ python-dotenv = "~=0.14"
 sentry-sdk = "~=0.17"
 django-prometheus = "~=2.0"
 timezonefinder = "~=4.4"
+Babel = "~=2.9"
 
 [requires]
 python_version = "3.7"
