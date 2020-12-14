@@ -100,3 +100,7 @@ If you need test data, you can load some using:
 ```
 pipenv run ./manage.py osmcal/fixtures/demo.yaml
 ```
+
+## API Documentation
+
+The API is described using OpenAPI 3, the schema is located in `/api/schema/`. The currently live version is [visible here](https://osmcal.org/static/api.html).

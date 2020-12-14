@@ -1,0 +1,217 @@
+openapi: 3.0.0
+info:
+  version: '2.2'
+  title: OSMCAL API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'https://osmcal.org/api'
+tags:
+  - name: Events
+paths:
+  /v2/events/:
+    get:
+      description: Retrieve list of upcoming events
+      tags:
+        - Events
+      parameters:
+        - name: in
+          in: query
+          description: Limit returned events to a given country. The country should be specified as ISO 3166-1 alpha-2 code.
+          required: false
+          example: "de"
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of events (soonest first)
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/Events"
+                
+  /v2/events/past/:
+    get:
+      description: Retrieve list of past events
+      tags:
+        - Events
+      parameters:
+        - name: in
+          in: query
+          description: Limit returned events to a given country. The country should be specified as ISO 3166-1 alpha-2 code.
+          required: false
+          example: "de"
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of events (recently passed first)
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/Events"
+
+  /v1/events/:
+    get:
+      deprecated: true
+      description: Retrieve list of upcoming events
+      tags:
+        - Events
+      parameters:
+        - name: in
+          in: query
+          description: Limit returned events to a given country
+          required: false
+          example: "Germany"
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of events (soonest first)
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/Events"
+                
+  /v1/events/past/:
+    get:
+      deprecated: true
+      description: Retrieve list of past events
+      tags:
+        - Events
+      parameters:
+        - name: in
+          in: query
+          description: Limit returned events to a given country
+          required: false
+          example: "Germany"
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of events (recently passed first)
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/EventsV1"
+
+components:
+  schemas:
+    Events:
+      type: array
+      items:
+        type: object
+        required:
+          - name
+          - url
+          - date
+        properties:
+          name:
+            type: string
+            example: "Mapping Party #23"
+          url:
+            type: string
+            example: "https://osmcal.org/event/23/"
+            description: "Link to event on OSMCAL"
+          date:
+            $ref: "#/components/schemas/Date"
+          location:
+            $ref: "#/components/schemas/Location"
+          cancelled:
+            type: boolean
+            default: false
+            example: true
+            description: Indicates whether event has been cancelled. Omited if not.
+  
+    Date:
+      type: object
+      required:
+        - start
+      properties:
+        start:
+          type: string
+          example: "2020-05-24T12:00:00+09:00"
+          description: Start Date as ISO 8601 string
+        end:
+          type: string
+          example: "2020-05-24T14:00:00+09:00"
+          description: End Date as ISO 8601 string, optional
+        human:
+          type: string
+          example: "24th May 12:00–14:00"
+        human_short:
+          type: string
+          example: "24th May"
+          description: Only displays the date (range) without time. Useful for e.g. list views.
+        whole_day:
+          type: boolean
+          example: false
+      description: Date object, with start date, end date (optional), human date (preferred way of display, localized) and indication, whether the event is a full-day event (`whole_day`).
+  
+    EventsV1:
+      type: array
+      items:
+        type: object
+        required:
+          - name
+          - url
+          - date
+        properties:
+          name:
+            type: string
+            example: "Mapping Party #23"
+          url:
+            type: string
+            example: "https://osmcal.org/event/23/"
+            description: "Link to event on OSMCAL"
+          date:
+            $ref: "#/components/schemas/DateV1"
+          location:
+            $ref: "#/components/schemas/Location"
+          cancelled:
+            type: boolean
+            default: false
+            example: true
+            description: Indicates whether event has been cancelled. Omited if not.
+    DateV1:
+      type: object
+      required:
+        - start
+      properties:
+        start:
+          type: string
+          example: "2020-05-24 12:00:00"
+        end:
+          type: string
+          example: "2020-05-24 14:00:00"
+        human:
+          type: string
+          example: "24th May 12:00–14:00"
+        whole_day:
+          type: boolean
+          example: false
+      description: Date object, with start date, end date (optional), human date (preferred way of display, localized) and indication, whether the event is a full-day event (`whole_day`).
+    Location:
+      type: object
+      required:
+        - coords
+      properties:
+        short:
+          type: string
+          example: "Osaka, Japan"
+        detailed:
+          type: string
+          example: "Tosabori-dori, Chuo, Osaka, Japan"
+        coords:
+          type: array
+          example: [135.5023, 34.6931]
+          items:
+            type: number
+          description: "Coordinates in lon/lat"
+        venue:
+          type: string
+          example: "Cool Pub"
+externalDocs:
+  description: OSMCAL User Documentation
+  url: https://osmcal.org/documentation/
