@@ -23,6 +23,18 @@ paths:
           example: "de"
           schema:
             type: string
+        - name: Accept-Language
+          in: header
+          schema:
+            type: string
+          example: 'pt-BR'
+          description: The user's locale. This will cause human-readable dates to be localized.
+        - name: Client-App
+          in: header
+          schema:
+            type: string
+          example: 'osmcal-widget/1.0.0'
+          description: Please send some kind of identification of your app, so we can find out easier who you are, if need be.
       responses:
         200:
           description: List of events (soonest first)
@@ -44,6 +56,18 @@ paths:
           example: "de"
           schema:
             type: string
+        - name: Accept-Language
+          in: header
+          schema:
+            type: string
+          example: 'pt-BR'
+          description: The user's locale. This will cause human-readable dates to be localized.
+        - name: Client-App
+          in: header
+          schema:
+            type: string
+          example: 'osmcal-widget/1.0.0'
+          description: Please send some kind of identification of your app, so we can find out easier who you are, if need be.
       responses:
         200:
           description: List of events (recently passed first)
@@ -72,7 +96,7 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: "#/components/schemas/Events"
+                $ref: "#/components/schemas/EventsV1"
                 
   /v1/events/past/:
     get:
@@ -128,6 +152,9 @@ components:
       type: object
       required:
         - start
+        - human
+        - human_short
+        - whole_day
       properties:
         start:
           type: string
