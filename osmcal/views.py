@@ -353,7 +353,7 @@ class DuplicateEvent(EditEvent):
     def get(self, request, event_id):
         old_evt = Event.objects.get(id=event_id)
 
-        form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description'))
+        form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description', 'timezone'))
         form_data['start'] = datetime.now().replace(
             hour=old_evt.start_localized.hour,
             minute=old_evt.start_localized.minute,
