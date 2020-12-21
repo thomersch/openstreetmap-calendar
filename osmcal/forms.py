@@ -94,6 +94,9 @@ class EventForm(forms.ModelForm):
         if self.cleaned_data['end']:
             self.cleaned_data['end'] = tz.localize(self.cleaned_data['end'].replace(tzinfo=None))
 
+        if self.cleaned_data['end'] <= self.cleaned_data['start']:
+            self.add_error('end', 'Event end has to be after its start.')
+
     def to_json(self):
         d = {}
         for field in self.fields:

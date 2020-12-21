@@ -40,6 +40,7 @@
 				{{ field }}
 				{{ field.attrs.items }}
 				{% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
+				{% if field.errors %}<label class="event-form-helptext">{{ field.errors }}</label>{% endif %}
 			</div>
 			{% endfor %}
 		</section>
