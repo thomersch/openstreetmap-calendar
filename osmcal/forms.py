@@ -15,6 +15,10 @@ from .widgets import LeafletWidget, TimezoneWidget
 
 class TimezoneField(forms.Field):
     def to_python(self, value):
+        if not value:
+            # Babel will default to UTC if no string is specified.
+            return None
+
         try:
             return pytz.timezone(
                 babel.dates.get_timezone_name(value, return_zone=True)
