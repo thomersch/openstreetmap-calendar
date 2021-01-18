@@ -45,7 +45,7 @@ class EventListView(View):
 
     def get_queryset(self, params, after=None):
         if after is None:
-            after = timezone.now()
+            after = timezone.now().date()
 
         upcoming_events = self.filter_queryset(
             Event.objects.all().annotate(
