@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'leaflet',
 
     'osmcal',
-    'osmcal.api'
+    'osmcal.api',
+    'osmcal.social'
 ]
 
 MIDDLEWARE = [
@@ -125,4 +126,13 @@ if not DEBUG:
 LEAFLET_CONFIG = {
     'RESET_VIEW': False,
     'MAX_ZOOM': 19
+}
+
+SOCIAL = {
+    'twitter': {
+        'client_key': os.getenv('OSMCAL_TWITTER_KEY', None),
+        'client_secret': os.getenv('OSMCAL_TWITTER_SECRET', None),
+        'user_key': os.getenv('OSMCAL_TWITTER_USER_KEY', None),
+        'user_secret': os.getenv('OSMCAL_TWITTER_USER_SECRET', None)
+    }
 }
