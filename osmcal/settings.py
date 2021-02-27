@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'leaflet',
+    'background_task',
 
     'osmcal',
     'osmcal.api',
