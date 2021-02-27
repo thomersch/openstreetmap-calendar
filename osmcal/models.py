@@ -1,6 +1,7 @@
 from enum import Enum
 
 import requests
+from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
@@ -74,6 +75,10 @@ class Event(models.Model):
             return None
         tz = timezone(self.timezone)
         return self.end.astimezone(tz)
+
+    @property
+    def tz_name(self):
+        return get_timezone_name(self.start_localized)
 
     class Meta:
         indexes = (
