@@ -27,7 +27,7 @@
 			</ul>
 		</li>
 		<li>
-			<p><strong>RSS: </strong>For users of feed readers, Atom/RSS 2.0 feeds are available.</li></p>
+			<p><strong>RSS: </strong>For users of feed readers, Atom/RSS 2.0 feeds are available.</p>
 			<ul>
 				{% if request.GET.in %}<li>
 					<a href="{% url 'event-rss' %}?in={{ request.GET.in }}">{{ request.GET.in }} feed</a><br>
@@ -38,6 +38,10 @@
 					<code>https://{{ request.get_host }}{% url 'event-rss' %}</code>
 				</li>
 			</ul>
+		</li>
+		<li>
+			<p><strong>Twitter: </strong>The calendar tweets about all new events as <a href="https://twitter.com/osm_events">@osm_events</a>.</p>
+		</li>
 	</ul>
 
 	<p>If you experience compatibility problems, feel free to <a href="https://github.com/thomersch/openstreetmap-calendar/issues">report them</a>.</p>
