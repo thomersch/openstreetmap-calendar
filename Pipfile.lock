@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5070f266de7f5a7b41a081fbaaf8e9ceee0afc5d36d66f686f9287ca543d9926"
+            "sha256": "aaa25fbad06d087d482b20735c607bf8a42e9df53af332ca2e63e7a421e6aa6a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,10 +18,10 @@
     "default": {
         "asgiref": {
             "hashes": [
-                "sha256:00a4fdc99c50e5b2b308ff270afdd1a6b265fba6d2c87ea7b98fc0f25f7f5b07",
-                "sha256:b58af092ac5987e245bba2d1472a09ca02fb402b782379c9c3e65555807c0631"
+                "sha256:92906c611ce6c967347bbfea733f13d6313901d54dcca88195eaeb52b2a8e8ee",
+                "sha256:d1216dfbdfb63826470995d31caed36225dcaf34f182e0fa257a4dd9e86f1b78"
             ],
-            "version": "==3.3.3"
+            "version": "==3.3.4"
         },
         "babel": {
             "hashes": [
@@ -55,11 +55,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:32ce792ee9b6a0cbbec340123e229ac9f765dff8c2a4ae9247a14b2ba3a365a7",
-                "sha256:baf099db36ad31f970775d0be5587cc58a6256a6771a44eb795b554d45f211b8"
+                "sha256:c348b3ddc452bf4b62361f0752f71a339140c777ebea3cdaaaa8fdb7f417a862",
+                "sha256:f8393103e15ec2d2d313ccbb95a3f1da092f9f58d74ac1c61ca2ac0436ae1eac"
             ],
             "index": "pypi",
-            "version": "==3.1.7"
+            "version": "==3.1.8"
         },
         "django-background-tasks": {
             "hashes": [
@@ -166,10 +166,10 @@
         },
         "prometheus-client": {
             "hashes": [
-                "sha256:1e7bc14fd6ca9c3fc07309b73a7a3469920dfe88ca9f331c02258cc62736cbc2",
-                "sha256:c5843b3e1b4689a3599a2463e5b5850d110d1a7e28a94bdc2c6f5bb6585cfb18"
+                "sha256:030e4f9df5f53db2292eec37c6255957eb76168c6f974e4176c711cf91ed34aa",
+                "sha256:b6c5a9643e3545bcbfd9451766cbaa5d9c67e7303c7bc32c750b6fa70ecb107d"
             ],
-            "version": "==0.10.0"
+            "version": "==0.10.1"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -294,7 +294,6 @@
                 "sha256:2f4da4594db7e1e110a944bb1b551fdf4e6c136ad42e4234131391e21eb5b0df",
                 "sha256:e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
             ],
-            "index": "pypi",
             "version": "==1.26.4"
         },
         "webencodings": {
