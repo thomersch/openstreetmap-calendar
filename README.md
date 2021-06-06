@@ -22,13 +22,20 @@ We support Python ≥ 3.7 and PostgreSQL ≥ 10.
 You need a running PostgreSQL database. There are two options: Running it locally or using Docker.
 
 #### A) Local Installation
-Create a PostgreSQL user called `osmcal` and a database `osmcal` with the owner set to `osmcal`. Make sure you have
+Create a PostgreSQL user called `osmcal` and a database `osmcal` with the owner set to `osmcal`. E.g.
+```
+CREATE ROLE osmcal WITH LOGIN ENCRYPTED PASSWORD 'postgres';
+CREATE DATABASE osmcal OWNER osmcal;
+CREATE EXTENSION postgis;
+```
 
+Make sure you have following line in your [pg_hba.conf](https://www.postgresql.org/docs/12/auth-pg-hba-conf.html), so osmcal need a password to log in:
 ```
 local    all    all        trust
 ```
+Alternatively, you can set your DB password using the `POSTGRES_PASSWORD` environment variable, c.f. the following section on Docker.
 
-in your [pg_hba.conf](https://www.postgresql.org/docs/12/auth-pg-hba-conf.html), so osmcal need a password to log in. Alternatively, you can set your DB password using the `POSTGRES_PASSWORD` environment variable.
+
 
 
 #### B) Docker
