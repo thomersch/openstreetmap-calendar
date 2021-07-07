@@ -10,7 +10,7 @@ urlpatterns = [
     path('subscribe/', views.SubscriptionInfo.as_view(), name='subscription-info'),
 
     path('event/add/', views.EditEvent.as_view(), name='event-edit'),
-    path('event/<int:event_id>/', views.event, name='event'),
+    path('event/<int:event_id>/', views.EventDetail.as_view(), name='event'),
     path('event/<int:event_id>.ics', views.EventICal.as_view(), name='event-ical'),
     path('event/<int:event_id>/cancel/', views.CancelEvent.as_view(), name='event-cancel'),
     path('event/<int:event_id>/change/', views.EditEvent.as_view(), name='event-change'),

@@ -132,15 +132,16 @@ class EventFeed(Feed, EventListView):
         return 'osmcal-event-{}'.format(obj.id)
 
 
-def event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    authors = event.log.all().distinct('created_by')
+class EventDetail(View):
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        authors = event.log.all().distinct('created_by')
 
-    user_is_joining = False
-    if not request.user.is_anonymous:
-        user_is_joining = event.participation.filter(user=request.user).exists()
+        user_is_joining = False
+        if not request.user.is_anonymous:
+            user_is_joining = event.participation.filter(user=request.user).exists()
 
-    return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors})
+        return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors})
 
 
 class EventParticipants(TemplateView):
