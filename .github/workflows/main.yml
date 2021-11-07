@@ -26,14 +26,14 @@ jobs:
       - name: Install other deps
         run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev
 
-      - name: Install pipenv
-        run: pip install pipenv
+      - name: Install poetry
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
-      - name: Run pipenv to install deps
-        run: pipenv sync --dev
+      - name: Install deps
+        run: poetry install
 
       - name: Run tests
-        run: pipenv run ./manage.py test
+        run: poetry run ./manage.py test
         env:
           OSMCAL_PG_HOST: postgres
           OSMCAL_PG_PASSWORD: postgres

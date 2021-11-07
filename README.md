@@ -13,7 +13,7 @@ Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documen
 
 ## Developer Documentation
 
-This is a Django application, it uses [pipenv](https://pipenv.kennethreitz.org/en/latest/) for managing dependencies, install it with `pip3 install pipenv`. See their manual for more information.
+This is a Django application, it uses [poetry](https://python-poetry.org) for managing dependencies. Please look at their documentation for installation instructions.
 
 We support Python ≥ 3.7 and PostgreSQL ≥ 10.
 
@@ -60,17 +60,17 @@ export OSMCAL_PG_PASSWORD='postgres'
 
 ### Virtual Environment
 
-Use *pipenv* to create a virtual environment. Then, install the dependencies:
+Use *poetry* to create a virtual environment. Then, install the dependencies:
 
 ```
 cd openstreetmap-calendar
-pipenv install --dev
+poetry install
 ```
 
 ### Running Tests
 
 ```
-pipenv run test
+poetry run ./manage.py test
 ```
 
 ### Developer Server
@@ -93,19 +93,19 @@ export OSMCAL_OSM_SECRET='...'
 Then, you may run the database migration:
 
 ```
-pipenv run migrate
+poetry run ./manage.py migrate
 ```
 
 and then the local server:
 
 ```
-pipenv run devserver
+poetry run ./manage.py runserver
 ```
 
 If you need test data, you can load some using:
 
 ```
-pipenv run ./manage.py osmcal/fixtures/demo.yaml
+poetry run ./manage.py osmcal/fixtures/demo.yaml
 ```
 
 ## API Documentation
