@@ -3,7 +3,7 @@ import markdown as md
 from bleach.linkifier import LinkifyFilter
 from django import template
 
-allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'i', 'li', 'ol', 'p', 'pre', 'strong', 'ul']
+allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'li', 'ol', 'p', 'pre', 'strong', 'ul']
 
 register = template.Library()
 cleaner = bleach.Cleaner(tags=allowed_tags, filters=[LinkifyFilter])
