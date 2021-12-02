@@ -115,6 +115,7 @@ OAUTH_OPENSTREETMAP_KEY = os.getenv('OSMCAL_OSM_KEY', '')
 OAUTH_OPENSTREETMAP_SECRET = os.getenv('OSMCAL_OSM_SECRET', '')
 
 AUTH_USER_MODEL = 'osmcal.User'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 LOGIN_URL = '/login/'
 
