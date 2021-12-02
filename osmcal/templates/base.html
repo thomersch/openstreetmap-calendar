@@ -32,6 +32,9 @@
 	</content>
 	<footer class="footer">
 		{% if user.is_authenticated %}You are logged in as <a href="/me/">{{ user.name }}</a>. <a href="/logout/">Logout</a>{% else %}<a href="/login/">Login</a>{% endif %}
+
+		{% if debug and not user.is_authenticated %}| <a href="{% url 'login-mock' %}">Mock login</a>{% endif %}
+
 		<div style="margin-top:.5em"><a href="/events/past/">Past Events</a> | <a href="/documentation/">Documentation</a></div>
 	</footer>
 </body>

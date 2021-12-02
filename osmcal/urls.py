@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.urls import path
 
@@ -38,3 +39,8 @@ urlpatterns = [
     url('', include('django_prometheus.urls')),
     url('api/', include('osmcal.api.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(
+        path('login/mock/', views.MockLogin.as_view(), name='login-mock')
+    )

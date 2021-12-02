@@ -235,6 +235,20 @@ def logout(request):
     return redirect("/")
 
 
+class MockLogin(View):
+    def get(self, request):
+        if not settings.DEBUG:
+            # This URL should not be available in prod, but let's double check here.
+            return redirect("/")
+
+        try:
+            user = User.objects.get(id=1)
+        except:
+            user = User.objects.create(id=1, name='some_dummy_user')
+        dj_login(request, user)
+        return redirect("/")
+
+
 class CancelEvent(View):
     @method_decorator(login_required)
     def post(self, request, event_id=None):

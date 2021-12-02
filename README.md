@@ -36,8 +36,6 @@ local    all    all        trust
 Alternatively, you can set your DB password using the `POSTGRES_PASSWORD` environment variable, c.f. the following section on Docker.
 
 
-
-
 #### B) Docker
 
 ```
@@ -75,22 +73,9 @@ poetry run ./manage.py test
 
 ### Developer Server
 
-If you need to use the login functionality locally, you need to create an OAuth app:
+In order to facilitate testing, you can use a fake login locally without having to setup OAuth first. To do this, scroll down to the footer. In debug mode, there is a link called "Mock login" which will instantly log you in as a normal user.
 
-1. Go to osm.org -> My Settings -> oauth settings -> bottom of the page (My Client Applications) -> Register your application.
-2. Fill `Name` and `Main Application URL`. No restrictions here.
-3. You *must* fill `Callback URL` with `http://localhost:8000/oauth/callback`.
-4. Mark `read their user preferences.`
-5. Click `Register`.
-
-When the application is registered on osm.org, set the respective environment variables used for oauth and copy *Consumer Key* and *Consumer Secret*:
-
-```
-export OSMCAL_OSM_KEY='...'
-export OSMCAL_OSM_SECRET='...'
-```
-
-Then, you may run the database migration:
+To prepare for application launch run the database migrations:
 
 ```
 poetry run ./manage.py migrate
@@ -111,3 +96,20 @@ poetry run ./manage.py osmcal/fixtures/demo.yaml
 ## API Documentation
 
 The API is described using OpenAPI 3, the schema is located in `/api/schema/`. The currently live version is [visible here](https://osmcal.org/static/api.html).
+
+## OAuth Setup
+
+If want to test the OAuth flow, you need to create an OAuth app first:
+
+1. Go to osm.org -> My Settings -> oauth settings -> bottom of the page (My Client Applications) -> Register your application.
+2. Fill `Name` and `Main Application URL`. No restrictions here.
+3. You *must* fill `Callback URL` with `http://localhost:8000/oauth/callback`.
+4. Mark `read their user preferences.`
+5. Click `Register`.
+
+When the application is registered on osm.org, set the respective environment variables used for oauth and copy *Consumer Key* and *Consumer Secret*:
+
+```
+export OSMCAL_OSM_KEY='...'
+export OSMCAL_OSM_SECRET='...'
+```
