@@ -249,7 +249,7 @@ class MockLogin(View):
         except:
             user = User.objects.create(id=1, name='some_dummy_user')
         dj_login(request, user)
-        return redirect("/")
+        return redirect(request.GET.get("next", "/"))
 
 
 class CancelEvent(View):
