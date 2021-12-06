@@ -6,6 +6,9 @@ devserver:
 install:
 	$(CALL) install
 
+dep-update:
+	$(CALL) update
+
 migrate:
 	$(CALL) run ./manage.py migrate
 
