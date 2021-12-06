@@ -1,34 +1,34 @@
 .event-form {
+	margin: 0 auto;
 	max-width: 600px;
-}
-
-.event-form-leading-label {
-	box-sizing: border-box;
-	color: #5A5A5A;
-	display: inline-block;
-	font-weight: bold;
-	padding-right: 10px;
-	text-align: right;
-	vertical-align: middle;
-	width: 30%;
 }
 
 .event-form-line {
 	margin-bottom: 1em;
 }
 
-.event-form input, select {
+.event-form-leading-label {
 	box-sizing: border-box;
+	color: #5A5A5A;
+	display: block;
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+.event-form input, select {
 	border: 1px solid #AAAAAA;
+	box-sizing: border-box;
 	font-size: 12pt;
 	padding: 10px;
-	width: 67%;
+	width: 100%;
 }
 
 .event-form .event-form-input {
-	display: inline-block;
-	width: 67%;
-	vertical-align: top;
+	width: 100%;
+}
+
+.event-form input[type="checkbox"] {
+	width: inherit;
 }
 
 .event-form-input-info {
@@ -38,29 +38,21 @@
 
 .event-form textarea {
 	font-size: 12pt;
-	vertical-align: top;
-	width: 65%;
+	width: 100%;
 }
 
 .event-form-helptext {
 	color: #666666;
 	display: block;
 	font-size: 90%;
-	margin-left: 30%;
 	margin-top: .25em;
-	padding-left: 3px;
-	width: 60%;
 }
 
 .event-form #id_location-map {
 	display: inline-block;
 	margin-bottom: 1em;
 	vertical-align: top;
-	width: 68%;
-}
-
-.submit-row {
-	margin-left: 1em;
+	width: 100%;
 }
 
 .event-form .submit-row input {
@@ -79,17 +71,13 @@
 }
 
 .event-question-form {
-	display: flex;
+	margin: 0 auto;
 	max-width: 600px;
-	width: 100%;
 }
 
 .event-question-form-label {
 	color: #666666;
 	font-weight: bold;
-	min-width: calc(30% - 10px); /* Small hack to align with other labels */
-	padding-right: 10px;
-	text-align: right;
 }
 
 @media only screen and (max-width: 600px) {

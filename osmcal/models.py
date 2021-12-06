@@ -5,6 +5,7 @@ from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
+from django.utils.safestring import mark_safe
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from timezonefinder import TimezoneFinder
@@ -34,7 +35,7 @@ class Event(models.Model):
 
     link = models.URLField(blank=True, null=True)
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
-    description = models.TextField(blank=True, null=True, help_text='Tell people what the event is about and what they can expect. You may use Markdown in this field.')
+    description = models.TextField(blank=True, null=True, help_text=mark_safe('Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'))
 
     cancelled = models.BooleanField(default=False)
 

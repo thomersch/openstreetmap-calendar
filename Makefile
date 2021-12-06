@@ -12,6 +12,9 @@ dep-update:
 migrate:
 	$(CALL) run ./manage.py migrate
 
+makemigrations:
+	$(CALL) run ./manage.py makemigrations
+
 staticfiles:
 	$(CALL) run ./manage.py collectstatic --noinput
 
