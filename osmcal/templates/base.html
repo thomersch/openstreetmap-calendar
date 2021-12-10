@@ -10,13 +10,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	<meta property="og:site_name" content="OpenStreetMap Calendar">
 	<meta property="og:image" content="{% static 'osmcal/touch-icon.png' %}">
+	<link rel="preload" href="{% static '/osmcal/source-sans-pro/SourceSansPro-Regular.otf' %}" as="font" type="font/otf">
+	<link rel="preload" href="{% static '/osmcal/source-sans-pro/SourceSansPro-Bold.otf' %}" as="font" type="font/otf">
 	{% block head %}
 	{% endblock %}
 </head>
 <body>
 	<header class="header-bar">
 		<a href="/" class="header-home-area">
-			<img class="header-home-icon" src="{% static 'osmcal/osm_logo.png' %}" height="100%">
+			<img class="header-home-icon" src="{% static 'osmcal/osm_logo.png' %}" height="55px" width="55px">
 			<span class="hide-slim">OpenStreetMap Calendar</span>
 			<span class="hide-wide">Calendar</span>
 		</a>

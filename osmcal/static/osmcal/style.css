@@ -1,10 +1,12 @@
 @font-face {
+	font-display: swap;
 	font-family: "Source Sans";
 	font-weight: normal;
 	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Regular.otf");
 }
 
 @font-face {
+	font-display: swap;
 	font-family: "Source Sans";
 	font-weight: bold;
 	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Bold.otf");
