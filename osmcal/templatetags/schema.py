@@ -28,6 +28,7 @@ def schema_block(evt):
 		data["location"] = {
 			"latitude": evt.location.y,
 			"longitude": evt.location.x,
+			"address": evt.location_detailed_addr
 		}
 
 	if evt.link:
