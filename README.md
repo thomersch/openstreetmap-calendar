@@ -90,7 +90,7 @@ poetry run ./manage.py runserver
 If you need test data, you can load some using:
 
 ```
-poetry run ./manage.py osmcal/fixtures/demo.yaml
+poetry run ./manage.py loaddata osmcal/fixtures/demo.yaml
 ```
 
 ## API Documentation
