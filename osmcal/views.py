@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
-from django.core.exceptions import ValidationError
+from django.core.exceptions import BadRequest
 from django.db import transaction
 from django.db.models import F, Q
 from django.db.models.expressions import Func
@@ -64,7 +64,7 @@ class EventListView(View):
         if filter_around:
             filter_around = [float(x) for x in filter_around.split(',')]
             if len(filter_around) < 2:
-                raise ValidationError("filter_around invalid")
+                raise BadRequest("filter_around invalid")
             pt = Point(filter_around[1], filter_around[0], srid=4326)
             upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000)  # distance in meters
 

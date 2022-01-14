@@ -25,4 +25,4 @@ test:
 	$(CALL) run ./manage.py test
 
 fixtures:
-	$(CALL) run ./manage.py osmcal/fixtures/demo.yaml
+	$(CALL) run ./manage.py loaddata osmcal/fixtures/demo.yaml
