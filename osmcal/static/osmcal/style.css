@@ -133,6 +133,7 @@ h1, h2 {
 	color: #5A5A5A;
 	font-size: 14pt;
 	padding: 1em 0;
+	overflow: hidden;
 }
 
 .event-list-entry a {
@@ -150,13 +151,15 @@ h1, h2 {
 }
 
 .event-entry-main {
-	flex-grow: 2;
 	padding-right: 1em;
+	min-width: 0;
+	width: 100%;
 }
 
 .event-entry-name {
 	font-size: 20pt;
 	margin: 0;
+	word-wrap: break-word;
 }
 
 .event-entry-location {
