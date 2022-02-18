@@ -136,3 +136,17 @@ def short_date_format(evt, locale=DEFAULT_LOCALE,
     else:
         # Year can be skipped
         return format_skeleton('MMMMd', evt.start, tzinfo=tz, locale=lo)
+
+
+@register.filter()
+def year_month_to_title(ymstr):
+    ym = datetime.strptime(ymstr, "%Y-%m")
+    now = datetime.now()
+
+    if ym.year == now.year and ym.month == now.month:
+        return ""
+
+    if ym.year == now.year:
+        return datetime.strftime(ym, "%B")
+    else:
+        return datetime.strftime(ym, "%B %Y")

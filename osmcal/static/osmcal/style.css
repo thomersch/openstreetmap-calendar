@@ -109,6 +109,17 @@ h1, h2 {
 	padding-left: 0;
 }
 
+.event-list-group {
+	list-style: none;
+	padding-left: 0;
+}
+
+.event-list-group-title {
+	font-size: 24pt;
+	margin-bottom: 0.25em;
+	color: #5A5A5A;
+}
+
 .event-list a:hover {
 	text-decoration: none;
 }
@@ -140,12 +151,11 @@ h1, h2 {
 
 .event-entry-main {
 	flex-grow: 2;
-	padding-right: 10px;
+	padding-right: 1em;
 }
 
 .event-entry-name {
-	font-size: 18pt;
-	font-weight: bold;
+	font-size: 20pt;
 	margin: 0;
 }
 

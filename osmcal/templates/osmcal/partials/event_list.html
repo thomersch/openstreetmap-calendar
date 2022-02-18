@@ -1,14 +1,24 @@
+{% load tz locadate %}
+
+{% regroup events by start|date:"Y-m" as ebd %}
+
 <ul class="event-list">
-{% load tz %}
-{% for event in events %}
-	<li class="event-list-entry{% if event.cancelled %} event-list-entry-cancelled{% endif %}"><a href="{% url 'event' event.id %}" class="event-list-entry-box">
-		<div class="event-entry-main">
-			<p class="event-entry-name">{{ event.name }}</p>
-			{% if event.location_text %}<p class="event-entry-location">{{ event.location_text }}</p>{% endif %}
-		</div>
-		<span class="event-entry-date">
-			{% include "osmcal/date-short.txt" %}
-		</span>
-	</a></li>
+{% for date in ebd %}
+	<li>
+		<h3 class="event-list-group-title">{{ date.grouper | year_month_to_title }}</h3>
+		<ul class="event-list-group">
+			{% for event in date.list %}
+			<li class="event-list-entry{% if event.cancelled %} event-list-entry-cancelled{% endif %}"><a href="{% url 'event' event.id %}" class="event-list-entry-box">
+				<div class="event-entry-main">
+					<p class="event-entry-name">{{ event.name }}</p>
+					{% if event.location_text %}<p class="event-entry-location">{{ event.location_text }}</p>{% endif %}
+				</div>
+				<span class="event-entry-date">
+					{% include "osmcal/date-short.txt" %}
+				</span>
+			</a></li>
+			{% endfor %}
+		</ul>
+	</li>
 {% endfor %}
 </ul>
