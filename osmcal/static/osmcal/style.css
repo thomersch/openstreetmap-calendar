@@ -215,6 +215,8 @@ h1, h2 {
 
 .event-single-main {
 	max-width: 600px;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
 
 .event-single-main pre {
