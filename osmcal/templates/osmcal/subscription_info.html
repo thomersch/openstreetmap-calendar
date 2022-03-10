@@ -15,7 +15,7 @@
 
 	<ul>
 		<li>
-			<p><strong>iCalendar Feed: </strong>If your calendar supports calendar subscriptions, you can add a calendar feed. Thunderbird Lightning, Apple Calendar and Fastmail are known to be working.</p>
+			<p><strong>iCalendar Feed: </strong>If your calendar supports calendar subscriptions, you can add a calendar feed. Thunderbird Lightning, Apple Calendar, Fastmail and Google Calendar are known to be working.</p>
 			<ul>
 				{% if request.GET.in %}<li>
 					<a href="webcal://{{ request.get_host }}{% url 'event-feed-ical' %}?in={{ request.GET.in }}">{{ request.GET.in }} subscription</a><br>
