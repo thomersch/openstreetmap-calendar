@@ -1,4 +1,5 @@
-CALL="poetry"
+PATH := $(PATH):$(HOME)/.poetry/bin
+CALL := env PATH=$(PATH) poetry
 
 devserver:
 	$(CALL) run ./manage.py runserver

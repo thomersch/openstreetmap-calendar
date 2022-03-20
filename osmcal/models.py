@@ -116,6 +116,9 @@ class EventParticipation(models.Model):
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     added_on = models.DateTimeField(auto_now_add=True, null=True)
 
+    class Meta:
+        unique_together = ['event', 'user']
+
 
 class ParticipationAnswer(models.Model):
     question = models.ForeignKey(ParticipationQuestion, on_delete=models.CASCADE, related_name='answers')
