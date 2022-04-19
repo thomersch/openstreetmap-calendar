@@ -209,7 +209,7 @@ class JoinEvent(View):
             else:
                 return self.survey(request, evt)
 
-        ep = EventParticipation.objects.create(event=evt, user=request.user)
+        ep, _ = EventParticipation.objects.update_or_create(event=evt, user=request.user)
         if answers:
             for qid, answer in answers.items():
                 ParticipationAnswer.objects.update_or_create(
