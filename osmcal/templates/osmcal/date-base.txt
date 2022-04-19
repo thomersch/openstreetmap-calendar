@@ -1,10 +1,10 @@
 {% now "Y" as current_year %}{% load tz tabless %}{% timezone event.timezone %}{% tabless %}
 {{ event.start|date:day_fmt }}
+	{% if event.start|date:"Y" != current_year %} {{ event.start|date:"Y" }}{% endif %}
 	{% if not event.whole_day %}
 		 {{ event.start|date:"G:i" }}
 	{% endif %}
-	{% if event.end and event.start|date:"jF" == event.end|date:"jF" %} – {{ event.end|date:"G:i" }}
-	{% elif not event.end and event.start|date:"Y" != current_year %} {{ event.start|date:"Y" }}
+	{% if event.end and event.start|date:"jFY" == event.end|date:"jFY" %} – {{ event.end|date:"G:i" }}
 	{% elif event.end %}
 		 – {{ event.end|date:day_fmt }}{% if event.end|date:"Y" != current_year %} {{ event.end|date:"Y" }}{% endif %}
 		{% if not event.whole_day %}

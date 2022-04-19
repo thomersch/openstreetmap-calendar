@@ -68,6 +68,16 @@ class DateFormatTest(SimpleTestCase):
             '2nd January ' + str(self.cur.year - 1)
         )
 
+    def test_dateformat_past_year_with_time_interval(self):
+        self.assertEqual(
+            self._fmt(MockEvent(
+                start=datetime(year=self.cur.year - 1, month=1, day=2, hour=10),
+                end=datetime(year=self.cur.year - 1, month=1, day=2, hour=12),
+                whole_day=False,
+            )),
+            '2nd January ' + str(self.cur.year - 1) + ' 10:00 – 12:00'
+        )
+
     def test_localized_de(self):
         translation.activate('de-DE')
         self.assertEqual(
