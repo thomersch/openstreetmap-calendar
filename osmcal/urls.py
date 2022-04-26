@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.conf.urls import include, url
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
@@ -36,8 +35,8 @@ urlpatterns = [
 
     path('me/', views.CurrentUserView.as_view(), name='user-self'),
 
-    url('', include('django_prometheus.urls')),
-    url('api/', include('osmcal.api.urls')),
+    path('', include('django_prometheus.urls')),
+    path('api/', include('osmcal.api.urls')),
 ]
 
 if settings.DEBUG:
