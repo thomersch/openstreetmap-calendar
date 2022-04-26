@@ -4,6 +4,7 @@ from babel.core import Locale
 from babel.dates import (format_interval, format_skeleton, get_timezone,
                          get_timezone_name)
 from django import template
+from django.utils import timezone
 from django.utils.translation import gettext
 
 register = template.Library()
@@ -116,7 +117,7 @@ def short_date_format(evt, locale=DEFAULT_LOCALE,
                       user_tz: tzinfo = None) -> str:
     lo = Locale.parse(locale, sep='_')
     tz = get_timezone(evt.timezone)
-    now = datetime.now()
+    now = timezone.now()
 
     if evt.end:
         if evt.start.year != now.year or evt.end.year != evt.start.year:
@@ -141,7 +142,7 @@ def short_date_format(evt, locale=DEFAULT_LOCALE,
 @register.filter()
 def year_month_to_title(ymstr):
     ym = datetime.strptime(ymstr, "%Y-%m")
-    now = datetime.now()
+    now = timezone.now()
 
     if ym.year == now.year and ym.month == now.month:
         return ""
