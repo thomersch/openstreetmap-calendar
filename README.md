@@ -1,6 +1,6 @@
 # OpenStreetMap Calendar
 
-A simple calendar for tracking OpenStreetMap related activities, so we don't have to wrestle the wiki anymore.
+A simple calendar for tracking OpenStreetMap-related activities.
 
 ## Principles
 
