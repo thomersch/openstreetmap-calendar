@@ -76,8 +76,8 @@ DATABASES = {
     'default': {
         'HOST': os.getenv('OSMCAL_PG_HOST', ''),
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'osmcal',
-        'USER': 'osmcal',
+        'NAME': os.getenv('OSMCAL_PG_DB', 'osmcal'),
+        'USER': os.getenv('OSMCAL_PG_USER', 'osmcal'),
         'PASSWORD': os.getenv('OSMCAL_PG_PASSWORD', None)
     }
 }
@@ -109,7 +109,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 OAUTH_OPENSTREETMAP_KEY = os.getenv('OSMCAL_OSM_KEY', '')
 OAUTH_OPENSTREETMAP_SECRET = os.getenv('OSMCAL_OSM_SECRET', '')
