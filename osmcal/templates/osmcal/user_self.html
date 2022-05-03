@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Your Account
+{% endblock %}
+
+{% block content %}
+<content class="text">
+	<h1>Hi, {{ request.user.name }}!</h1>
+
+	<h2>User Info</h2>
+	<p>You're registered since {{ request.user.date_joined|date:"Y-m-d" }}.</p>
+
+	{% if request.user.home_location %}
+	<p>Your home location is {{ request.user.home_location.y }}/{{ request.user.home_location.x }}, time zone {{ request.user.home_timezone }}.</p>
+	{% else %}
+	<p>Your home location is unknown, but you can set it in your <a href="https://www.openstreetmap.org/user/{{ request.user.name }}/account">OpenStreetMap.org user settings</a>.</p>
+	{% endif %}
+</content>
+{% endblock %}

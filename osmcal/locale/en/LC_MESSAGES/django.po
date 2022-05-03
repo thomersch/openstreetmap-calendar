@@ -21,3 +21,6 @@ msgstr ""
 #: osmcal/templatetags/locadate.py:9 osmcal/templatetags/locadate.py:10
 msgid "day_month_format"
 msgstr "PLACEHOLDER" # This is not the real value, just a fallback. The real en-value is 'jS F', fallback shall be 'j F'.
+
+msgid "day_only_format"
+msgstr "PLACEHOLDER"

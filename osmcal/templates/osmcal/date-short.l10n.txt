@@ -1,0 +1,1 @@
+{% load locadate i18n %}{% get_current_language as lang %}{% loca_day_month_fmt lang as day_mon_fmt %}{% loca_day_fmt lang as day_fmt %}{% include 'osmcal/date-short-base.txt' %}

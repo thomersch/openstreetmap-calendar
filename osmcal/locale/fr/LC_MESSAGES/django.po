@@ -20,4 +20,7 @@ msgstr ""
 
 #: osmcal/templatetags/locadate.py:9 osmcal/templatetags/locadate.py:10
 msgid "day_month_format"
-msgstr "j F"
+msgstr "j E"
+
+msgid "day_only_format"
+msgstr "j"

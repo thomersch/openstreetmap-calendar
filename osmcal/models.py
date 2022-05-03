@@ -1,10 +1,16 @@
 from enum import Enum
 
 import requests
+from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
+from django.utils.safestring import mark_safe
+from pytz import timezone
 from sentry_sdk import add_breadcrumb
+from timezonefinder import TimezoneFinder
+
+tf = TimezoneFinder()
 
 
 class EventType(Enum):
@@ -21,6 +27,7 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField(blank=True, null=True)
     whole_day = models.BooleanField(default=False)
+    timezone = models.CharField(max_length=100, blank=True, null=True)
 
     location_name = models.CharField(max_length=50, blank=True, null=True)
     location = PointField(blank=True, null=True)
@@ -28,7 +35,7 @@ class Event(models.Model):
 
     link = models.URLField(blank=True, null=True)
     kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType], null=True)
-    description = models.TextField(blank=True, null=True, help_text='Tell people what the event is about and what they can expect. You may use Markdown in this field.')
+    description = models.TextField(blank=True, null=True, help_text=mark_safe('Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'))
 
     cancelled = models.BooleanField(default=False)
 
@@ -57,6 +64,22 @@ class Event(models.Model):
             return None
         addr = self.location_address
         return ", ".join(filter(lambda x: x is not None, [self.location_name, addr.get('house_number'), addr.get('road'), addr.get('suburb'), addr.get('village'), addr.get('city'), addr.get('state'), addr.get('country')]))
+
+    @property
+    def start_localized(self):
+        tz = timezone(self.timezone)
+        return self.start.astimezone(tz)
+
+    @property
+    def end_localized(self):
+        if not self.end:
+            return None
+        tz = timezone(self.timezone)
+        return self.end.astimezone(tz)
+
+    @property
+    def tz_name(self):
+        return get_timezone_name(self.start_localized)
 
     class Meta:
         indexes = (
@@ -93,6 +116,9 @@ class EventParticipation(models.Model):
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     added_on = models.DateTimeField(auto_now_add=True, null=True)
 
+    class Meta:
+        unique_together = ['event', 'user']
+
 
 class ParticipationAnswer(models.Model):
     question = models.ForeignKey(ParticipationQuestion, on_delete=models.CASCADE, related_name='answers')
@@ -116,6 +142,13 @@ class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     osm_id = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
+
+    home_location = PointField(blank=True, null=True)
+
+    def home_timezone(self):
+        if not self.home_location:
+            return None
+        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:

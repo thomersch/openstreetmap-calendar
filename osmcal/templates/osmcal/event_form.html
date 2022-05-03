@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load leaflet_tags static %}
+{% load leaflet_tags static tz %}
 
 {% block head %}
 	{{ block.super }}
@@ -18,21 +18,57 @@
 	{% else %}
 	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
 	{% endif %}
+
+	<script>
+		var appData = {
+			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}'),
+			id_location_geojson: ""
+		};
+	</script>
 {% endblock %}
 
 {% block content %}
 	{% if page_title %}<h1>{{ page_title }}</h1>{% endif %}
 	<form id="event-main-form" method="POST">
 		{% csrf_token %}
-
+		
+		{% timezone tz %}
 		<section class="event-form">
 			{% for field in form %}
 			<div class="event-form-line{% if field.errors %} event-form-error{% endif %}">
 				<label for="{{ field.id_for_label }}" class="event-form-leading-label">{{ field.label }}</label>
 				{{ field }}
+				{{ field.attrs.items }}
 				{% if field.help_text %}<label class="event-form-helptext">{{ field.help_text }}</label>{% endif %}
+				{% if field.errors %}<label class="event-form-helptext">{{ field.errors }}</label>{% endif %}
 			</div>
 			{% endfor %}
+		</section>
+		{% endtimezone %}
+
+		<section id="event-question-form" class="event-question-form">
+			<label class="event-question-form-label">
+				Sign Up Survey
+			</label>
+
+			<div class="event-question-input-column">
+				<div v-if="questions.length == 0">
+					<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Create Sign Up Survey</button>
+					<label class="event-question-form-helptext">You can ask the participants questions they will be asked to answer during event sign up, e.g. whether they'll join the after work party.</label>
+				</div>
+
+				<div v-for="(question, index) in questions" class="event-question-form-block">
+					<div style="display:flex">
+						<h3 style="flex-grow: 2;">Question [[ index+1 ]]</h3>
+						<button v-on:click.prevent="deleteQuestion(index)" v-if="!question.frozen" class="btn-mini btn-negative" style="padding: 0.3em; height: 100%;">Delete Question</button>
+					</div>
+
+					<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
+
+					<div class="event-question-line">
+						<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
+						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input" required>
+					</div>
 
 			<div class="event-form-line">
 				<label class="event-form-leading-label">Community</label>
@@ -52,22 +88,25 @@
 		</div>
 		{% endif %}
 
-		<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; width: 95%; max-width: 600px;">Save Event</button></p>
+		<div class="event-form">
+			<p class="submit-row"><button class="btn" type="submit" style="font-size: 150%; margin-top: 1em; width: 100%;">Save Event</button></p>
+		</div>
 	</form>
 
 	<script>
-		var app = new Vue({
+		var questionApp = new Vue({
 			el: '#event-question-form',
 			delimiters: ['[[', ']]'],
-			data: {
-				questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}')
-			},
+			data: appData,
 			created: function() {
 				this.initial_questions_n = this.questions.length;
 			},
 			methods: {
 				addQuestion: function() {
 					this.questions.push({'type': 'TEXT', choices: [{}]});
+				},
+				deleteQuestion: function(index) {
+					this.questions.splice(index, 1);
 				},
 				addChoice: function(question) {
 					question.choices.push({'text': ''});
@@ -127,9 +166,11 @@
 					marker.addTo(this._map);
 					fs.save(marker);
 					marker.editing.enable();
+					leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
 
 					marker.on('dragend', function(e) {
 						fs.save(marker);
+						leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
 					});
 				}
 			});

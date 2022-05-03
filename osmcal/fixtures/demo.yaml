@@ -46,12 +46,14 @@
     name: "International OSM Day"
     start: "2029-05-01 20:00:00"
     end: "2029-05-01 22:00:00"
+    timezone: "Europe/London"
 
 - model: osmcal.event
   pk: 2
   fields:
     name: みんなで東淀川区の魅力を発信しよう!
     start: "2029-08-18 20:00:00"
+    timezone: "Asia/Tokyo"
     whole_day: yes
     location_address:
       city: Osaka
@@ -64,6 +66,7 @@
     name: "Bonner Stammtisch"
     start: "2029-08-20 19:30:00"
     end: "2029-08-20 22:00:00"
+    timezone: "Europe/Berlin"
     location_address:
       street: Dottendorfer Straße
       city: Bonn
@@ -104,6 +107,7 @@
     name: "State of the Map"
     start: "2029-09-20 08:00:00"
     end: "2029-09-24 08:00:00"
+    timezone: "Europe/Berlin"
     whole_day: yes
     location: POINT(13.41641 52.52065)
     location_address:
@@ -117,6 +121,7 @@
     name: OSM x Wikidata
     start: "2029-08-20 17:00:00"
     end: "2029-08-20 19:00:00"
+    timezone: "Asia/Taipei"
     location_address:
       housenumber: 4F-A1, No. 106, Sec. 5
       street: Xinyi Rd
@@ -129,6 +134,7 @@
     name: Multiday with Times
     start: "2029-08-20 17:00:00"
     end: "2029-08-22 19:00:00"
+    timezone: "UTC"
 
 - model: osmcal.eventparticipation
   pk: 1

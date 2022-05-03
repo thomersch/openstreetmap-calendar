@@ -5,28 +5,37 @@
 {% endblock %}
 
 {% block content %}
+<div class="content-main-fullwidth">
+
 	<h1 class="event-single-title">Participants of <a href="{% url 'event' event.id %}">{{ event.name }}</a></h1>
 	On {% include "osmcal/date.txt" %}
 
-{% regroup answers by user_name as participants %}
-<section style="overflow-x:auto;">
-	<table class="participant-table">
-		<tr>
-			<th>User Name</th>
-			<th>Signed Up On</th>
-			{% for question in event.questions.all %}
-			<th>{{ question.question_text }}</th>
-			{% endfor %}
-		</tr>
-		{% for user, answers in participants %}
+	{% regroup answers by user_name as participants %}
+	<section style="overflow-x:auto;">
+		<table class="participant-table">
 			<tr>
-				<td><a href="https://openstreetmap.org/user/{{ user }}">{{ user }}</a></td>
-				<td>{{ answers.0.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
-				{% for line in answers %}
-					<td>{{ line.answer|default_if_none:"" }}</td>
+				<th>User Name</th>
+				<th>Signed Up On</th>
+				{% for question in event.questions.all %}
+				<th>{{ question.question_text }}</th>
 				{% endfor %}
 			</tr>
-		{% endfor %}
-	</table>
-</section>
+			{% for user, answers in participants %}
+				<tr>
+					<td><a href="https://openstreetmap.org/user/{{ user }}">{{ user }}</a></td>
+					<td>{{ answers.0.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
+					{% for line in answers %}
+						<td>{{ line.answer|default_if_none:"" }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+			{% if not answers %}{% for ptc in event.participation.all %}
+			<tr>
+				<td><a href="https://openstreetmap.org/user/{{ ptc.user.name }}">{{ ptc.user.name }}</a></td>
+				<td>{{ ptc.added_on|default_if_none:""|date:"Y-m-d H:i" }}</td>
+			</tr>
+			{% endfor %}{% endif %}
+		</table>
+	</section>
+</div>
 {% endblock %}

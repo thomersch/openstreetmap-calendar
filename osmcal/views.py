@@ -1,6 +1,5 @@
 import json
 from datetime import datetime, timedelta
-from xml.etree import ElementTree as ET
 
 from django.conf import settings
 from django.contrib.auth import login as dj_login
@@ -9,8 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
+from django.core.exceptions import BadRequest
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import F, Q
+from django.db.models.expressions import Func
+from django.db.models.fields import DateTimeField
 from django.forms import formset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,33 +21,52 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
+from pytz import UTC
 from requests_oauthlib import OAuth1Session
 
-from . import forms
+from . import forms, osmuser
 from .ical import encode_event, encode_events
 from .models import (Event, EventLog, EventParticipation, ParticipationAnswer,
                      ParticipationQuestion, ParticipationQuestionChoice, User)
 
 
+class LocalDateTime(Func):
+    template = '%(expressions)s'
+    arg_joiner = ' AT TIME ZONE '
+    arity = 2
+
+    output_field = DateTimeField()
+
+
 class EventListView(View):
     def filter_queryset(self, qs, **kwargs):
-        return qs.filter(Q(start__gte=kwargs['after']) | Q(end__gte=kwargs['after'])).order_by('start')
+        return qs.filter(
+            Q(start__gte=kwargs['after']) | Q(end__gte=kwargs['after'])
+        ).order_by('local_start')
 
     def get_queryset(self, params, after=None):
         if after is None:
-            after = timezone.now()
+            after = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
-        upcoming_events = self.filter_queryset(Event.objects.all(), after=after)
+        upcoming_events = self.filter_queryset(
+            Event.objects.all().annotate(
+                local_start=LocalDateTime(F('start'), F('timezone'))
+            ), after=after
+        )
 
         filter_to_country = params.get('in', None)
-        if filter_to_country:
+        if filter_to_country and len(filter_to_country) == 2:
+            upcoming_events = upcoming_events.filter(location_address__country_code=filter_to_country.lower())
+        elif filter_to_country:
             upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
 
         filter_around = params.get('around', None)
         if filter_around:
             filter_around = [float(x) for x in filter_around.split(',')]
+            if len(filter_around) < 2:
+                raise BadRequest("filter_around invalid")
             pt = Point(filter_around[1], filter_around[0], srid=4326)
-            upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000)  # distance in meter
+            upcoming_events = upcoming_events.annotate(distance=Distance('location', pt)).filter(distance__lte=50000)  # distance in meters
 
         return upcoming_events
 
@@ -56,18 +77,32 @@ class Homepage(EventListView):
 
         country_list = Event.objects.order_by('location_address__country').filter(location_address__country__isnull=False).values_list('location_address__country', flat=True).distinct()
 
-        return render(request, 'osmcal/homepage.html', context={'user': request.user, 'events': upcoming_events, 'country_list': country_list, 'filter': {'in': request.GET.get('in', None), 'around': request.GET.get('around', None)}})
+        return render(
+            request,
+            'osmcal/homepage.html',
+            context={
+                'user': request.user,
+                'events': upcoming_events,
+                'country_list': country_list,
+                'filter': {
+                    'in': request.GET.get('in', None),
+                    'around': request.GET.get('around', None)
+                }
+            })
 
 
 class SubscriptionInfo(TemplateView):
     template_name = 'osmcal/subscription_info.html'
 
 
-class PastEvents(View):
+class PastEvents(EventListView):
     PAGESIZE = 20
 
+    def filter_queryset(self, qs, **kwargs):
+        return qs.filter(start__lte=timezone.now()).order_by('-local_start')
+
     def get(self, request, page=1, **kwargs):
-        evts = Event.objects.filter(start__lte=timezone.now()).order_by('-start')
+        evts = self.get_queryset(request.GET)
         has_more = False
         if evts.count() > page * self.PAGESIZE:
             has_more = True
@@ -174,7 +209,7 @@ class JoinEvent(View):
             else:
                 return self.survey(request, evt)
 
-        ep = EventParticipation.objects.create(event=evt, user=request.user)
+        ep, _ = EventParticipation.objects.update_or_create(event=evt, user=request.user)
         if answers:
             for qid, answer in answers.items():
                 ParticipationAnswer.objects.update_or_create(
@@ -201,6 +236,20 @@ def login(request):
 def logout(request):
     dj_logout(request)
     return redirect("/")
+
+
+class MockLogin(View):
+    def get(self, request):
+        if not settings.DEBUG:
+            # This URL should not be available in prod, but let's double check here.
+            return redirect("/")
+
+        try:
+            user = User.objects.get(id=1)
+        except:
+            user = User.objects.create(id=1, name='some_dummy_user')
+        dj_login(request, user)
+        return redirect(request.GET.get("next", "/"))
 
 
 class CancelEvent(View):
@@ -245,6 +294,16 @@ class EditEvent(View):
             ParticipationQuestionChoice.objects.create(text=choice, question=pq)
         pq.save()
 
+    def render(self, request, ctx):
+        ctx['debug'] = settings.DEBUG
+        # For existing events, we need to consider the local timezone,
+        # otherwise we're just using UTC and converting it later.
+        try:
+            ctx['tz'] = ctx['event'].timezone
+        except (AttributeError, KeyError):
+            ctx['tz'] = UTC
+        return render(request, 'osmcal/event_form.html', ctx)
+
     @method_decorator(login_required)
     def get(self, request, event_id=None):
         form = forms.EventForm()
@@ -256,7 +315,7 @@ class EditEvent(View):
             questions = evt.questions.all()
             form = forms.EventForm(instance=evt)
             question_formset = self._question_formset(request)
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions), 'event': evt})
+        return self.render(request, {'form': form, 'question_formset': question_formset, 'questions': self._questions_json(questions), 'event': evt})
 
     @method_decorator(login_required)
     @transaction.atomic
@@ -291,7 +350,7 @@ class EditEvent(View):
 
             return redirect(reverse('event', kwargs={'event_id': event_id or evt.id}))
 
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'question_formset': question_formset})
+        return self.render(request, {'form': form, 'question_formset': question_formset})
 
 
 class DuplicateEvent(EditEvent):
@@ -311,17 +370,17 @@ class DuplicateEvent(EditEvent):
     def get(self, request, event_id):
         old_evt = Event.objects.get(id=event_id)
 
-        form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description'))
+        form_data = self.dict_from_event(old_evt, ('name', 'whole_day', 'link', 'kind', 'location_name', 'location', 'description', 'timezone'))
         form_data['start'] = datetime.now().replace(
-            hour=old_evt.start.hour,
-            minute=old_evt.start.minute,
+            hour=old_evt.start_localized.hour,
+            minute=old_evt.start_localized.minute,
         )
         form = forms.EventForm(initial=form_data)
         form.cleaned_data = {}
         form.add_error('start', 'please set')
         if old_evt.end:
             form.add_error('end', 'please set')
-        return render(request, 'osmcal/event_form.html', context={'form': form, 'page_title': 'New Event'})
+        return self.render(request, {'form': form, 'page_title': 'New Event'})
 
 
 class EventICal(View):
@@ -357,17 +416,15 @@ def oauth_callback(request):
         resource_owner_secret=request.session.get("oauth_params")["oauth_token_secret"],
         verifier='OSMNOPE'
     )
-    osm.fetch_access_token('https://www.openstreetmap.org/oauth/access_token')
-    userreq = osm.get('https://api.openstreetmap.org/api/0.6/user/details')
-
-    userxml = ET.fromstring(userreq.text)
-    userattrs = userxml.find('user').attrib
+    osm_attrs = osmuser.get_user_attributes(osm)
 
     try:
-        u = User.objects.get(osm_id=userattrs["id"])
+        u = User.objects.get(osm_id=osm_attrs['osm_id'])
     except User.DoesNotExist:
-        u = User.objects.create(osm_id=userattrs["id"])
-    u.name = userattrs['display_name']
+        u = User.objects.create(osm_id=osm_attrs['osm_id'])
+    
+    u.name = osm_attrs['display_name']
+    u.home_location = osm_attrs.get('home_location', None)
     u.save()
 
     dj_login(request, u)
@@ -381,3 +438,11 @@ def oauth_callback(request):
 
 class Documentation(TemplateView):
     template_name = 'osmcal/documentation.html'
+
+
+class CurrentUserView(TemplateView):
+    template_name = 'osmcal/user_self.html'
+
+    @method_decorator(login_required)
+    def get(self, request):
+        return super().get(self, request)

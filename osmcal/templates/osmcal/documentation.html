@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+{% load static %}
 <content class="text">
 <h1>OpenStreetMap Calendar Documentation</h1>
 
@@ -19,15 +20,25 @@
 
 <h2 id="API">API</h2>
 
-<p>The available API endpoints are documented using <a href="https://app.swaggerhub.com/apis-docs/osmcal/osmcal-api/">Swagger</a>.</p>
+<p>The available API endpoints <a href="{% static 'api.html' %}">are documented along with examples</a>.</p>
+
+<h3>Changelog</h3>
+
+<ul>
+	<li>v2 (2020-09-30): Dates are now ISO 8601 strings with time zone info. v1 is therefore deprecated from now on.</li>
+	<li>v2.1 (2020-10-07): A short date representation has been added to the date object (<code>human_short</code>) for displaying in event lists.</li>
+	<li>v2.2 (2020-12-02): Filtering event lists by ISO country code (<code>?in=</code>) is now allowed and the preferred way. Filtering by country name is deprecated.</li>
+</ul>
 
 <h2 id="Integrations">Integrations</h2>
 
-<p>If you're looking to integrate OSMCAL into your website, consider using <a href="https://github.com/jbelien/openstreetmap-calendar-widget">jbelien's openstreetmap-calendar-widget</a>.</p>
+<p>If you're looking to integrate OSMCAL <strong>into your website</strong>, consider using <a href="https://github.com/jbelien/openstreetmap-calendar-widget">jbelien's openstreetmap-calendar-widget</a>.</p>
+
+<p>There is also a plugin for <strong>MediaWiki</strong>, which allows you to display events on any wiki page: <a href="https://github.com/thomersch/OSMCALWikiWidget">OSMCAL Wiki Widget</a></p>
 
 <h2>Source Code and Issue Tracker</h2>
 
-<p>The OpenStreetMap Calendar is open source software and is <a href="https://github.com/thomersch/openstreetmap-calendar">hosted on GitHub</a>. If you experience problems, you can raise an issue there.</p>
+<p>The OpenStreetMap Calendar is open source software and the code is <a href="https://github.com/thomersch/openstreetmap-calendar">hosted on GitHub</a>. If you experience problems, you can raise an issue there.</p>
 
 <h2>Frequently Asked Questions</h2>
 

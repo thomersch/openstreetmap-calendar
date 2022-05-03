@@ -1,10 +1,12 @@
 @font-face {
+	font-display: swap;
 	font-family: "Source Sans";
 	font-weight: normal;
 	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Regular.otf");
 }
 
 @font-face {
+	font-display: swap;
 	font-family: "Source Sans";
 	font-weight: bold;
 	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Bold.otf");
@@ -102,9 +104,20 @@ h1, h2 {
 
 .event-list {
 	list-style: none;
+	margin: 0 auto;
 	max-width: 600px;
 	padding-left: 0;
-	margin: 0 auto;
+}
+
+.event-list-group {
+	list-style: none;
+	padding-left: 0;
+}
+
+.event-list-group-title {
+	font-size: 24pt;
+	margin-bottom: 0.25em;
+	color: #5A5A5A;
 }
 
 .event-list a:hover {
@@ -120,6 +133,7 @@ h1, h2 {
 	color: #5A5A5A;
 	font-size: 14pt;
 	padding: 1em 0;
+	overflow: hidden;
 }
 
 .event-list-entry a {
@@ -127,8 +141,8 @@ h1, h2 {
 }
 
 .event-list-entry-cancelled {
-	text-decoration: line-through;
 	opacity: 0.7;
+	text-decoration: line-through;
 }
 
 .event-list-entry-box {
@@ -137,14 +151,15 @@ h1, h2 {
 }
 
 .event-entry-main {
-	flex-grow: 2;
-	padding-right: 10px;
+	padding-right: 1em;
+	min-width: 0;
+	width: 100%;
 }
 
 .event-entry-name {
-	font-size: 130%;
-	font-weight: bold;
+	font-size: 20pt;
 	margin: 0;
+	word-wrap: break-word;
 }
 
 .event-entry-location {
@@ -200,6 +215,8 @@ h1, h2 {
 
 .event-single-main {
 	max-width: 600px;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
 
 .event-single-main pre {
@@ -223,8 +240,8 @@ h1, h2 {
 
 .text {
 	display: block;
-	max-width: 600px;
 	margin: auto;
+	max-width: 600px;
 }
 
 .text pre {

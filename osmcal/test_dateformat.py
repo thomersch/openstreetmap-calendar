@@ -2,20 +2,26 @@ from datetime import datetime
 
 from django.template.loader import render_to_string
 from django.test import SimpleTestCase
+from django.utils import translation
 
 # from .models import Event
 
 
 class MockEvent(object):
-    def __init__(self, start, end=None, whole_day=False):
+    def __init__(self, start, end=None, whole_day=False, location='Dummy'):
         self.start = start
         self.end = end
         self.whole_day = whole_day
+        self.timezone = 'UTC'
+        self.location = location
 
 
 class DateFormatTest(SimpleTestCase):
     def _fmt(self, evt):
         return render_to_string('osmcal/date.txt', {'event': evt}).strip()
+
+    def _fmt_loca(self, evt):
+        return render_to_string('osmcal/date.l10n.txt', {'event': evt}).strip()
 
     def setUp(self):
         self.cur = datetime.now()
@@ -61,3 +67,29 @@ class DateFormatTest(SimpleTestCase):
             self._fmt(MockEvent(start=datetime(year=self.cur.year - 1, month=1, day=2), whole_day=True)),
             '2nd January ' + str(self.cur.year - 1)
         )
+
+    def test_dateformat_past_year_with_time_interval(self):
+        self.assertEqual(
+            self._fmt(MockEvent(
+                start=datetime(year=self.cur.year - 1, month=1, day=2, hour=10),
+                end=datetime(year=self.cur.year - 1, month=1, day=2, hour=12),
+                whole_day=False,
+            )),
+            '2nd January ' + str(self.cur.year - 1) + ' 10:00 – 12:00'
+        )
+
+    def test_localized_de(self):
+        translation.activate('de-DE')
+        self.assertEqual(
+            self._fmt_loca(MockEvent(start=datetime(year=self.cur.year, month=10, day=3), whole_day=True)),
+            '3. Oktober'
+        )
+        translation.deactivate()
+
+    def test_localized_fr(self):
+        translation.activate('fr-FR')
+        self.assertEqual(
+            self._fmt_loca(MockEvent(start=datetime(year=self.cur.year, month=10, day=3), whole_day=True)),
+            '3 Octobre'
+        )
+        translation.deactivate()

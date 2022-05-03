@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -43,11 +44,12 @@ class EventsSerializer(BaseSerializerMany):
     def attr_date(self, obj):
         o = {
             'human': render_to_string('osmcal/date.l10n.txt', {'event': obj}).strip(),
+            'human_short': render_to_string('osmcal/date-short.l10n.txt', {'event': obj}).strip(),
             'whole_day': obj.whole_day,
-            'start': str(obj.start),
+            'start': obj.start_localized.isoformat(),
         }
         if obj.end:
-            o['end'] = str(obj.end)
+            o['end'] = obj.end_localized.isoformat()
         return o
 
     def attr_location(self, obj):

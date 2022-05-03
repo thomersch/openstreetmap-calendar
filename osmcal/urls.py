@@ -1,5 +1,5 @@
-from django.conf.urls import include, url
-from django.urls import path
+from django.conf import settings
+from django.urls import include, path
 
 from . import views
 
@@ -33,7 +33,14 @@ urlpatterns = [
 
     path('documentation/', views.Documentation.as_view(), name='api-manual'),
 
-    url('', include('django_prometheus.urls')),
-    url('api/', include('osmcal.api.urls')),
-    url('community/', include('osmcal.community.urls'))
+    path('me/', views.CurrentUserView.as_view(), name='user-self'),
+
+    path('', include('django_prometheus.urls')),
+    path('api/', include('osmcal.api.urls')),
+    path('community/', include('osmcal.community.urls'))
 ]
+
+if settings.DEBUG:
+    urlpatterns.append(
+        path('login/mock/', views.MockLogin.as_view(), name='login-mock')
+    )
