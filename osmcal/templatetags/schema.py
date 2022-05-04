@@ -13,11 +13,11 @@ def schema_block(evt):
 	data = {
 		"@context": "https://schema.org",
 		"@type": "Event",
-		"startDate": evt.start.isoformat(),
+		"startDate": evt.start_localized.isoformat(),
 		"name": evt.name
 	}
 	if evt.end:
-		data["endDate"] = evt.end.isoformat()
+		data["endDate"] = evt.end_localized.isoformat()
 
 	if evt.cancelled:
 		data["eventStatus"] = "https://schema.org/EventCancelled"
