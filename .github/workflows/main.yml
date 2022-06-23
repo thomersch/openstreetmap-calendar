@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: python:3.7-slim-buster
+    container: python:3.10-slim-buster
 
     services:
       postgres:
@@ -44,11 +44,9 @@ jobs:
     needs: test
 
     steps:
-    - name: SSH Commands
-      uses: appleboy/ssh-action@v0.0.7
-      with: 
-        host: osmcal.org
-        username: osmcal
-        key: ${{ secrets.SSH_KEY }}
-        script_stop: true
-        debug: true
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - uses: superfly/flyctl-actions/setup-flyctl@master
+    - run: fly deploy --remote-only
+      env:
+        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

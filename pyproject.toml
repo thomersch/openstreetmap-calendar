@@ -6,7 +6,7 @@ authors = ["Thomas Skowron <th@skowron.eu>"]
 license = "APACHE 2.0"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 psycopg2-binary = "~=2.8"
 requests = "~=2.22"
 requests-oauthlib = "~=1.2"
@@ -18,7 +18,7 @@ gunicorn = "~=20.0"
 python-dotenv = "~=0.14"
 sentry-sdk = "~=1.5"
 django-prometheus = "~=2.0"
-timezonefinder = "~=4.4"
+timezonefinder = "~=6.0"
 Babel = "~=2.9"
 django-background-tasks = "*"
 # django-background-tasks-updated = "==1.2.7" # pinned to a fork which supports Django 4
