@@ -1,4 +1,4 @@
-PATH := $(PATH):$(HOME)/.poetry/bin
+PATH := "$(PATH):$(HOME)/.poetry/bin"
 CALL := env PATH=$(PATH) poetry
 
 devserver:
@@ -27,3 +27,13 @@ test:
 
 fixtures:
 	$(CALL) run ./manage.py loaddata osmcal/fixtures/demo.yaml
+
+processtasks:
+	$(CALL) run ./manage.py process_tasks
+
+periodic:
+	while true; do \
+		echo "Running clearsessions" ;\
+		$(CALL) run ./manage.py clearsessions ;\
+		sleep 86400 ;\
+	done;
