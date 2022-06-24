@@ -7,7 +7,7 @@ processes = []
 [env]
   PORT = "8080"
   OSMCAL_PROD = "true"
-  GUNICORN_WOKERS = "2"
+  GUNICORN_WORKERS = "2"
 
 [experimental]
   allowed_public_ports = []

@@ -1,4 +1,4 @@
-gunicorn: poetry run gunicorn osmcal.wsgi -b :8080 -w $GUNICORN_WOKERS -p /var/run/osmcal.pid --preload --access-logfile -
+gunicorn: poetry run gunicorn osmcal.wsgi -b :8080 -w $GUNICORN_WORKERS --preload --access-logfile -
 
 worker: make processtasks
 
