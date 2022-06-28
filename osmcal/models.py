@@ -81,6 +81,11 @@ class Event(models.Model):
     def tz_name(self):
         return get_timezone_name(self.start_localized)
 
+    @property
+    def year_month(self):
+        l = self.start_localized
+        return (l.year, l.month)
+
     class Meta:
         indexes = (
             models.Index(fields=('end',)),

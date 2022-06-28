@@ -15,7 +15,6 @@ processes = []
   private_network = true
 
 [[services]]
-  http_checks = []
   internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
@@ -35,11 +34,14 @@ processes = []
     handlers = ["tls", "http"]
     port = 443
 
-  [[services.tcp_checks]]
-    grace_period = "1s"
-    interval = "15s"
-    restart_limit = 0
+  [[services.http_checks]]
+    grace_period = "3s"
+    interval = "10s"
+    restart_limit = 10
     timeout = "2s"
+    path = "/"
+    method = "get"
+    protocol = "http"
 
 [[statics]]
   guest_path = "/app/static/"

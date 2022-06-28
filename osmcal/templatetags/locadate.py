@@ -140,14 +140,14 @@ def short_date_format(evt, locale=DEFAULT_LOCALE,
 
 
 @register.filter()
-def year_month_to_title(ymstr):
-    ym = datetime.strptime(ymstr, "%Y-%m")
+def year_month_to_title(ym):
     now = timezone.now()
 
-    if ym.year == now.year and ym.month == now.month:
+    if ym[0] == now.year and ym[1] == now.month:
         return ""
 
-    if ym.year == now.year:
-        return datetime.strftime(ym, "%B")
+    ymo = datetime(month=ym[1], year=ym[0], day=1)
+    if ym[0] == now.year:
+        return datetime.strftime(ymo, "%B")
     else:
-        return datetime.strftime(ym, "%B %Y")
+        return datetime.strftime(ymo, "%B %Y")

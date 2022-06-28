@@ -1,6 +1,6 @@
 {% load tz locadate %}
 
-{% regroup events by start|date:"Y-m" as ebd %}
+{% regroup events by year_month as ebd %}
 
 <ul class="event-list">
 {% for date in ebd %}
