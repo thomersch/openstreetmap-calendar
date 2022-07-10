@@ -1,3 +1,11 @@
+FROM ghcr.io/redocly/redoc/cli:v2.0.0-rc.72 AS apidocs
+
+WORKDIR /docs
+
+COPY osmcal/api/schema .
+COPY Makefile .
+RUN apk add make && redoc-cli bundle -o api.html --disableGoogleFont api.yaml
+
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -20,6 +28,7 @@ COPY pyproject.toml poetry.lock Makefile ./
 RUN make install
 
 COPY . .
+COPY --from=apidocs /docs/api.html osmcal/static/api.html
 RUN make install staticfiles
 
 EXPOSE 8080
