@@ -2,7 +2,7 @@
 
 set -e
 
-PATH=$PATH:$HOME/.poetry/bin/
+PATH=$PATH:$HOME/.local/bin/
 
 make migrate
 hivemind
