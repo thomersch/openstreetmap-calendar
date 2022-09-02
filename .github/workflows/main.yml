@@ -30,10 +30,10 @@ jobs:
         run: curl -sSL https://install.python-poetry.org | python3 -
 
       - name: Install deps
-        run: $HOME/.poetry/bin/poetry install
+        run: $HOME/.local/bin/poetry install
 
       - name: Run tests
-        run: $HOME/.poetry/bin/poetry run ./manage.py test
+        run: $HOME/.local/bin/poetry run ./manage.py test
         env:
           OSMCAL_PG_HOST: postgres
           OSMCAL_PG_PASSWORD: postgres
