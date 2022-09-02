@@ -59,7 +59,7 @@ class QuestionnaireForm(forms.Form):
             self.fields[str(question.id)] = f
 
     def clean(self, *args, **kwargs):
-        for k, v in self.cleaned_data.items():
+        for k in list(self.cleaned_data.keys()):
             self.cleaned_data[int(k)] = self.cleaned_data.pop(k)
         return super().clean()
 
