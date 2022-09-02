@@ -21,7 +21,7 @@ RUN useradd -m osmcal
 RUN chown osmcal /app
 
 USER osmcal
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 # This is a hack to speed up docker builds through leveraging the layer cache.
 COPY pyproject.toml poetry.lock Makefile ./

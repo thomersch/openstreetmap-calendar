@@ -1,4 +1,4 @@
-PATH := "$(PATH):$(HOME)/.poetry/bin"
+PATH := "$(PATH):$(HOME)/.local/bin"
 CALL := env PATH=$(PATH) poetry
 
 devserver:
