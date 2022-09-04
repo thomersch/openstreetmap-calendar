@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'osmcal.middlewares.replay_middleware.ReplayMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -72,13 +74,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'osmcal.wsgi.application'
 
+WRITABLE_REGION: Optional[str] = os.getenv('WRITABLE_REGION', None)
+CURRENT_REGION: Optional[str] = os.getenv('FLY_REGION', None)
+
 DATABASES = {
     'default': {
         'HOST': os.getenv('OSMCAL_PG_HOST', ''),
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.getenv('OSMCAL_PG_DB', 'osmcal'),
         'USER': os.getenv('OSMCAL_PG_USER', 'osmcal'),
-        'PASSWORD': os.getenv('OSMCAL_PG_PASSWORD', None)
+        'PASSWORD': os.getenv('OSMCAL_PG_PASSWORD', None),
+        'PORT': 5432 if WRITABLE_REGION == CURRENT_REGION else 5433,
     }
 }
 

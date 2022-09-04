@@ -8,6 +8,8 @@ processes = []
   PORT = "8080"
   OSMCAL_PROD = "true"
   GUNICORN_WORKERS = "2"
+  WRITABLE_REGION = "fra"
+  OSMCAL_PG_HOST = "top1.nearest.of.osmcal-db.internal"
 
 [experimental]
   allowed_public_ports = []
