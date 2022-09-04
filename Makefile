@@ -2,6 +2,8 @@ PATH := "$(PATH):$(HOME)/.local/bin"
 CALL := env PATH=$(PATH) poetry
 
 GUNICORN_WORKERS ?= 1
+FLY_REGION ?= ""
+WRITABLE_REGION ?= ""
 
 devserver:
 	$(CALL) run ./manage.py runserver
@@ -13,7 +15,11 @@ dep-update:
 	$(CALL) update
 
 migrate:
-	$(CALL) run ./manage.py migrate
+	@if [ $(FLY_REGION) = $(WRITABLE_REGION) ]; then \
+		$(CALL) run ./manage.py migrate;\
+	else \
+		echo "Running on non-writable node";\
+	fi
 
 makemigrations:
 	$(CALL) run ./manage.py makemigrations
