@@ -2,9 +2,12 @@ from django.conf import settings
 from django.core.exceptions import MiddlewareNotUsed
 from django.db.utils import ProgrammingError
 from django.http import HttpResponse
+from psycopg2.errors import ReadOnlySqlTransaction
 
 
 class ReplayMiddleware:
+	read_only_exceptions = [ProgrammingError, ReadOnlySqlTransaction]
+
 	def __init__(self, get_response):
 		if not settings.WRITABLE_REGION:
 			"""
@@ -19,13 +22,14 @@ class ReplayMiddleware:
 		return self.get_response(request)
 
 	def process_exception(self, request, exception):
-		if isinstance(exception, ProgrammingError):
-			if settings.CURRENT_REGION == settings.WRITABLE_REGION:
-				# We are already in the region, which supposed to be writable, so reraise:
-				return None
-			response = HttpResponse()
-			self.mark_for_replay(response)
-			return response
+		for roe in self.read_only_exceptions:
+			if isinstance(exception, roe):
+				if settings.CURRENT_REGION == settings.WRITABLE_REGION:
+					# We are already in the region, which supposed to be writable, so reraise:
+					return None
+				response = HttpResponse()
+				self.mark_for_replay(response)
+				return response
 
 	def mark_for_replay(self, response):
 		response.headers['fly-replay'] = f"region={settings.WRITABLE_REGION}"
