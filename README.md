@@ -15,7 +15,7 @@ Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documen
 
 This is a Django application, it uses [poetry](https://python-poetry.org) for managing dependencies. Please look at their documentation for installation instructions.
 
-We support Python ≥ 3.7 and PostgreSQL ≥ 10.
+We support Python ≥ 3.8 and PostgreSQL ≥ 10.
 
 ### Database
 
