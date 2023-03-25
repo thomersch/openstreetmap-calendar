@@ -1,11 +1,14 @@
 from enum import Enum
 
+import bleach
+import markdown
 import requests
 from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from timezonefinder import TimezoneFinder
@@ -85,6 +88,17 @@ class Event(models.Model):
     def year_month(self):
         l = self.start_localized
         return (l.year, l.month)
+
+    @property
+    def short_description_without_markup(self) -> str:
+        if not self.description:
+            return ""
+        max_words = 15
+        cleaned = bleach.clean(
+            markdown.markdown(
+                self.description), tags=[], strip=True
+        )
+        return Truncator(cleaned).words(max_words)
 
     class Meta:
         indexes = (
