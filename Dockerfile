@@ -32,4 +32,4 @@ COPY --from=apidocs /docs/api.html osmcal/static/api.html
 RUN make install staticfiles
 
 EXPOSE 8080
-CMD /app/run.sh
+CMD hivemind
