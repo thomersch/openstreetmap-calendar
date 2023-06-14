@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.syndication.views import Feed
-from django.core.exceptions import BadRequest
+from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import transaction
 from django.db.models import F, Q
 from django.db.models.expressions import Func
@@ -49,7 +49,7 @@ class EventListView(View):
             after = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
         upcoming_events = self.filter_queryset(
-            Event.objects.all().annotate(
+            Event.objects.filter(hidden=False).annotate(
                 local_start=LocalDateTime(F('start'), F('timezone'))
             ), after=after
         )
@@ -135,15 +135,17 @@ class EventFeed(Feed, EventListView):
         return 'osmcal-event-{}'.format(obj.id)
 
 
-def event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    authors = event.log.all().distinct('created_by')
+class EventView(View):
+    def get(self, request, event_id):
+        # event = get_object_or_404(Event, id=event_id)
+        event = Event.objects.get(id=event_id)
+        authors = event.log.all().distinct('created_by')
 
-    user_is_joining = False
-    if not request.user.is_anonymous:
-        user_is_joining = event.participation.filter(user=request.user).exists()
+        user_is_joining = False
+        if not request.user.is_anonymous:
+            user_is_joining = event.participation.filter(user=request.user).exists()
 
-    return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors})
+        return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors})
 
 
 class EventParticipants(TemplateView):
@@ -383,9 +385,29 @@ class DuplicateEvent(EditEvent):
         return self.render(request, {'form': form, 'page_title': 'New Event'})
 
 
+class HideEvent(View):
+    def post(self, request, event_id):
+        if not request.user.is_moderator:
+            raise PermissionDenied()
+        evt = Event.objects.get(id=event_id)
+        evt.hidden = True
+        evt.save()
+        return redirect(reverse('event', kwargs={'event_id': event_id}))
+
+
+class UnhideEvent(View):
+    def post(self, request, event_id):
+        if not request.user.is_moderator:
+            raise PermissionDenied()
+        evt = Event.objects.get(id=event_id)
+        evt.hidden = False
+        evt.save()
+        return redirect(reverse('event', kwargs={'event_id': event_id}))
+
+
 class EventICal(View):
     def get(self, request, event_id):
-        evt = Event.objects.get(id=event_id)
+        evt = get_object_or_404(Event, pk=event_id)
         return HttpResponse(encode_event(evt), content_type='text/calendar')
 
 

@@ -10,11 +10,13 @@ urlpatterns = [
     path('subscribe/', views.SubscriptionInfo.as_view(), name='subscription-info'),
 
     path('event/add/', views.EditEvent.as_view(), name='event-edit'),
-    path('event/<int:event_id>/', views.event, name='event'),
+    path('event/<int:event_id>/', views.EventView.as_view(), name='event'),
     path('event/<int:event_id>.ics', views.EventICal.as_view(), name='event-ical'),
     path('event/<int:event_id>/cancel/', views.CancelEvent.as_view(), name='event-cancel'),
     path('event/<int:event_id>/change/', views.EditEvent.as_view(), name='event-change'),
     path('event/<int:event_id>/duplicate/', views.DuplicateEvent.as_view(), name='event-duplicate'),
+    path('event/<int:event_id>/hide/', views.HideEvent.as_view(), name='event-hide'),
+    path('event/<int:event_id>/unhide/', views.UnhideEvent.as_view(), name='event-unhide'),
 
     path('event/<int:event_id>/join/', views.JoinEvent.as_view(), name='event-join'),
     path('event/<int:event_id>/unjoin/', views.UnjoinEvent.as_view(), name='event-unjoin'),

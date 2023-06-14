@@ -297,3 +297,7 @@ h1, h2 {
 .code-bool {
 	color: #9b692d;
 }
+
+.form-inline {
+	display: inline-block;
+}

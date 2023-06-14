@@ -12,7 +12,6 @@ from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from timezonefinder import TimezoneFinder
-from .managers import HiddenManager
 
 tf = TimezoneFinder()
 
@@ -38,13 +37,13 @@ class Event(models.Model):
     location_address = models.JSONField(blank=True, null=True)
 
     link = models.URLField(blank=True, null=True)
-    kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
-    description = models.TextField(blank=True, null=True, help_text=mark_safe('Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'))
+    kind = models.CharField(max_length=4, choices=[
+                            (x.name, x.value) for x in EventType])
+    description = models.TextField(blank=True, null=True, help_text=mark_safe(
+        'Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'))
 
     cancelled = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
-
-    objects = HiddenManager()
 
     def save(self, *args, **kwargs):
         if self.location:
@@ -52,7 +51,8 @@ class Event(models.Model):
         super().save(*args, **kwargs)
 
     def geocode_location(self):
-        nr = requests.get('https://nominatim.openstreetmap.org/reverse', params={'format': 'jsonv2', 'lat': self.location.y, 'lon': self.location.x, 'accept-language': 'en'})
+        nr = requests.get('https://nominatim.openstreetmap.org/reverse', params={
+                          'format': 'jsonv2', 'lat': self.location.y, 'lon': self.location.x, 'accept-language': 'en'})
         self.location_address = nr.json().get('address', None)
         if self.location_address is None:
             add_breadcrumb(category='nominatim', level='error', data=nr.json())
@@ -117,9 +117,11 @@ class AnswerType(Enum):
 
 
 class ParticipationQuestion(models.Model):
-    event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='questions')
+    event = models.ForeignKey(
+        'Event', null=True, on_delete=models.SET_NULL, related_name='questions')
     question_text = models.CharField(max_length=200)
-    answer_type = models.CharField(max_length=4, choices=[(x.name, x.value) for x in AnswerType])
+    answer_type = models.CharField(
+        max_length=4, choices=[(x.name, x.value) for x in AnswerType])
     mandatory = models.BooleanField(default=True)
 
     class Meta:
@@ -127,7 +129,8 @@ class ParticipationQuestion(models.Model):
 
 
 class ParticipationQuestionChoice(models.Model):
-    question = models.ForeignKey(ParticipationQuestion, related_name='choices', on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        ParticipationQuestion, related_name='choices', on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
 
     class Meta:
@@ -135,7 +138,8 @@ class ParticipationQuestionChoice(models.Model):
 
 
 class EventParticipation(models.Model):
-    event = models.ForeignKey('Event', null=True, on_delete=models.SET_NULL, related_name='participation')
+    event = models.ForeignKey(
+        'Event', null=True, on_delete=models.SET_NULL, related_name='participation')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     added_on = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -144,20 +148,24 @@ class EventParticipation(models.Model):
 
 
 class ParticipationAnswer(models.Model):
-    question = models.ForeignKey(ParticipationQuestion, on_delete=models.CASCADE, related_name='answers')
+    question = models.ForeignKey(
+        ParticipationQuestion, on_delete=models.CASCADE, related_name='answers')
     user = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
     answer = models.CharField(max_length=200)
 
     class Meta:
         constraints = (
-            models.UniqueConstraint(fields=('question', 'user'), name='unique_question_answer'),
+            models.UniqueConstraint(
+                fields=('question', 'user'), name='unique_question_answer'),
         )
 
 
 class EventLog(models.Model):
-    event = models.ForeignKey('Event', related_name='log', on_delete=models.CASCADE)
+    event = models.ForeignKey(
+        'Event', related_name='log', on_delete=models.CASCADE)
     data = models.JSONField()
-    created_by = models.ForeignKey('User', null=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(
+        'User', null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -167,6 +175,8 @@ class User(AbstractUser):
     name = models.CharField(max_length=255)
 
     home_location = PointField(blank=True, null=True)
+
+    is_moderator = models.BooleanField(default=False)
 
     def home_timezone(self):
         if not self.home_location:
