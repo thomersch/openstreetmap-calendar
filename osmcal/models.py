@@ -12,6 +12,7 @@ from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from timezonefinder import TimezoneFinder
+from .managers import HiddenManager
 
 tf = TimezoneFinder()
 
@@ -41,6 +42,9 @@ class Event(models.Model):
     description = models.TextField(blank=True, null=True, help_text=mark_safe('Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'))
 
     cancelled = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
+
+    objects = HiddenManager()
 
     def save(self, *args, **kwargs):
         if self.location:
