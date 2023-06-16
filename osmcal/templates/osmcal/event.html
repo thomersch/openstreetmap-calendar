@@ -56,12 +56,12 @@
 						{% if not event.hidden %}
 							<form action="{% url 'event-hide' event.id %}" method="POST" class="form-inline">
 								{% csrf_token %}
-								<button class="btn btn-mini btn-negative">Hide Event</button>
+								<button class="btn btn-mini btn-negative">Hide Event</button></a>
 							</form>
 						{% else %}
 							<form action="{% url 'event-unhide' event.id %}" method="POST" class="form-inline">
 							{% csrf_token %}
-								<button class="btn btn-mini btn-negative">Unhide Event</button>
+								<button class="btn btn-mini btn-negative">Unhide Event</button></a>
 							</form>
 						{% endif %}
 					{% endif %}
