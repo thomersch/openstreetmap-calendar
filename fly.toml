@@ -1,8 +1,3 @@
-# fly.toml app configuration file generated for osmcal on 2023-04-25T16:56:51+02:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
 app = "osmcal"
 primary_region = "ams"
 kill_signal = "SIGINT"

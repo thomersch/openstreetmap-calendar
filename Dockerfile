@@ -6,7 +6,7 @@ COPY osmcal/api/schema .
 COPY Makefile .
 RUN apk add make && redoc-cli bundle -o api.html --disableGoogleFont api.yaml
 
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
