@@ -38,6 +38,9 @@ def auth_keys(verifier):
 
 
 def post(text: str):
+    # Twitter API v1.1 is not available anymore, no point in proceeding here.
+    # If anybody feels like reworking this part to work with API v2, PRs welcome.
+    return
     oauth = OAuth1(
         _get_config_value('client_key'),
         client_secret=_get_config_value('client_secret'),
@@ -45,5 +48,4 @@ def post(text: str):
         resource_owner_secret=_get_config_value('user_secret')
     )
     resp = requests.post(tweet_url, data={'status': text}, auth=oauth)
-    if "id" not in resp.json():
-        raise Exception("Twitter API did not return a tweet ID")
+    resp.raise_for_status()
