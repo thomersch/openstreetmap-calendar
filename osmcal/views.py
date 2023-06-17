@@ -137,15 +137,15 @@ class EventFeed(Feed, EventListView):
 
 class EventView(View):
     def get(self, request, event_id):
-        # event = get_object_or_404(Event, id=event_id)
         event = Event.objects.get(id=event_id)
         authors = event.log.all().distinct('created_by')
+        current_user_may_hide_event = HideEventBase.user_is_permitted(event, request.user)
 
         user_is_joining = False
         if not request.user.is_anonymous:
             user_is_joining = event.participation.filter(user=request.user).exists()
 
-        return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors})
+        return render(request, 'osmcal/event.html', context={'event': event, 'user_is_joining': user_is_joining, 'authors': authors, 'current_user_may_hide_event': current_user_may_hide_event})
 
 
 class EventParticipants(TemplateView):
@@ -385,23 +385,31 @@ class DuplicateEvent(EditEvent):
         return self.render(request, {'form': form, 'page_title': 'New Event'})
 
 
-class HideEvent(View):
-    def post(self, request, event_id):
-        if not request.user.is_moderator:
-            raise PermissionDenied()
+class HideEventBase(View):
+    @classmethod
+    def user_is_permitted(cls, event, user):
+        return (user.is_moderator or
+                event.originally_created_by == user)
+
+    def change_to(self, hide_status: bool, event_id, request):
         evt = Event.objects.get(id=event_id)
-        evt.hidden = True
+        if not self.user_is_permitted(evt, request.user):
+            raise PermissionDenied()
+        evt.hidden = hide_status
         evt.save()
+
+
+class HideEvent(HideEventBase):
+    def post(self, request, event_id):
+        hidden = True
+        self.change_to(hidden, event_id, request)
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
-class UnhideEvent(View):
+class UnhideEvent(HideEventBase):
     def post(self, request, event_id):
-        if not request.user.is_moderator:
-            raise PermissionDenied()
-        evt = Event.objects.get(id=event_id)
-        evt.hidden = False
-        evt.save()
+        hidden = False
+        self.change_to(hidden, event_id, request)
         return redirect(reverse('event', kwargs={'event_id': event_id}))
 
 
