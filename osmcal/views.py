@@ -388,7 +388,7 @@ class DuplicateEvent(EditEvent):
 class HideEventBase(View):
     @classmethod
     def user_is_permitted(cls, event, user):
-        return (user.is_moderator or
+        return user.is_authenticated and (user.is_moderator or
                 event.originally_created_by == user)
 
     def change_to(self, hide_status: bool, event_id, request):
