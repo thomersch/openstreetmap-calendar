@@ -44,4 +44,6 @@ def post(text: str):
         resource_owner_key=_get_config_value('user_key'),
         resource_owner_secret=_get_config_value('user_secret')
     )
-    return requests.post(tweet_url, data={'status': text}, auth=oauth)
+    resp = requests.post(tweet_url, data={'status': text}, auth=oauth)
+    if "id" not in resp.json():
+        raise Exception("Twitter API did not return a tweet ID")
