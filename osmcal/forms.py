@@ -20,26 +20,24 @@ class TimezoneField(forms.Field):
             return None
 
         try:
-            return pytz.timezone(
-                babel.dates.get_timezone_name(value, return_zone=True)
-            )
+            return pytz.timezone(babel.dates.get_timezone_name(value, return_zone=True))
         except pytz.exceptions.Error:
             return None
 
     def validate(self, value):
         if not value:
-            raise ValidationError('no value', code='required')
+            raise ValidationError("no value", code="required")
 
 
 class QuestionForm(forms.ModelForm):
     choices = SimpleArrayField(forms.CharField())
 
     def clean_choices(self):
-        return [x for x in self.cleaned_data['choices'][0].splitlines() if x]
+        return [x for x in self.cleaned_data["choices"][0].splitlines() if x]
 
     class Meta:
         model = models.ParticipationQuestion
-        fields = ('question_text', 'answer_type', 'mandatory')
+        fields = ("question_text", "answer_type", "mandatory")
 
 
 class QuestionnaireForm(forms.Form):
@@ -47,12 +45,16 @@ class QuestionnaireForm(forms.Form):
         self.fields: Dict[str, forms.Field] = {}
         super().__init__(**kwargs)
         for question in questions:
-            if question.answer_type == 'TEXT':
+            if question.answer_type == "TEXT":
                 f = forms.CharField(label=question.question_text, required=question.mandatory)
-            elif question.answer_type == 'BOOL':
+            elif question.answer_type == "BOOL":
                 f = forms.BooleanField(label=question.question_text, required=question.mandatory)
-            elif question.answer_type == 'CHOI':
-                f = forms.ChoiceField(label=question.question_text, required=question.mandatory, choices=[(x.id, x.text) for x in question.choices.all()])
+            elif question.answer_type == "CHOI":
+                f = forms.ChoiceField(
+                    label=question.question_text,
+                    required=question.mandatory,
+                    choices=[(x.id, x.text) for x in question.choices.all()],
+                )
             else:
                 raise ValueError("invalid answer_type: %s" % (question.answer_type))
 
@@ -69,23 +71,34 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = models.Event
-        fields = ('name', 'whole_day', 'start', 'end', 'link', 'kind', 'location_name', 'location', 'timezone', 'description')
+        fields = (
+            "name",
+            "whole_day",
+            "start",
+            "end",
+            "link",
+            "kind",
+            "location_name",
+            "location",
+            "timezone",
+            "description",
+        )
         widgets = {
-            'location': LeafletWidget(),
-            'start': DateTimeInput(attrs={'class': 'datepicker-flat'}),
-            'end': DateTimeInput(attrs={'class': 'datepicker-flat', 'placeholder': 'optional'}),
-            'link': TextInput(attrs={'placeholder': 'https://'}),
-            'location_name': TextInput(attrs={'placeholder': 'e.g. Café International'}),
+            "location": LeafletWidget(),
+            "start": DateTimeInput(attrs={"class": "datepicker-flat"}),
+            "end": DateTimeInput(attrs={"class": "datepicker-flat", "placeholder": "optional"}),
+            "link": TextInput(attrs={"placeholder": "https://"}),
+            "location_name": TextInput(attrs={"placeholder": "e.g. Café International"}),
         }
-        unlogged_fields = ('timezone', )
+        unlogged_fields = ("timezone",)
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
-        
+
         if self.errors:
             return self.cleaned_data
 
-        tz = self.cleaned_data.get('timezone', None)
+        tz = self.cleaned_data.get("timezone", None)
 
         """
         Django automatically assumes that datetimes are in the default time zone (UTC),
@@ -93,13 +106,13 @@ class EventForm(forms.ModelForm):
         the field and setting it to the given time zone.
         This does not change the value of the time itself, only the time zone placement.
         """
-        self.cleaned_data['start'] = tz.localize(self.cleaned_data['start'].replace(tzinfo=None))
+        self.cleaned_data["start"] = tz.localize(self.cleaned_data["start"].replace(tzinfo=None))
 
-        if self.cleaned_data['end']:
-            self.cleaned_data['end'] = tz.localize(self.cleaned_data['end'].replace(tzinfo=None))
+        if self.cleaned_data["end"]:
+            self.cleaned_data["end"] = tz.localize(self.cleaned_data["end"].replace(tzinfo=None))
 
-            if self.cleaned_data['end'] <= self.cleaned_data['start']:
-                self.add_error('end', 'Event end has to be after its start.')
+            if self.cleaned_data["end"] <= self.cleaned_data["start"]:
+                self.add_error("end", "Event end has to be after its start.")
 
     def to_json(self):
         d = {}
