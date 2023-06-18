@@ -32,6 +32,9 @@ jobs:
       - name: Install deps
         run: $HOME/.local/bin/poetry install
 
+      - name: Check formatting
+        run: $HOME/.local/bin/poetry run black --check .
+
       - name: Run tests
         run: $HOME/.local/bin/poetry run ./manage.py test
         env:
