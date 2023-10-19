@@ -24,7 +24,7 @@ django-background-tasks = "*"
 # django-background-tasks-updated = "==1.2.7" # pinned to a fork which supports Django 4
 
 [tool.poetry.dev-dependencies]
-PyYaml = "~=5.3"
+PyYaml = "~=6.0"
 pylint = "*"
 black = "~=23.3.0"
 

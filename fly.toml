@@ -8,7 +8,7 @@ kill_timeout = 5
 
 [env]
   GUNICORN_WORKERS = "2"
-  OSMCAL_PG_HOST = "top1.nearest.of.osmcal-db.internal"
+  OSMCAL_PG_HOST = "osmcal-db2.flycast"
   OSMCAL_PROD = "true"
   PORT = "8080"
   WRITABLE_REGION = "fra"
