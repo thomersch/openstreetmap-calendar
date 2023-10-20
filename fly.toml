@@ -11,7 +11,7 @@ kill_timeout = 5
   OSMCAL_PG_HOST = "osmcal-db2.flycast"
   OSMCAL_PROD = "true"
   PORT = "8080"
-  WRITABLE_REGION = "fra"
+  WRITABLE_REGION = "ams"
 
 [[services]]
   protocol = "tcp"
