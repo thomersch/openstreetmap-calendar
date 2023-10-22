@@ -86,6 +86,7 @@ DATABASES = {
     }
 }
 
+CONN_MAX_AGE = 3600
 
 AUTH_PASSWORD_VALIDATORS = [
     {
