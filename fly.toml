@@ -8,7 +8,7 @@ kill_timeout = 5
 
 [env]
   GUNICORN_WORKERS = "2"
-  OSMCAL_PG_HOST = "osmcal-db2.flycast"
+  OSMCAL_PG_HOST = "top1.nearest.of.osmcal-db2.internal"
   OSMCAL_PROD = "true"
   PORT = "8080"
   WRITABLE_REGION = "ams"
@@ -17,6 +17,9 @@ kill_timeout = 5
   protocol = "tcp"
   internal_port = 8080
   processes = ["app"]
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
 
   [[services.ports]]
     port = 80
@@ -26,10 +29,11 @@ kill_timeout = 5
   [[services.ports]]
     port = 443
     handlers = ["tls", "http"]
+
   [services.concurrency]
     type = "connections"
-    hard_limit = 25
-    soft_limit = 20
+    hard_limit = 125
+    soft_limit = 100
 
   [[services.http_checks]]
     interval = "10s"
