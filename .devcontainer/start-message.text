@@ -1,3 +1,11 @@
+ 
+ ██████  ███████ ███    ███  ██████  █████  ██      
+██    ██ ██      ████  ████ ██      ██   ██ ██      
+██    ██ ███████ ██ ████ ██ ██      ███████ ██      
+██    ██      ██ ██  ██  ██ ██      ██   ██ ██      
+ ██████  ███████ ██      ██  ██████ ██   ██ ███████ 
+                                                    
+                                                    
 Setup complete.
 
 You can now run migrations (make migrate) and start the dev server (make devserver).
