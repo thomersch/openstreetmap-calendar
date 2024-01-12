@@ -23,7 +23,7 @@ We support Python ≥ 3.11 and PostgreSQL ≥ 15. (Older versions might work, bu
 
 You need a running PostgreSQL database with PostGIS installed. If you're using the dev container, the DB is automatically started and set up.
 
-If you set this up manually, make sure you have an empty DB before starting. By default we're using
+If you set this up manually, make sure you have an empty DB before starting. By default we're using the `osmcal` for user and DB with no password set. For more details, check `osmcal/settings.py`.
 
 ### Running Tests
 
