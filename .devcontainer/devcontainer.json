@@ -1,0 +1,8 @@
+{
+  "name": "osmcal",
+  "service": "osmcal",
+  "dockerComposeFile": "docker-compose.yml",
+  "workspaceFolder": "/app",
+  "postCreateCommand": "make install && cat .devcontainer/start-message.text && /bin/bash",
+  "shutdownAction": "stopCompose"
+}

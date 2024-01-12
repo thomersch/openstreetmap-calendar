@@ -9,7 +9,7 @@ devserver:
 	$(CALL) run ./manage.py runserver
 
 install:
-	$(CALL) install
+	$(CALL) install --no-root
 
 dep-update:
 	$(CALL) update
