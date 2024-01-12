@@ -9,7 +9,7 @@ jobs:
 
     services:
       postgres:
-        image: postgis/postgis
+        image: postgis/postgis:15-3.4
         env:
           POSTGRES_USER: osmcal
           POSTGRES_PASSWORD: postgres
