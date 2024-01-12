@@ -11,6 +11,9 @@ devserver:
 install:
 	$(CALL) install --no-root
 
+install-dev:
+	$(CALL) install --no-root --with dev
+
 dep-update:
 	$(CALL) update
 

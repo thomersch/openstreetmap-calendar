@@ -1,11 +1,10 @@
 from xml.etree import ElementTree as ET
 
 from django.contrib.gis.geos import Point
-from requests_oauthlib import OAuth1Session
+from requests_oauthlib import OAuth2Session
 
 
-def get_user_attributes(session: OAuth1Session) -> dict:
-    session.fetch_access_token("https://www.openstreetmap.org/oauth/access_token")
+def get_user_attributes(session: OAuth2Session) -> dict:
     userreq = session.get("https://api.openstreetmap.org/api/0.6/user/details")
 
     userxml = ET.fromstring(userreq.text)

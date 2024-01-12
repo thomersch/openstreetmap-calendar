@@ -22,7 +22,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
 from pytz import UTC
-from requests_oauthlib import OAuth1Session
+from osmcal import oauth
 
 from . import forms, osmuser
 from .ical import encode_event, encode_events
@@ -461,23 +461,15 @@ class EventFeedICal(EventListView):
 
 
 def oauth_start(request):
-    osm = OAuth1Session(settings.OAUTH_OPENSTREETMAP_KEY, client_secret=settings.OAUTH_OPENSTREETMAP_SECRET)
-    req_token = osm.fetch_request_token("https://www.openstreetmap.org/oauth/request_token")
-    request.session["oauth_params"] = req_token
+    osm = oauth.get_oauth_session(request)
     if request.GET.get("next", None):
         request.session["next"] = request.GET["next"]
-    auth_url = osm.authorization_url("https://www.openstreetmap.org/oauth/authorize")
+    auth_url, _ = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
     return redirect(auth_url)
 
 
 def oauth_callback(request):
-    osm = OAuth1Session(
-        settings.OAUTH_OPENSTREETMAP_KEY,
-        client_secret=settings.OAUTH_OPENSTREETMAP_SECRET,
-        resource_owner_key=request.session.get("oauth_params")["oauth_token"],
-        resource_owner_secret=request.session.get("oauth_params")["oauth_token_secret"],
-        verifier="OSMNOPE",
-    )
+    osm = oauth.get_authenticated_session(request)
     osm_attrs = osmuser.get_user_attributes(osm)
 
     try:

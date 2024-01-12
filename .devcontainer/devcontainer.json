@@ -3,6 +3,11 @@
   "service": "osmcal",
   "dockerComposeFile": "docker-compose.yml",
   "workspaceFolder": "/app",
-  "postCreateCommand": "make install && cat .devcontainer/start-message.text",
-  "shutdownAction": "stopCompose"
+  "postCreateCommand": "make install-dev && ln -s `poetry env info -p`/bin/black /usr/bin/black && cat .devcontainer/start-message.text",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "ms-python.black-formatter"]
+    }
+  }
 }
