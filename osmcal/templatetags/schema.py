@@ -33,7 +33,11 @@ def schema_block(evt):
             "addressLocality": ", ".join(
                 filter(
                     lambda x: x is not None,
-                        [evt.location_address.get("village"), evt.location_address.get("town"), evt.location_address.get("city")]
+                    [
+                        evt.location_address.get("village"),
+                        evt.location_address.get("town"),
+                        evt.location_address.get("city"),
+                    ],
                 )
             ),
         }
@@ -47,7 +51,7 @@ def schema_block(evt):
             addr["streetAddress"] = ", ".join(
                 filter(
                     lambda x: x is not None,
-                        [evt.location_address.get("house_number"), evt.location_address.get("road")]
+                    [evt.location_address.get("house_number"), evt.location_address.get("road")],
                 )
             )
 
