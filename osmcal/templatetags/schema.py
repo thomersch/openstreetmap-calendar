@@ -27,7 +27,8 @@ def schema_block(evt):
     else:
         data["eventStatus"] = "https://schema.org/EventScheduled"
 
-    if evt.location:
+    addr = None
+    if evt.location_address:
         addr = {
             "@type": "PostalAddress",
             "addressLocality": ", ".join(
@@ -55,12 +56,15 @@ def schema_block(evt):
                 )
             )
 
+    if addr or evt.location or evt.location_name:
         data["location"] = {
             "@type": "Place",
-            "latitude": evt.location.y,
-            "longitude": evt.location.x,
-            "address": addr,
         }
+        if evt.location:
+            data["location"]["latitude"] = evt.location.y
+            data["location"]["longitude"] = evt.location.x
+        if addr:
+            data["location"]["address"] = addr
         if evt.location_name:
             data["location"]["name"] = evt.location_name
 
