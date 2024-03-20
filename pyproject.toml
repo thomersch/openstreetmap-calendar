@@ -26,7 +26,7 @@ django-background-tasks = "*"
 [tool.poetry.group.dev.dependencies]
 PyYaml = "~=6.0"
 pylint = "*"
-black = "~=23.3.0"
+black = "~=24.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
