@@ -133,7 +133,7 @@ if not DEBUG:
     sentry_sdk.init(
         dsn=os.getenv("OSMCAL_SENTRY_URL"),
         integrations=[DjangoIntegration()],
-        traces_sample_rate=0.1,
+        traces_sample_rate=0.01,
     )
 
 LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19}
