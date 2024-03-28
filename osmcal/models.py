@@ -3,6 +3,7 @@ from enum import Enum
 import bleach
 import markdown
 import requests
+from background_task import background
 from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
@@ -52,16 +53,37 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if self.location:
             self.geocode_location()
+
+        # For the case that an event had previously an address which got removed by the edit:
+        if not self.location:
+            self.location_address = None
+
         super().save(*args, **kwargs)
 
     def geocode_location(self):
+        try:
+            self._geocode_location()
+        except:
+            event_id = self.id
+            self._background_geocode_location(event_id)
+
+    def _geocode_location(self):
         nr = requests.get(
             "https://nominatim.openstreetmap.org/reverse",
             params={"format": "jsonv2", "lat": self.location.y, "lon": self.location.x, "accept-language": "en"},
+            headers={"User-Agent": "osmcal"},
         )
+        nr.raise_for_status()
+
         self.location_address = nr.json().get("address", None)
         if self.location_address is None:
             add_breadcrumb(category="nominatim", level="error", data=nr.json())
+
+    @staticmethod
+    @background(schedule=1)
+    def _background_geocode_location(event_id):
+        evt = Event.objects.get(id=event_id)
+        evt.save()  # geocodes implicitly
 
     @property
     def location_text(self):
