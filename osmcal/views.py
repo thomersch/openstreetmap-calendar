@@ -150,7 +150,7 @@ class EventFeed(Feed, EventListView):
 
 class EventView(View):
     def get(self, request, event_id):
-        event = Event.objects.get(id=event_id)
+        event = get_object_or_404(Event, id=event_id)
         authors = event.log.all().distinct("created_by")
         current_user_may_hide_event = HideEventBase.user_is_permitted(event, request.user)
 
