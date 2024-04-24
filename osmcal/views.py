@@ -74,6 +74,10 @@ class EventListView(View):
                 distance__lte=50000
             )  # distance in meters
 
+        days = params.get("days", None)
+        if days:
+            upcoming_events = upcoming_events.filter(start__lte=timezone.now() + timedelta(days=int(days)))
+
         return upcoming_events
 
 
