@@ -21,7 +21,7 @@ RUN useradd -m osmcal
 RUN chown osmcal /app
 
 USER osmcal
-RUN pip install poetry==1.7.1
+RUN pip install poetry==1.8.3
 
 # This is a hack to speed up docker builds through leveraging the layer cache.
 COPY pyproject.toml poetry.lock Makefile ./

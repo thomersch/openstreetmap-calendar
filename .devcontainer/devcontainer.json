@@ -9,5 +9,6 @@
     "vscode": {
       "extensions": ["ms-python.python", "ms-python.black-formatter"]
     }
-  }
+  },
+  "forwardPorts": [8000, "db:5432"]
 }

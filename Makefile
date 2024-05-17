@@ -1,5 +1,5 @@
 PATH := "$(PATH):$(HOME)/.local/bin"
-CALL := env PATH=$(PATH) poetry
+CALL := env PATH=$(PATH) POETRY_VIRTUALENVS_IN_PROJECT=true poetry
 
 GUNICORN_WORKERS ?= 1
 FLY_REGION ?= ""
