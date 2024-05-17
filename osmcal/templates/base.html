@@ -38,7 +38,7 @@
 
 		{% if debug and not user.is_authenticated %}| <a href="{% url 'login-mock' %}?next={% if next %}{{ next }}{% else %}{{ request.path }}{% endif %}">Mock login</a>{% endif %}
 
-		<div style="margin-top:.5em"><a href="/events/past/">Past Events</a> | <a href="/documentation/">Documentation</a></div>
+		<div style="margin-top:.5em"><a href="/events/past/{% if filter.in %}?in={{ filter.in }}{% endif %}">Past Events</a> | <a href="/documentation/">Documentation</a></div>
 	</footer>
 </body>
 </html>
