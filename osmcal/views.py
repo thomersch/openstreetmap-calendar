@@ -151,6 +151,9 @@ class EventFeed(Feed, EventListView):
     def item_guid(self, obj):
         return "osmcal-event-{}".format(obj.id)
 
+    def item_guid_is_permalink(self, obj):
+        return False
+
 
 class EventView(View):
     def get(self, request, event_id):
