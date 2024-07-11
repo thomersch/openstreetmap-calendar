@@ -27,7 +27,6 @@ django-background-tasks = "*"
 PyYaml = "~=6.0"
 pylint = "*"
 black = "~=24.3.0"
-gdal = "^3.9.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
