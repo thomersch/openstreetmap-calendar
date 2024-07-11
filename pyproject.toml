@@ -8,7 +8,7 @@ license = "APACHE 2.0"
 [tool.poetry.dependencies]
 python = "^3.8"
 psycopg2-binary = "~=2.8"
-requests = "^2.32"
+requests = "~=2.32"
 requests-oauthlib = "~=1.2"
 django-leaflet = "~=0.27"
 Django = "~=3.2"
@@ -27,7 +27,6 @@ tzfpy = "^0.15.5"
 PyYaml = "~=6.0"
 pylint = "*"
 black = "~=24.3.0"
-gdal = "^3.9.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

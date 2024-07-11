@@ -339,19 +339,6 @@ files = [
 prometheus-client = ">=0.7"
 
 [[package]]
-name = "gdal"
-version = "3.9.1"
-description = "GDAL: Geospatial Data Abstraction Library"
-optional = false
-python-versions = ">=3.8.0"
-files = [
-    {file = "gdal-3.9.1.tar.gz", hash = "sha256:6d8a8f162ed32c5cb58839fa9198def477c68b670eed4cbce9eeef387ac3c8da"},
-]
-
-[package.extras]
-numpy = ["numpy (>1.0.0)"]
-
-[[package]]
 name = "gunicorn"
 version = "22.0.0"
 description = "WSGI HTTP Server for UNIX"
@@ -959,4 +946,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "98c4d3d44d81203e0c4f02cdbe96fc9d8502e99715248049533df8760695d19c"
+content-hash = "59662ad20726ee57ace222c1c2b72dc23498d28893241d18d1382e1766349a1b"
