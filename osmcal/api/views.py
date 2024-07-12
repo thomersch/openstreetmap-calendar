@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views import View
 from osmcal import views
 from pytz import timezone as tzp
-from timezonefinder import TimezoneFinder
+from tzfpy import get_tz
 
 from . import serializers
 from .decorators import ALLOWED_HEADERS, cors_any, language_from_header
@@ -12,8 +12,6 @@ from .decorators import ALLOWED_HEADERS, cors_any, language_from_header
 JSON_CONTENT_TYPE = (
     "application/json; charset=" + settings.DEFAULT_CHARSET
 )  # This shall be utf-8, otherwise we're not friends anymore.
-
-tf = TimezoneFinder()
 
 
 class CORSOptionsMixin(object):
@@ -31,7 +29,9 @@ class EventList(CORSOptionsMixin, views.EventListView):
     @cors_any
     @language_from_header
     def get(self, request, *args, **kwargs):
-        es = self.get_serializer()(self.get_queryset(request.GET), context={"request": request})
+        es = self.get_serializer()(
+            self.get_queryset(request.GET), context={"request": request}
+        )
         return HttpResponse(es.json, content_type=JSON_CONTENT_TYPE)
 
 
@@ -49,7 +49,7 @@ class Timezone(View):
     def get(self, request, *args, **kwargs):
         lat = float(request.GET["lat"])
         lon = float(request.GET["lon"])
-        tz = tf.timezone_at(lng=lon, lat=lat)
+        tz = get_tz(lon, lat)
         if tz is None:
             return HttpResponse("", status=400)
         return HttpResponse(tzp(tz))

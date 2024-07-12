@@ -12,9 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
-from timezonefinder import TimezoneFinder
-
-tf = TimezoneFinder()
+from tzfpy import get_tz
 
 
 class EventType(Enum):
@@ -38,7 +36,9 @@ class Event(models.Model):
     location_address = models.JSONField(blank=True, null=True)
 
     link = models.URLField(blank=True, null=True)
-    kind = models.CharField(max_length=4, choices=[(x.name, x.value) for x in EventType])
+    kind = models.CharField(
+        max_length=4, choices=[(x.name, x.value) for x in EventType]
+    )
     description = models.TextField(
         blank=True,
         null=True,
@@ -70,7 +70,12 @@ class Event(models.Model):
     def _geocode_location(self):
         nr = requests.get(
             "https://nominatim.openstreetmap.org/reverse",
-            params={"format": "jsonv2", "lat": self.location.y, "lon": self.location.x, "accept-language": "en"},
+            params={
+                "format": "jsonv2",
+                "lat": self.location.y,
+                "lon": self.location.x,
+                "accept-language": "en",
+            },
             headers={"User-Agent": "osmcal"},
         )
         nr.raise_for_status()
@@ -93,7 +98,13 @@ class Event(models.Model):
         return ", ".join(
             filter(
                 lambda x: x is not None,
-                [addr.get("village"), addr.get("town"), addr.get("city"), addr.get("state"), addr.get("country")],
+                [
+                    addr.get("village"),
+                    addr.get("town"),
+                    addr.get("city"),
+                    addr.get("state"),
+                    addr.get("country"),
+                ],
             )
         )
 
@@ -163,9 +174,13 @@ class AnswerType(Enum):
 
 
 class ParticipationQuestion(models.Model):
-    event = models.ForeignKey("Event", null=True, on_delete=models.SET_NULL, related_name="questions")
+    event = models.ForeignKey(
+        "Event", null=True, on_delete=models.SET_NULL, related_name="questions"
+    )
     question_text = models.CharField(max_length=200)
-    answer_type = models.CharField(max_length=4, choices=[(x.name, x.value) for x in AnswerType])
+    answer_type = models.CharField(
+        max_length=4, choices=[(x.name, x.value) for x in AnswerType]
+    )
     mandatory = models.BooleanField(default=True)
 
     class Meta:
@@ -173,7 +188,9 @@ class ParticipationQuestion(models.Model):
 
 
 class ParticipationQuestionChoice(models.Model):
-    question = models.ForeignKey(ParticipationQuestion, related_name="choices", on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        ParticipationQuestion, related_name="choices", on_delete=models.CASCADE
+    )
     text = models.CharField(max_length=200)
 
     class Meta:
@@ -181,7 +198,9 @@ class ParticipationQuestionChoice(models.Model):
 
 
 class EventParticipation(models.Model):
-    event = models.ForeignKey("Event", null=True, on_delete=models.SET_NULL, related_name="participation")
+    event = models.ForeignKey(
+        "Event", null=True, on_delete=models.SET_NULL, related_name="participation"
+    )
     user = models.ForeignKey("User", null=True, on_delete=models.SET_NULL)
     added_on = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -190,12 +209,18 @@ class EventParticipation(models.Model):
 
 
 class ParticipationAnswer(models.Model):
-    question = models.ForeignKey(ParticipationQuestion, on_delete=models.CASCADE, related_name="answers")
+    question = models.ForeignKey(
+        ParticipationQuestion, on_delete=models.CASCADE, related_name="answers"
+    )
     user = models.ForeignKey("User", null=True, on_delete=models.SET_NULL)
     answer = models.CharField(max_length=200)
 
     class Meta:
-        constraints = (models.UniqueConstraint(fields=("question", "user"), name="unique_question_answer"),)
+        constraints = (
+            models.UniqueConstraint(
+                fields=("question", "user"), name="unique_question_answer"
+            ),
+        )
 
 
 class EventLog(models.Model):
@@ -217,7 +242,7 @@ class User(AbstractUser):
     def home_timezone(self):
         if not self.home_location:
             return None
-        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
+        return tf.get_tz(self.home_location.x, self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:
