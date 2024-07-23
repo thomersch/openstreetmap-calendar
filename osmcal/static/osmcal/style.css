@@ -228,6 +228,10 @@ h1, h2 {
 	padding-right: 1em;
 }
 
+.event-single-additional .leaflet-container {
+    height: 400px;
+}
+
 .event-single-side-buttons {
 	margin-top: 1em;
 	text-align: right;

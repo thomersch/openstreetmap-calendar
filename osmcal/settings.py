@@ -136,7 +136,7 @@ if not DEBUG:
         traces_sample_rate=0.01,
     )
 
-LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19}
+LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19, "ATTRIBUTION_PREFIX": False}
 
 SOCIAL = {
     "twitter": {

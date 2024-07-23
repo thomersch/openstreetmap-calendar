@@ -4,9 +4,10 @@ CALL := env PATH=$(PATH) POETRY_VIRTUALENVS_IN_PROJECT=true poetry
 GUNICORN_WORKERS ?= 1
 FLY_REGION ?= ""
 WRITABLE_REGION ?= ""
+DEVSERVER_ARGS ?= ""
 
 devserver:
-	$(CALL) run ./manage.py runserver
+	$(CALL) run ./manage.py runserver $(DEVSERVER_ARGS)
 
 install:
 	$(CALL) install --no-root
