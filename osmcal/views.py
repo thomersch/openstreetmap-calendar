@@ -68,9 +68,10 @@ class EventListView(View):
         if filter_around:
             filter_around_radius = params.get("around_radius", None)
             if filter_around_radius:
-                dist = filter_around_radius * 1000
-            else
-                dist = 50000
+                dist = float(filter_around_radius)
+                if dist == 0 or dist > 250: raise BadRequest("filter_around_radius invalid")
+            else:
+                dist = 50
             filter_around = [float(x) for x in filter_around.split(",")]
             if len(filter_around) == 2:
                 lat = filter_around[0]
@@ -81,7 +82,7 @@ class EventListView(View):
             upcoming_events = upcoming_events.annotate(
                 distance = Distance("location", pt)
             ).filter(
-                distance__lte = dist # distance in meters
+                distance__lte = dist * 1000 # dist variable contains km, filter must be in meters
             )
 
         days = params.get("days", None)
