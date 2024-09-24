@@ -66,15 +66,15 @@ class EventListView(View):
 
         filter_around = params.get("around", None)
         if filter_around:
+            filter_around_radius = params.get("around_radius", None)
+            if filter_around_radius:
+                dist = filter_around_radius * 1000
+            else
+                dist = 50000
             filter_around = [float(x) for x in filter_around.split(",")]
             if len(filter_around) == 2:
                 lat = filter_around[0]
                 lon = filter_around[1]
-                dist = 50000
-            elif len(filter_around) == 3:
-                lat = filter_around[0]
-                lon = filter_around[1]
-                dist = filter_around[2] * 1000
             else:
                 raise BadRequest("filter_around invalid")
             pt = Point(lon, lat, srid = 4326)
