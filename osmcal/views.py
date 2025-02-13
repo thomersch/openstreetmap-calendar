@@ -380,6 +380,17 @@ class EditEvent(View):
             form = forms.EventForm(request.POST, instance=Event.objects.get(id=event_id))
 
         if form.is_valid():
+            if request.user.is_banned:
+                # User is shadow-banned, let's pretend the event got saved
+                # and display a fake rendered page for them.
+                return render(
+                    request,
+                    "osmcal/event.html",
+                    context={
+                        "event": Event(id=2000000, **form.cleaned_data),
+                    },
+                )
+
             questions_data = []
             question_formset.is_valid()
             for qf in question_formset:

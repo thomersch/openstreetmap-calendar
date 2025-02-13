@@ -121,7 +121,7 @@ class Event(models.Model):
 
     @property
     def start_localized(self):
-        tz = timezone(self.timezone)
+        tz = timezone(str(self.timezone))
         return self.start.astimezone(tz)
 
     @property
@@ -213,6 +213,7 @@ class User(AbstractUser):
     home_location = PointField(blank=True, null=True)
 
     is_moderator = models.BooleanField(default=False)
+    is_banned = models.BooleanField(default=False)
 
     def home_timezone(self):
         if not self.home_location:
