@@ -21,10 +21,10 @@ RUN useradd -m osmcal
 RUN chown osmcal /app
 
 USER osmcal
-RUN pip install poetry==1.8.3
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # This is a hack to speed up docker builds through leveraging the layer cache.
-COPY pyproject.toml poetry.lock Makefile ./
+COPY pyproject.toml uv.lock Makefile ./
 RUN make install
 
 COPY . .

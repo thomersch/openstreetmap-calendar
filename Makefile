@@ -1,5 +1,4 @@
-PATH := "$(PATH):$(HOME)/.local/bin"
-CALL := env PATH=$(PATH) POETRY_VIRTUALENVS_IN_PROJECT=true poetry
+CALL := uv
 
 GUNICORN_WORKERS ?= 1
 FLY_REGION ?= ""
@@ -10,13 +9,10 @@ devserver:
 	$(CALL) run ./manage.py runserver $(DEVSERVER_ARGS)
 
 install:
-	$(CALL) install --no-root
+	$(CALL) sync --no-dev
 
 install-dev:
-	$(CALL) install --no-root --with dev
-
-dep-update:
-	$(CALL) update
+	$(CALL) sync
 
 migrate:
 	@if [ $(FLY_REGION) = $(WRITABLE_REGION) ]; then \
