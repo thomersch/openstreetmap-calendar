@@ -26,17 +26,17 @@ jobs:
       - name: Install other deps
         run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev curl
 
-      - name: Install poetry
-        run: curl -sSL https://install.python-poetry.org | python3 -
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install deps
-        run: $HOME/.local/bin/poetry install
+        run: make install-dev
 
       - name: Check formatting
-        run: $HOME/.local/bin/poetry run black --check .
+        run: uv run black --check .
 
       - name: Run tests
-        run: $HOME/.local/bin/poetry run ./manage.py test
+        run: uv run ./manage.py test
         env:
           OSMCAL_PG_HOST: postgres
           OSMCAL_PG_PASSWORD: postgres
@@ -47,9 +47,9 @@ jobs:
     needs: test
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - uses: superfly/flyctl-actions/setup-flyctl@master
-    - run: flyctl deploy --remote-only --detach
-      env:
-        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --detach
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
