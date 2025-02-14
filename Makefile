@@ -9,10 +9,10 @@ devserver:
 	$(CALL) run ./manage.py runserver $(DEVSERVER_ARGS)
 
 install:
-	$(CALL) sync --no-dev
+	$(CALL) sync --no-dev --frozen
 
 install-dev:
-	$(CALL) sync
+	$(CALL) sync --frozen
 
 migrate:
 	@if [ $(FLY_REGION) = $(WRITABLE_REGION) ]; then \

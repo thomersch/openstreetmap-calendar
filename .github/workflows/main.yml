@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install other deps
-        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev curl
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev curl make
 
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
