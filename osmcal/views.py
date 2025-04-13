@@ -109,7 +109,10 @@ class Homepage(EventListView):
                 "user": request.user,
                 "events": upcoming_events,
                 "country_list": country_list,
-                "filter": {"in": request.GET.get("in", None), "around": request.GET.get("around", None)},
+                "filter": {
+                    "in": request.GET.get("in", None),
+                    "around": request.GET.get("around", None),
+                },
             },
         )
 
@@ -226,7 +229,9 @@ class JoinEvent(View):
     def survey(self, request, evt):
         question_form = forms.QuestionnaireForm
         return render(
-            request, "osmcal/event_survey.html", context={"event": evt, "form": question_form(evt.questions.all())}
+            request,
+            "osmcal/event_survey.html",
+            context={"event": evt, "form": question_form(evt.questions.all())},
         )
 
     @method_decorator(login_required)
@@ -295,9 +300,8 @@ class MockLogin(View):
         return redirect(request.GET.get("next", "/"))
 
 
-class CancelEvent(View):
-    @method_decorator(login_required)
-    def post(self, request, event_id=None):
+class CancelEventMixin:
+    def set_event_staus(self, request, event_id, cancelled: bool):
         event = get_object_or_404(Event, id=event_id)
 
         # We don't need an event form as such, but we will use the to_json method
@@ -306,8 +310,21 @@ class CancelEvent(View):
         event_form.is_valid()
         EventLog.objects.create(created_by=request.user, event=event, data=event_form.to_json())
 
-        event.cancelled = True
+        event.cancelled = cancelled
         event.save()
+
+
+class CancelEvent(View, CancelEventMixin):
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
+        self.set_event_staus(request, event_id, True)
+        return redirect(reverse("event", kwargs={"event_id": event_id}))
+
+
+class UncancelEvent(View, CancelEventMixin):
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
+        self.set_event_staus(request, event_id, False)
         return redirect(reverse("event", kwargs={"event_id": event_id}))
 
 
@@ -435,7 +452,17 @@ class DuplicateEvent(EditEvent):
         old_evt = Event.objects.get(id=event_id)
 
         form_data = self.dict_from_event(
-            old_evt, ("name", "whole_day", "link", "kind", "location_name", "location", "description", "timezone")
+            old_evt,
+            (
+                "name",
+                "whole_day",
+                "link",
+                "kind",
+                "location_name",
+                "location",
+                "description",
+                "timezone",
+            ),
         )
         form_data["start"] = datetime.now().replace(
             hour=old_evt.start_localized.hour,

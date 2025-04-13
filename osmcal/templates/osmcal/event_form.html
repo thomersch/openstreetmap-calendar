@@ -109,8 +109,12 @@
 		<div method="POST" class="event-form" style="margin-top: 1em;">
 			<div class="event-form-line">
 				<div class="event-form-leading-label"></div>
-				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
-				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% if not event.cancelled %}
+    				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
+    				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% else %}
+				    <button type="submit" formaction="{% url 'event-uncancel' event.id %}" class="btn btn-negative">Uncancel Event</button>
+				{% endif %}
 			</div>
 		</div>
 		{% endif %}
