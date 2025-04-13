@@ -18,7 +18,9 @@
 		{% endif %}
 
 		{% if not user.is_authenticated %}
+		<div style="text-align: center; margin-top: 1em;">
 			<a href='/oauth/start/{% if next %}?next={{ next }}{% endif %}'><button class="btn">Login using your OpenStreetMap account</button></a>
+		</div>
 		{% endif %}
 	</div>
 {% endblock %}
