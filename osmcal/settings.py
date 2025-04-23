@@ -146,3 +146,9 @@ SOCIAL = {
         "user_secret": os.getenv("OSMCAL_TWITTER_USER_SECRET", None),
     }
 }
+
+if gdal_path := os.getenv("GDAL_LIBRARY_PATH", None):
+    GDAL_LIBRARY_PATH = gdal_path
+
+if geos_path := os.getenv("GEOS_LIBRARY_PATH", None):
+    GEOS_LIBRARY_PATH = geos_path
