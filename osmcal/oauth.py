@@ -18,7 +18,7 @@ def get_oauth_session(request):
 
 
 def get_authenticated_session(request) -> OAuth2Session:
-    authorization_response = request.get_raw_uri()
+    authorization_response = request.build_absolute_uri(None)
     if settings.DEBUG:
         # This simplifies the reverse proxy setup on dev:
         # It's pretending we're using HTTPS with a correct configuration.
