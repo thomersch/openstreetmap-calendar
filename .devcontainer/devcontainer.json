@@ -3,7 +3,7 @@
   "service": "osmcal",
   "dockerComposeFile": "docker-compose.yml",
   "workspaceFolder": "/app",
-  "postCreateCommand": "make install-dev && ln -s `poetry env info -p`/bin/black /usr/bin/black && cat .devcontainer/start-message.text",
+  "postCreateCommand": "make install-dev && ln -s /app/.venv/bin/black /usr/local/bin/black && cat .devcontainer/start-message.text",
   "postStartCommand": "DEVSERVER_ARGS=0:8000 make devserver",
   "shutdownAction": "stopCompose",
   "customizations": {

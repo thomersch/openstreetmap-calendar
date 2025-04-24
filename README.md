@@ -15,7 +15,9 @@ Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documen
 
 The repo contains a [dev container](https://containers.dev) configuration, so you can develop without having to install all the dependencies on your machine manually. VS Code and PyCharm/IntelliJ have integrated support and you can even use Github Codespaces.
 
-Alternatively you can install like any other Python/Django project. We're using [poetry](https://python-poetry.org) for managing dependencies. Please look at their documentation for installation instructions.
+We also feature a [devbox](https://www.jetify.com/devbox) setup which allows to setup a development environment without having to utilize Docker and containers. `devbox services up` allows you to start the project itself and its dependencies.
+
+Alternatively you can install like any other Python/Django project. We're using [uv](https://docs.astral.sh/uv/) for managing dependencies. Please look at their documentation for installation instructions.
 
 We support Python ≥ 3.11 and PostgreSQL ≥ 15. (Older versions might work, but no guarantees).
 
