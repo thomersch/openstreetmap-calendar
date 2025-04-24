@@ -7,9 +7,7 @@ from osmcal.templatetags import locadate
 def assemble_msg(evt_id):
     evt = Event.objects.get(id=evt_id)
 
-    return "{} on {} https://osmcal.org/event/{}/".format(
-        evt.name, locadate.short_date_format(evt), evt.id
-    )
+    return "{} on {} https://osmcal.org/event/{}/".format(evt.name, locadate.short_date_format(evt), evt.id)
 
 
 @background(schedule=5)
