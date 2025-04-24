@@ -8,10 +8,8 @@ venvPath = "."
 venv = ".venv"
 
 [project]
-authors = [
-    {name = "Thomas Skowron", email = "th@skowron.eu"},
-]
-license = {text = "APACHE 2.0"}
+authors = [{ name = "Thomas Skowron", email = "th@skowron.eu" }]
+license = { text = "APACHE 2.0" }
 requires-python = "<4.0,>=3.8"
 dependencies = [
     "psycopg2-binary~=2.8",
@@ -27,7 +25,7 @@ dependencies = [
     "django-prometheus~=2.0",
     "timezonefinder~=6.0",
     "Babel~=2.9",
-    "django-background-tasks",
+    "django4-background-tasks~=1.2.10",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
@@ -35,8 +33,4 @@ description = ""
 package-mode = false
 
 [dependency-groups]
-dev = [
-    "PyYaml~=6.0",
-    "pylint",
-    "black~=24.3.0",
-]
+dev = ["PyYaml~=6.0", "pylint", "black~=24.3.0"]

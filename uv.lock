@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.8, <4.0"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -335,25 +336,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-background-tasks"
-version = "1.2.5"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django-compat" },
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/43/82/3f36d2c23d0f09bb1c9552c4871a22113c11c8ea2ea4033df5a93a181360/django-background-tasks-1.2.5.tar.gz", hash = "sha256:e1b19e8d495a276c9d64c5a1ff8b41132f75d2f58e45be71b78650dad59af9de", size = 20256 }
-
-[[package]]
-name = "django-compat"
-version = "1.0.15"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/6b/03/84a887c67dbaf8b9fe7a876f44b2c6050c2a247e34e5fad6791fd15cf12f/django-compat-1.0.15.tar.gz", hash = "sha256:3ac9a3bedc56b9365d9eb241bc5157d0c193769bf995f9a78dc1bc24e7c2331b", size = 21980 }
-
-[[package]]
 name = "django-leaflet"
 version = "0.31.0"
 source = { registry = "https://pypi.org/simple" }
@@ -376,6 +358,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/e1/51/485b4122e00f2b8ef
 wheels = [
     { url = "https://files.pythonhosted.org/packages/3a/75/fb3d4f056f9ed4f8848817d5afd7a1d949632ab117452ccd179e3839cfc4/django_prometheus-2.3.1-py2.py3-none-any.whl", hash = "sha256:cf9b26f7ba2e4568f08f8f91480a2882023f5908579681bcf06a4d2465f12168", size = 29081 },
 ]
+
+[[package]]
+name = "django4-background-tasks"
+version = "1.2.10"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/41/98/961354520d4bc9234d3e0ffd2f9f4c42da028711e8ca26d62f4384882c81/django4-background-tasks-1.2.10.tar.gz", hash = "sha256:6a36e23fcf003a662aa7dbc743c915c77a8a7582766d4567b29ee727f5af4092", size = 21101 }
 
 [[package]]
 name = "gunicorn"
@@ -465,7 +456,7 @@ resolution-markers = [
     "python_full_version == '3.9.*'",
 ]
 dependencies = [
-    { name = "zipp", version = "3.21.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
+    { name = "zipp", version = "3.21.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/33/08/c1395a292bb23fd03bdf572a1357c5a733d3eecbab877641ceacab23db6e/importlib_metadata-8.6.1.tar.gz", hash = "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580", size = 55767 }
 wheels = [
@@ -707,9 +698,9 @@ dependencies = [
     { name = "babel" },
     { name = "bleach" },
     { name = "django" },
-    { name = "django-background-tasks" },
     { name = "django-leaflet" },
     { name = "django-prometheus" },
+    { name = "django4-background-tasks" },
     { name = "gunicorn" },
     { name = "markdown" },
     { name = "psycopg2-binary" },
@@ -733,9 +724,9 @@ requires-dist = [
     { name = "babel", specifier = "~=2.9" },
     { name = "bleach", specifier = "~=3.3" },
     { name = "django", specifier = "~=3.2" },
-    { name = "django-background-tasks" },
     { name = "django-leaflet", specifier = "~=0.27" },
     { name = "django-prometheus", specifier = "~=2.0" },
+    { name = "django4-background-tasks", specifier = "~=1.2.10" },
     { name = "gunicorn", specifier = "~=22.0" },
     { name = "markdown", specifier = "~=3.2" },
     { name = "psycopg2-binary", specifier = "~=2.8" },
