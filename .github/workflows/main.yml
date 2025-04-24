@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: python:3.11-slim-buster
+    container: python:3.11-slim-bookworm
 
     services:
       postgres:
