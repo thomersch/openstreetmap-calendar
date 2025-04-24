@@ -12,8 +12,9 @@
 {% endblock %}
 
 {% block content %}
+	<div class="text">
 	<h1>Attend ”{{ event.name }}”</h1>
-	<div class="text">The event organiser wants you to answer some questions for sign-up. Answers are publicly visible.</div>
+	<div>The event organiser wants you to answer some questions for sign-up. Answers are publicly visible.</div>
 
 	<form method="POST">
 		<input hidden name="signup-answers" value="1">
@@ -31,4 +32,5 @@
 			<button class="btn survey-submit-button">Sign up</button>
 		</section>
 	</form>
+	</div>
 {% endblock %}
