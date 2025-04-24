@@ -1,11 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
-  "packages": [
-    "uv@latest",
-    "path:postgres#postgresql",
-    "python312Packages.gdal@latest",
-    "geos@latest"
-  ],
+  "packages": ["uv@latest", "path:postgres#postgresql", "python312Packages.gdal@latest", "geos@latest"],
   "shell": {
     "init_hook": ["echo 'Welcome to devbox!' > /dev/null"],
     "scripts": {

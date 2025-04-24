@@ -10,22 +10,23 @@ venv = ".venv"
 [project]
 authors = [{ name = "Thomas Skowron", email = "th@skowron.eu" }]
 license = { text = "APACHE 2.0" }
-requires-python = "<4.0,>=3.8"
+requires-python = "<4.0,>=3.11"
 dependencies = [
     "psycopg2-binary~=2.8",
     "requests~=2.32",
     "requests-oauthlib~=1.2",
     "django-leaflet~=0.27",
-    "Django~=3.2",
+    "Django~=5.2",
     "Markdown~=3.2",
-    "bleach~=3.3",
+    "bleach~=6.2.0",
     "gunicorn~=22.0",
-    "python-dotenv~=0.14",
+    "python-dotenv~=1.1.0",
     "sentry-sdk~=2.8",
     "django-prometheus~=2.0",
     "timezonefinder~=6.0",
     "Babel~=2.9",
     "django4-background-tasks~=1.2.10",
+    "pytz~=2025.2",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
