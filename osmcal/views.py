@@ -49,6 +49,27 @@ class EventListView(View):
     def filter_queryset(self, qs, **kwargs):
         return qs.filter(Q(start__gte=kwargs["after"]) | Q(end__gte=kwargs["after"])).order_by("local_start")
 
+    def filter_around(self, filter_around, filter_around_radius, upcoming_events):
+        if filter_around_radius:
+            dist = float(filter_around_radius)
+            if dist <= 0 or dist > 250:
+                raise BadRequest("filter_around_radius invalid")
+        else:
+            dist = 50
+        try:
+            filter_around = [float(x) for x in filter_around.split(",")]
+        except ValueError:
+            raise BadRequest("invalid lat/lon")
+        if len(filter_around) == 2:
+            lat = filter_around[0]
+            lon = filter_around[1]
+        else:
+            raise BadRequest("filter_around invalid")
+        pt = Point(lon, lat, srid=4326)
+        return upcoming_events.annotate(distance=Distance("location", pt)).filter(
+            distance__lte=dist * 1000  # dist variable contains km, filter must be in meters
+        )
+
     def get_queryset(self, params, after=None):
         if after is None:
             after = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -67,22 +88,7 @@ class EventListView(View):
         filter_around = params.get("around", None)
         if filter_around:
             filter_around_radius = params.get("around_radius", None)
-            if filter_around_radius:
-                dist = float(filter_around_radius)
-                if dist <= 0 or dist > 250:
-                    raise BadRequest("filter_around_radius invalid")
-            else:
-                dist = 50
-            filter_around = [float(x) for x in filter_around.split(",")]
-            if len(filter_around) == 2:
-                lat = filter_around[0]
-                lon = filter_around[1]
-            else:
-                raise BadRequest("filter_around invalid")
-            pt = Point(lon, lat, srid=4326)
-            upcoming_events = upcoming_events.annotate(distance=Distance("location", pt)).filter(
-                distance__lte=dist * 1000  # dist variable contains km, filter must be in meters
-            )
+            upcoming_events = self.filter_around(filter_around, filter_around_radius, upcoming_events)
 
         days = params.get("days", None)
         if days:

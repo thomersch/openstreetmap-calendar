@@ -18,6 +18,11 @@ class EventListTest(TestCase):
         resp = c.get("/events.ics?around=52,13")
         self.assertEqual(resp.status_code, 200)
 
+    def test_location_bad_syntax(self):
+        c = Client()
+        resp = c.get("/events.ics?around=52\\,13")
+        self.assertEqual(resp.status_code, 400)
+
     def test_location_around_dist(self):
         c = Client()
         resp = c.get("/events.ics?around=52,13&around_radius=5")
