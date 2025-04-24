@@ -139,12 +139,7 @@ if not DEBUG:
 LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19, "ATTRIBUTION_PREFIX": False}
 
 SOCIAL = {
-    "twitter": {
-        "client_key": os.getenv("OSMCAL_TWITTER_KEY", None),
-        "client_secret": os.getenv("OSMCAL_TWITTER_SECRET", None),
-        "user_key": os.getenv("OSMCAL_TWITTER_USER_KEY", None),
-        "user_secret": os.getenv("OSMCAL_TWITTER_USER_SECRET", None),
-    }
+    "mastodon": {"access_token": os.getenv("MASTODON_ACCESS_TOKEN", None)},
 }
 
 if gdal_path := os.getenv("GDAL_LIBRARY_PATH", None):
