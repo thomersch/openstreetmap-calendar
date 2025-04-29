@@ -6,9 +6,14 @@
 
 {% block head %}
 	{{ block.super }}
-	<meta property="og:title" content="{{ event.name }}">
-	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %}{% if event.location_name %} at {{ event.location_name }}{% endif %}{% if event.location %} in {{ event.location_text }}{% endif %}. {{ event.short_description_without_markup }}">
-	{% schema_block event %}
+	{% if not event.hidden %}
+    	<meta property="og:title" content="{{ event.name }}">
+    	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %}{% if event.location_name %} at {{ event.location_name }}{% endif %}{% if event.location %} in {{ event.location_text }}{% endif %}. {{ event.short_description_without_markup }}">
+    	{% schema_block event %}
+	{% else %}
+        <meta name="robots" content="noindex">
+	{% endif %}
+
 	{% if event.location %}
 		{% leaflet_js %}
 		{% leaflet_css %}
