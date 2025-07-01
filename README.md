@@ -1,3 +1,5 @@
+[![Matrix](https://img.shields.io/matrix/osmcal:mustelo.de?server_fqdn=matrix.org&logo=matrix)](https://matrix.to/#/#osmcal:mustelo.de)
+
 # OpenStreetMap Calendar
 
 A simple, open calendar for tracking OpenStreetMap-related activities, such as mapping parties, hackathons, conferences, and other community events.
