@@ -6,7 +6,7 @@ A simple collaborative calendar for hosting community events. OSMCal hosts OpenS
 
 ## Key Features
 
-- **Open for Contributions**: Anyone with an OpenStreetMap account can add or manage events.
+- **Open Collaboration**: Anyone with an OpenStreetMap account can add or edit events.
 - **Multilingual Support**: Events and dates can be displayed in different languages based on user preferences.
 - **RSS Feeds**: Subscribe to event feeds globally or by specific countries.
 
