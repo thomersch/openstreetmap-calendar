@@ -2,7 +2,7 @@
 
 # OpenStreetMap Calendar
 
-A simple, open calendar for tracking OpenStreetMap-related activities, such as mapping parties, hackathons, conferences, and other community events.
+A simple collaborative calendar for hosting community events. OSMCal hosts OpenStreetMap-related activities such as mapping parties, hackathons and conferences.
 
 ## Key Features
 
