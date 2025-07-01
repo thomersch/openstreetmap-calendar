@@ -78,7 +78,7 @@ During development, you can use a fake login without setting up OAuth. Scroll to
 
 ## API Documentation
 
-The API is described using OpenAPI 3, and the schema is located in `/api/schema/`. The live version is available [here](https://osmcal.org/static/api.html).
+The API is described using [OpenAPI 3](https://spec.openapis.org/oas/v3.0.0.html). The schema is located in `/api/schema/`. The live version is available [here](https://osmcal.org/static/api.html).
 
 ## Support and Contact
 
