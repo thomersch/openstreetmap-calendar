@@ -5,7 +5,7 @@
 {% block head %}
 	{{ block.super }}
 	{% include "osmcal/partials/no_index.html" %}
-	
+
 	{% leaflet_js plugins="forms" %}
 	{% leaflet_css plugins="forms" %}
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/flatpickr.min.css' %}">
@@ -31,7 +31,7 @@
 	{% if page_title %}<h1>{{ page_title }}</h1>{% endif %}
 	<form id="event-main-form" method="POST">
 		{% csrf_token %}
-		
+
 		{% timezone tz %}
 		<section class="event-form">
 			{% for field in form %}
@@ -82,8 +82,12 @@
 		<div method="POST" class="event-form" style="margin-top: 1em;">
 			<div class="event-form-line">
 				<div class="event-form-leading-label"></div>
-				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
-				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% if not event.cancelled %}
+    				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
+    				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% else %}
+				    <button type="submit" formaction="{% url 'event-uncancel' event.id %}" class="btn btn-negative">Uncancel Event</button>
+				{% endif %}
 			</div>
 		</div>
 		{% endif %}
@@ -141,9 +145,13 @@
 				fp[i].config.enableTime = !evt.target.checked;
 				if(evt.target.checked) {
 					fp[i].config.dateFormat = 'Y-m-d';
+					if(fp[i].selectedDates.length > 0) {
+						fp[i].setDate(new Date(fp[i].selectedDates[0].toDateString()));
+					}
 				} else {
 					fp[i].config.dateFormat = 'Y-m-d H:i';
 				}
+				fp[i].redraw();
 			}
 		});
 
@@ -174,8 +182,8 @@
 					});
 				}
 			});
-			
-			leafletmap.addControl(osmGeocoder); 
+
+			leafletmap.addControl(osmGeocoder);
 		}, false);
 	</script>
 {% endblock %}

@@ -6,9 +6,14 @@
 
 {% block head %}
 	{{ block.super }}
-	<meta property="og:title" content="{{ event.name }}">
-	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %} {% if event.location_name %}at {{ event.location_name }}{% endif %} in {{ event.location_text }}. {{ event.description|truncatewords:15 }}">
-	{% schema_block event %}
+	{% if not event.hidden %}
+    	<meta property="og:title" content="{{ event.name }}">
+    	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %}{% if event.location_name %} at {{ event.location_name }}{% endif %}{% if event.location %} in {{ event.location_text }}{% endif %}. {{ event.short_description_without_markup }}">
+    	{% schema_block event %}
+	{% else %}
+        <meta name="robots" content="noindex">
+	{% endif %}
+
 	{% if event.location %}
 		{% leaflet_js %}
 		{% leaflet_css %}
@@ -52,6 +57,19 @@
 				<div class="event-single-side-buttons">
 					<a href="{% url 'event-change' event.id %}"><button class="btn btn-mini">Edit Event</button></a>
 					<a href="{% url 'event-duplicate' event.id %}"><button class="btn btn-mini">Repeat Event</button></a>
+					{% if current_user_may_hide_event %}
+						{% if not event.hidden %}
+							<form action="{% url 'event-hide' event.id %}" method="POST" class="form-inline">
+								{% csrf_token %}
+								<button class="btn btn-mini btn-negative">Hide Event</button>
+							</form>
+						{% else %}
+							<form action="{% url 'event-unhide' event.id %}" method="POST" class="form-inline">
+							{% csrf_token %}
+								<button class="btn btn-mini btn-negative">Unhide Event</button>
+							</form>
+						{% endif %}
+					{% endif %}
 				</div>
 
 				{% if not event.cancelled %}

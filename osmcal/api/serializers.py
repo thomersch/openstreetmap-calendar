@@ -39,17 +39,17 @@ class BaseSerializerMany(object):
 
 
 class EventsSerializer(BaseSerializerMany):
-    fields = ('name', 'url', 'date', 'location', 'cancelled')
+    fields = ("name", "url", "date", "location", "cancelled")
 
     def attr_date(self, obj):
         o = {
-            'human': render_to_string('osmcal/date.l10n.txt', {'event': obj}).strip(),
-            'human_short': render_to_string('osmcal/date-short.l10n.txt', {'event': obj}).strip(),
-            'whole_day': obj.whole_day,
-            'start': obj.start_localized.isoformat(),
+            "human": render_to_string("osmcal/date.l10n.txt", {"event": obj}).strip(),
+            "human_short": render_to_string("osmcal/date-short.l10n.txt", {"event": obj}).strip(),
+            "whole_day": obj.whole_day,
+            "start": obj.start_localized.isoformat(),
         }
         if obj.end:
-            o['end'] = obj.end_localized.isoformat()
+            o["end"] = obj.end_localized.isoformat()
         return o
 
     def attr_location(self, obj):
@@ -57,19 +57,19 @@ class EventsSerializer(BaseSerializerMany):
             return Omitable()
 
         o = {
-            'short': obj.location_text,
-            'detailed': obj.location_detailed_addr,
-            'coords': [obj.location.x, obj.location.y]
+            "short": obj.location_text,
+            "detailed": obj.location_detailed_addr,
+            "coords": [obj.location.x, obj.location.y],
         }
 
         if obj.location_name:
-            o['venue'] = obj.location_name
+            o["venue"] = obj.location_name
         return o
 
     def attr_url(self, obj):
-        rel_url = reverse('event', args=[obj.id])
+        rel_url = reverse("event", args=[obj.id])
         try:
-            return self.context['request'].build_absolute_uri(rel_url)
+            return self.context["request"].build_absolute_uri(rel_url)
         except KeyError:
             return rel_url
 

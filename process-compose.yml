@@ -1,0 +1,5 @@
+processes:
+  osmcal:
+    command: make devserver
+    availability:
+      restart: always

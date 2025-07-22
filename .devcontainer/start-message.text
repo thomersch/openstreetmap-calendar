@@ -1,0 +1,11 @@
+ 
+ ██████  ███████ ███    ███  ██████  █████  ██      
+██    ██ ██      ████  ████ ██      ██   ██ ██      
+██    ██ ███████ ██ ████ ██ ██      ███████ ██      
+██    ██      ██ ██  ██  ██ ██      ██   ██ ██      
+ ██████  ███████ ██      ██  ██████ ██   ██ ███████ 
+                                                    
+                                                    
+Setup complete.
+
+You can now run migrations (`make migrate`) and start the dev server (`make devserver`). You can load some demo data (fixtures) by running `make fixtures`.

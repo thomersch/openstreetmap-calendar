@@ -5,11 +5,11 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: python:3.7-slim-buster
+    container: python:3.11-slim-bookworm
 
     services:
       postgres:
-        image: postgis/postgis
+        image: postgis/postgis:15-3.4
         env:
           POSTGRES_USER: osmcal
           POSTGRES_PASSWORD: postgres
@@ -24,16 +24,19 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install other deps
-        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev curl
+        run: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libgdal-dev curl make
 
-      - name: Install poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install deps
-        run: $HOME/.poetry/bin/poetry install
+        run: make install-dev
+
+      - name: Check formatting
+        run: uv run black --check .
 
       - name: Run tests
-        run: $HOME/.poetry/bin/poetry run ./manage.py test
+        run: uv run ./manage.py test
         env:
           OSMCAL_PG_HOST: postgres
           OSMCAL_PG_PASSWORD: postgres
@@ -44,11 +47,9 @@ jobs:
     needs: test
 
     steps:
-    - name: SSH Commands
-      uses: appleboy/ssh-action@v0.0.7
-      with: 
-        host: osmcal.org
-        username: osmcal
-        key: ${{ secrets.SSH_KEY }}
-        script_stop: true
-        debug: true
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --detach
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -228,6 +228,10 @@ h1, h2 {
 	padding-right: 1em;
 }
 
+.event-single-additional .leaflet-container {
+    height: 400px;
+}
+
 .event-single-side-buttons {
 	margin-top: 1em;
 	text-align: right;
@@ -296,4 +300,8 @@ h1, h2 {
 
 .code-bool {
 	color: #9b692d;
+}
+
+.form-inline {
+	display: inline-block;
 }
