@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "background_task",
     "osmcal",
     "osmcal.api",
+    "osmcal.community",
     "osmcal.social",
 ]
 

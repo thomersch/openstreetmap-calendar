@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 import bleach
 import markdown
@@ -13,6 +14,7 @@ from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from timezonefinder import TimezoneFinder
+
 
 tf = TimezoneFinder()
 
@@ -149,8 +151,11 @@ class Event(models.Model):
         return Truncator(cleaned).words(max_words)
 
     @property
-    def originally_created_by(self) -> "User":
-        return self.log.order_by("created_at").first().created_by
+    def originally_created_by(self) -> Optional["User"]:
+        try:
+            return self.log.order_by("created_at").first().created_by
+        except AttributeError:
+           return None
 
     class Meta:
         indexes = (models.Index(fields=("end",)),)
