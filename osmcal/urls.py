@@ -44,7 +44,7 @@ urlpatterns = [
     path("me/", views.CurrentUserView.as_view(), name="user-self"),
     path("", include("django_prometheus.urls")),
     path("api/", include("osmcal.api.urls")),
-    path('community/', include('osmcal.community.urls')),
+    path("community/", include("osmcal.community.urls")),
 ]
 
 if settings.DEBUG:

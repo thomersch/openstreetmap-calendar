@@ -155,7 +155,7 @@ class Event(models.Model):
         try:
             return self.log.order_by("created_at").first().created_by
         except AttributeError:
-           return None
+            return None
 
     class Meta:
         indexes = (models.Index(fields=("end",)),)

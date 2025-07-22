@@ -13,16 +13,18 @@ from .models import Community
 
 class CommunityList(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'osmcal/community/community_list.html', {
-            'communities': Community.objects.annotate(member_count=Count('members')).order_by('-member_count')
-        })
+        return render(
+            request,
+            "osmcal/community/community_list.html",
+            {"communities": Community.objects.annotate(member_count=Count("members")).order_by("-member_count")},
+        )
 
 
 class CommunityCreate(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        form = forms.CommunityForm(label_suffix='')
-        return render(request, 'osmcal/community/community_form.html', {'form': form})
+        form = forms.CommunityForm(label_suffix="")
+        return render(request, "osmcal/community/community_form.html", {"form": form})
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -31,48 +33,46 @@ class CommunityCreate(View):
         c = Community.objects.create(**form.cleaned_data)
         c.members.add(request.user)
         c.save()
-        return redirect(reverse('osmcal.community:community', args=[c.id]))
+        return redirect(reverse("osmcal.community:community", args=[c.id]))
 
 
 class CommunityDetail(View):
     def get(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
         now = timezone.now()
-        upcoming_events = Event.objects.filter(communities=community).filter(Q(start__gte=now) | Q(end__gte=now)).order_by('start')
+        upcoming_events = (
+            Event.objects.filter(communities=community).filter(Q(start__gte=now) | Q(end__gte=now)).order_by("start")
+        )
 
-        ctx = {
-            'community': community,
-            'user': request.user,
-            'events': upcoming_events
-        }
+        ctx = {"community": community, "user": request.user, "events": upcoming_events}
         if not request.user.is_anonymous:
-            ctx['is_member'] = community.members.filter(id=request.user.id).count() > 0
+            ctx["is_member"] = community.members.filter(id=request.user.id).count() > 0
 
-        return render(request, 'osmcal/community/community_detail.html', ctx)
+        return render(request, "osmcal/community/community_detail.html", ctx)
 
 
 class CommunityJoin(View):
     @method_decorator(login_required)
     def get(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
-        return render(request, 'osmcal/community/community_join.html', context={'community': community})
+        return render(request, "osmcal/community/community_join.html", context={"community": community})
 
     @method_decorator(login_required)
     def post(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
         community.members.add(request.user)
         community.save()
-        return redirect(reverse('osmcal.community:community', args=[community_id]))
+        return redirect(reverse("osmcal.community:community", args=[community_id]))
 
 
 class CommunityLeave(View):
     @method_decorator(login_required)
     def get(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
-        return render(request, 'osmcal/community/community_leave.html', context={'community': community})
+        return render(request, "osmcal/community/community_leave.html", context={"community": community})
 
     @method_decorator(login_required)
     def post(self, request, community_id):
         community = get_object_or_404(Community, id=community_id)
         community.members.remove(request.user)
-        return redirect(reverse('osmcal.community:community', args=[community_id]))
+        return redirect(reverse("osmcal.community:community", args=[community_id]))
