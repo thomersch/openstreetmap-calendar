@@ -8,6 +8,7 @@
 {% block title %}{{ block.super }} | {{ community.name }}{% endblock %}
 
 {% block content %}
+<div class="centered-content">
 	<h1>{{ community.name }}</h1>
 	<p>This community has {{ community.members.count }} member{{ community.members.count|pluralize }}.</p>
 
@@ -20,7 +21,7 @@
 		{% else %}
 			<form action="{% url 'osmcal.community:community-leave' community.id %}" method="POST">
 				{% csrf_token %}
-				<button class="btn btn-negative">Leave ”{{ community.name }}“</button>
+				<button class="btn btn-negative btn-mini">Leave ”{{ community.name }}“</button>
 			</form>
 		{% endif %}
 	</div>
@@ -29,4 +30,5 @@
 	<div class="community-events-list">
 		{% include "osmcal/partials/event_list.html" %}
 	</div>
+</div>
 {% endblock %}

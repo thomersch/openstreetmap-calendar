@@ -80,7 +80,7 @@
 							{% if participants != 0 %}
 								{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
 								{% if participants > 4 %}
-									and {{ participants|add:-3}} others 
+									and {{ participants|add:-3}} others
 								{% elif participants == 4 %}
 									and {% with event.participation.all|slice:"3:4" as lp %}{{ lp.0.user.name }}{% endwith %}
 								{% endif %}
@@ -105,6 +105,7 @@
 				</div>
 				{% endif %}
 
+				{% if communities_enabled %}
 				<div class="event-single-communities">
 					<h2>Communities</h2>
 					{% if event.communities.count == 0 %}
@@ -113,6 +114,7 @@
 
 					<div><button class="btn">Add to Community</button></div>
 				</div>
+				{% endif %}
 			</aside>
 		</div>
 

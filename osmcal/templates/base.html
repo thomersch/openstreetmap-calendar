@@ -1,4 +1,4 @@
-{% load static %}
+{% load static settings %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +38,11 @@
 
 		{% if debug and not user.is_authenticated %}| <a href="{% url 'login-mock' %}?next={% if next %}{{ next }}{% else %}{{ request.path }}{% endif %}">Mock login</a>{% endif %}
 
-        <div style="margin-top:.5em"><a href="/events/past/{% if filter.in %}?in={{ filter.in }}{% endif %}">Past Events</a> | <a href="{% url 'osmcal.community:community-list' %}">Communities</a> | <a href="/documentation/">Documentation</a></div>
+		{% settings_value "ENABLE_COMMUNITIES" as enable_communities %}
+        <div style="margin-top:.5em">
+            <a href="/events/past/{% if filter.in %}?in={{ filter.in }}{% endif %}">Past Events</a> |
+             {% if enable_communities %}<a href="{% url 'osmcal.community:community-list' %}">Communities</a> |{% endif %}
+             <a href="/documentation/">Documentation</a></div>
 	</footer>
 </body>
 </html>

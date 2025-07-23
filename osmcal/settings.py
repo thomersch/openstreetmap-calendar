@@ -11,6 +11,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("OSMCAL_SECRET", "03#2of3$kqqxc&=rz#qkm^+2cl)0al@0k@2c)qx-$rq34m&q55")
 DEBUG = os.getenv("OSMCAL_PROD", False) not in ["True", "true", "yes", "1"]
 
+ENABLE_COMMUNITIES = False
+
 if DEBUG:
     INTERNAL_IPS = ["127.0.0.1"]
 

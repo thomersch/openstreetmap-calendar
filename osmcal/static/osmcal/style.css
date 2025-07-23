@@ -1,231 +1,235 @@
 @font-face {
-	font-display: swap;
-	font-family: "Source Sans";
-	font-weight: normal;
-	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Regular.otf");
+    font-display: swap;
+    font-family: "Source Sans";
+    font-weight: normal;
+    src: url("/static/osmcal/source-sans-pro/SourceSansPro-Regular.otf");
 }
 
 @font-face {
-	font-display: swap;
-	font-family: "Source Sans";
-	font-weight: bold;
-	src: url("/static/osmcal/source-sans-pro/SourceSansPro-Bold.otf");
+    font-display: swap;
+    font-family: "Source Sans";
+    font-weight: bold;
+    src: url("/static/osmcal/source-sans-pro/SourceSansPro-Bold.otf");
 }
 
 body {
-	font-family: "Source Sans Pro", "Source Sans", sans-serif; /* if Source Sans Pro is installed, it won't be loaded from remote */
-	margin: 0;
+    font-family:
+        "Source Sans Pro", "Source Sans", sans-serif; /* if Source Sans Pro is installed, it won't be loaded from remote */
+    margin: 0;
 }
 
 a {
-	color: #24d;
-	text-decoration: none;
+    color: #24d;
+    text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
-h1, h2 {
-	color: #5A5A5A;
+h1,
+h2 {
+    color: #5a5a5a;
 }
 
 .btn {
-	background-color: white;
-	border: 2px solid #7EBC6F;
-	color: #7EBC6F;
-	cursor: pointer;
-	font-size: 12pt;
-	font-weight: bold;
-	padding: 0.5em 1.2em;
+    background-color: white;
+    border: 2px solid #7ebc6f;
+    color: #7ebc6f;
+    cursor: pointer;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 0.5em 1.2em;
 }
 
 .btn-mini {
-	background-color: white;
-	border: 2px solid #7EBC6F;
-	color: #7EBC6F;
-	cursor: pointer;
-	font-size: 10pt;
-	font-weight: bold;
-	padding: 0.3em 0.5em;
+    background-color: white;
+    border: 2px solid #7ebc6f;
+    color: #7ebc6f;
+    cursor: pointer;
+    font-size: 10pt;
+    font-weight: bold;
+    padding: 0.3em 0.5em;
 }
 
 .btn-negative {
-	border-color: #DD9D53;
-	color: #DD9D53;
+    border-color: #dd9d53;
+    color: #dd9d53;
 }
 
 .hide-wide {
-	display: none;
+    display: none;
 }
 
 .hide-slim {
-	display: inherit;
+    display: inherit;
 }
 
 .content-main {
-	display: block;
+    display: block;
 }
 
 .content-main-fullwidth {
-	margin-left: 1em;
+    margin-left: 1em;
 }
 
 .header-bar {
-	background-color: #F3F3F3;
-	display: block;
-	height: 55px;
-	margin-bottom: 1em;
-	padding: 10px;
+    background-color: #f3f3f3;
+    display: block;
+    height: 55px;
+    margin-bottom: 1em;
+    padding: 10px;
 }
 
-.header-home-area, .header-home-area:hover {
-	color: #5A5A5A;
-	display: inline-block;
-	height: 100%;
-	font-size: 18pt;
-	text-decoration: none;
+.header-home-area,
+.header-home-area:hover {
+    color: #5a5a5a;
+    display: inline-block;
+    height: 100%;
+    font-size: 18pt;
+    text-decoration: none;
 }
 
 .header-home-icon {
-	margin-right: 5px;
-	vertical-align: middle;
+    margin-right: 5px;
+    vertical-align: middle;
 }
 
 .navigation-top {
-	display: block;
-	float: right;
-	height: 100%;
+    display: block;
+    float: right;
+    height: 100%;
 }
 
 .navigation-top a {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .event-list {
-	list-style: none;
-	margin: 0 auto;
-	max-width: 600px;
-	padding-left: 0;
+    list-style: none;
+    margin: 0 auto;
+    max-width: 600px;
+    padding-left: 0;
 }
 
 .event-list-group {
-	list-style: none;
-	padding-left: 0;
+    list-style: none;
+    padding-left: 0;
 }
 
 .event-list-group-title {
-	font-size: 24pt;
-	margin-bottom: 0.25em;
-	color: #5A5A5A;
+    font-size: 24pt;
+    margin-bottom: 0.25em;
+    color: #5a5a5a;
 }
 
 .event-list a:hover {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .event-list-entry:first-child {
-	border-top: 1px solid #DBDBDB;
+    border-top: 1px solid #dbdbdb;
 }
 
 .event-list-entry {
-	border-bottom: 1px solid #DBDBDB;
-	color: #5A5A5A;
-	font-size: 14pt;
-	padding: 1em 0;
-	overflow: hidden;
+    border-bottom: 1px solid #dbdbdb;
+    color: #5a5a5a;
+    font-size: 14pt;
+    padding: 1em 0;
+    overflow: hidden;
 }
 
 .event-list-entry a {
-	color: inherit;
+    color: inherit;
 }
 
 .event-list-entry-cancelled {
-	opacity: 0.7;
-	text-decoration: line-through;
+    opacity: 0.7;
+    text-decoration: line-through;
 }
 
 .event-list-entry-box {
-	align-items: center;
-	display: flex;
+    align-items: center;
+    display: flex;
 }
 
 .event-entry-main {
-	padding-right: 1em;
-	min-width: 0;
-	width: 100%;
+    padding-right: 1em;
+    min-width: 0;
+    width: 100%;
 }
 
 .event-entry-name {
-	font-size: 20pt;
-	margin: 0;
-	word-wrap: break-word;
+    font-size: 20pt;
+    margin: 0;
+    word-wrap: break-word;
 }
 
 .event-entry-location {
-	color: #A4A4A4;
-	font-size: 12pt;
-	margin: 0;
+    color: #a4a4a4;
+    font-size: 12pt;
+    margin: 0;
 }
 
 .event-entry-date {
-	text-align: right;
-	white-space: nowrap;
+    text-align: right;
+    white-space: nowrap;
 }
 
 .footer {
-	background-color: #F3F3F3;
-	font-size: 90%;
-	margin-top: 2em;
-	padding: 1em;
+    background-color: #f3f3f3;
+    font-size: 90%;
+    margin-top: 2em;
+    padding: 1em;
 }
 
 .select-dropdown {
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	background: url('/static/osmcal/triangle.svg') no-repeat right white;
-	background-origin: content-box;
-	border: 2px solid #7EBC6F;
-	border-radius: 0;
-	color: #7EBC6F;
-	font-size: 12pt;
-	font-weight: bold;
-	min-width: 9em;
-	padding: 0.5em 1em;
-	width: 100%;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: url("/static/osmcal/triangle.svg") no-repeat right white;
+    background-origin: content-box;
+    border: 2px solid #7ebc6f;
+    border-radius: 0;
+    color: #7ebc6f;
+    font-size: 12pt;
+    font-weight: bold;
+    min-width: 9em;
+    padding: 0.5em 1em;
+    width: 100%;
 }
 
 .event-single-title {
-	line-height: 1em;
-	margin: 0;
+    line-height: 1em;
+    margin: 0;
 }
 
 .event-single-title-cancelled {
-	text-decoration: line-through;
+    text-decoration: line-through;
 }
 
 .event-single-location {
-	color: #5A5A5A;
-	margin: 0;
+    color: #5a5a5a;
+    margin: 0;
 }
 
 .event-single-block {
-	display: flex;
+    display: flex;
 }
 
 .event-single-main {
-	max-width: 600px;
-	overflow-wrap: break-word;
-	word-wrap: break-word;
+    max-width: 600px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .event-single-main pre {
-	overflow: scroll;
+    overflow: scroll;
 }
 
-.event-single-main, .event-single-additional {
-	flex: 1;
-	padding-right: 1em;
+.event-single-main,
+.event-single-additional {
+    flex: 1;
+    padding-right: 1em;
 }
 
 .event-single-additional .leaflet-container {
@@ -233,75 +237,83 @@ h1, h2 {
 }
 
 .event-single-side-buttons {
-	margin-top: 1em;
-	text-align: right;
+    margin-top: 1em;
+    text-align: right;
 }
 
 .event-single-date {
-	font-size: 110%;
-	margin: 1em 0;
+    font-size: 110%;
+    margin: 1em 0;
 }
 
 .text {
-	display: block;
-	margin: auto;
-	max-width: 600px;
+    display: block;
+    margin: auto;
+    max-width: 600px;
 }
 
 .text pre {
-	overflow: scroll;
+    overflow: scroll;
+}
+
+.centered-content {
+    display: block;
+    margin: auto;
+    max-width: 600px;
 }
 
 .event-single-join {
-	margin-top: .5em;
+    margin-top: 0.5em;
 }
 
-.event-single-communities h2, .event-single-participants h2 {
-	margin-bottom: .25em;
+.event-single-communities h2,
+.event-single-participants h2 {
+    margin-bottom: 0.25em;
 }
 
 .event-single-participants {
-	margin-top: 1em;
+    margin-top: 1em;
 }
 
 .event-feed-button-panel {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
 }
 
 .event-filter-controls {
-	padding-right: 10px;
+    padding-right: 10px;
 }
 
 .participant-table {
-	margin-top: 1em;
+    margin-top: 1em;
 }
 
 .participant-table th {
-	text-align: left;
+    text-align: left;
 }
 
-.participant-table td, .participant-table th {
-	padding: 0.5em;
+.participant-table td,
+.participant-table th {
+    padding: 0.5em;
 }
 
 .participant-table tr:nth-child(even) {
-	background-color: #eeeeee;
+    background-color: #eeeeee;
 }
 
 .code-comment {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 
 .code-number {
-	color: #4e7843;
+    color: #4e7843;
 }
 
 .code-bool {
-	color: #9b692d;
+    color: #9b692d;
 }
 
 .form-inline {
-	display: inline-block;
+    display: inline-block;
 }

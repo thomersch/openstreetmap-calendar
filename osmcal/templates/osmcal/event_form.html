@@ -46,37 +46,17 @@
 		</section>
 		{% endtimezone %}
 
-		<section id="event-question-form" class="event-question-form">
-			<label class="event-question-form-label">
-				Sign Up Survey
-			</label>
-
-			<div class="event-question-input-column">
-				<div v-if="questions.length == 0">
-					<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Create Sign Up Survey</button>
-					<label class="event-question-form-helptext">You can ask the participants questions they will be asked to answer during event sign up, e.g. whether they'll join the after work party.</label>
-				</div>
-
-				<div v-for="(question, index) in questions" class="event-question-form-block">
-					<div style="display:flex">
-						<h3 style="flex-grow: 2;">Question [[ index+1 ]]</h3>
-						<button v-on:click.prevent="deleteQuestion(index)" v-if="!question.frozen" class="btn-mini btn-negative" style="padding: 0.3em; height: 100%;">Delete Question</button>
-					</div>
-
-					<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
-
-					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
-						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input" required>
-					</div>
-
-			<div class="event-form-line">
-				<label class="event-form-leading-label">Community</label>
-				
-			</div>
-		</section>
+		<div style="margin-top:2em;"></div>
 
 		{% include 'osmcal/partials/event_form_survey.html' %}
+
+		<div style="margin-top:2em;"></div>
+
+		{% if enable_communities %}
+		<div class="event-form">
+			<label class="event-form-leading-label">Community</label>
+		</div>
+		{% endif %}
 
 		{% if event %}
 		<div method="POST" class="event-form" style="margin-top: 1em;">
