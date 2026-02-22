@@ -12,6 +12,7 @@ WORKDIR /app
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV UV_NO_SYNC=1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get -y install curl make libgdal36
