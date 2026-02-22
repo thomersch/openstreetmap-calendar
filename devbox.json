@@ -1,8 +1,21 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
-  "packages": ["uv@latest", "path:postgres#postgresql", "python312Packages.gdal@latest", "geos@latest"],
+  "packages": [
+    "uv@latest",
+    "path:postgres#postgresql",
+    "python312Packages.gdal@latest",
+    "geos@latest",
+    "python312@latest"
+  ],
   "shell": {
-    "init_hook": ["echo 'Welcome to devbox!' > /dev/null"],
+    "init_hook": [
+      "echo 'Welcome to devbox!' > /dev/null",
+      "if pg_isready -q 2>/dev/null; then",
+      "  psql -c \"SELECT 1 FROM pg_roles WHERE rolname='osmcal'\" | grep -q 1 || psql -c \"CREATE USER osmcal\"",
+      "  psql -lqt | cut -d'|' -f1 | grep -qw osmcal || psql -c \"CREATE DATABASE osmcal OWNER osmcal\"",
+      "  psql -d osmcal -c \"CREATE EXTENSION IF NOT EXISTS postgis\"",
+      "fi"
+    ],
     "scripts": {
       "test": ["echo \"Error: no test specified\" && exit 1"]
     }
