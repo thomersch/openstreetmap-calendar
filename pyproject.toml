@@ -29,6 +29,7 @@ dependencies = [
     "Babel~=2.9",
     "django4-background-tasks~=1.2.10",
     "pytz~=2025.2",
+    "tzdata",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
