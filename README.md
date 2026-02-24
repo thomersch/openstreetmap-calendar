@@ -1,6 +1,14 @@
+[![Matrix](https://img.shields.io/matrix/osmcal:mustelo.de?server_fqdn=matrix.org&logo=matrix)](https://matrix.to/#/#osmcal:mustelo.de)
+
 # OpenStreetMap Calendar
 
-A simple calendar for tracking OpenStreetMap-related activities.
+A simple collaborative calendar for hosting community events. OSMCal hosts OpenStreetMap-related activities such as mapping parties, hackathons and conferences.
+
+## Key Features
+
+- **Open Collaboration**: Anyone with an OpenStreetMap account can add or edit events.
+- **Multilingual Support**: Events and dates can be displayed in different languages based on user preferences.
+- **RSS Feeds**: Subscribe to event feeds globally or by specific countries.
 
 ## Principles
 
@@ -9,7 +17,7 @@ A simple calendar for tracking OpenStreetMap-related activities.
 
 ## User Documentation
 
-Please look at [OpenStreetMap Calendar Documentation](https://osmcal.org/documentation/) for information about integration and API.
+For information on integration, using the API, or general usage, visit the [OpenStreetMap Calendar Documentation](https://osmcal.org/documentation/).
 
 ## Developer Documentation
 
@@ -19,42 +27,72 @@ We also feature a [devbox](https://www.jetify.com/devbox) setup which allows to 
 
 Alternatively you can install like any other Python/Django project. We're using [uv](https://docs.astral.sh/uv/) for managing dependencies. Please look at their documentation for installation instructions.
 
-We support Python ≥ 3.11 and PostgreSQL ≥ 15. (Older versions might work, but no guarantees).
+### Requirements
 
-### Database
+- Python ≥ 3.11
+- PostgreSQL ≥ 15 with PostGIS
 
-You need a running PostgreSQL database with PostGIS installed. If you're using the dev container, the DB is automatically started and set up.
+### Setup Instructions
 
-If you set this up manually, make sure you have an empty DB before starting. By default we're using the `osmcal` for user and DB with no password set. For more details, check `osmcal/settings.py`.
+1. **Clone the Repository**:  
+   ```
+   git clone https://github.com/<your-repo>/osmcal.git
+   cd osmcal
+   ```
+
+2. **Install Dependencies**:  
+   Use Poetry to install all necessary dependencies:  
+   ```
+   poetry install
+   ```
+
+3. **Configure the Database**:  
+   Ensure a PostgreSQL database with PostGIS is available. If using the dev container, the database is automatically started. For manual setup, create an empty database named `osmcal`.
+
+   Update the database settings in `osmcal/settings.py` if needed.
+
+4. **Run Database Migrations**:  
+   ```
+   make migrate
+   ```
+
+5. **Start the Development Server**:  
+   ```
+   make devserver
+   ```
+
+6. **Load Test Data (Optional)**:  
+   If needed, load sample data:  
+   ```
+   make fixtures
+   ```
 
 ### Running Tests
 
+To ensure everything is working correctly, run the tests:  
 ```
 make test
 ```
 
-### Developer Server
+### Mock Login for Development
 
-In order to facilitate testing, you can use a fake login locally without having to setup OAuth first. To do this, scroll down to the footer. In debug mode, there is a link called "Mock login" which will instantly log you in as a normal user.
-
-To prepare for application launch run the database migrations:
-
-```
-make migrate
-```
-
-and then the local server:
-
-```
-make devserver
-```
-
-If you need test data, you can load some using:
-
-```
-make fixtures
-```
+During development, you can use a fake login without setting up OAuth. Scroll to the footer in debug mode and click "Mock login" to instantly log in as a normal user.
 
 ## API Documentation
 
-The API is described using OpenAPI 3, the schema is located in `/api/schema/`. The currently live version is [visible here](https://osmcal.org/static/api.html).
+The API is described using [OpenAPI 3](https://spec.openapis.org/oas/v3.0.0.html). The schema is located in `/api/schema/`. The live version is available [here](https://osmcal.org/static/api.html).
+
+## Support and Contact
+
+For questions, feedback, or support, feel free to reach out via the following channels:
+
+- **Matrix Channel**: Join the discussion at [#osmcal:openstreetmap.org](https://matrix.to/#/#osmcal:mustelo.de).
+- **GitHub Issues**: Report bugs or request features on the [issue tracker](https://github.com/thomersch/openstreetmap-calendar/issues).
+
+## Contributing
+
+We welcome contributions! Check out the developer documentation above for setup instructions, and feel free to submit pull requests or open issues. Translations can be found in the folder https://github.com/thomersch/openstreetmap-calendar/blob/master/osmcal/locale
+
+## License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](https://github.com/thomersch/openstreetmap-calendar/blob/master/LICENSE) file for details.
