@@ -5,8 +5,8 @@ import bleach
 import markdown
 import requests
 from babel.dates import get_timezone_name
-from background_task import background
 from django.contrib.auth.models import AbstractUser
+from osmcal.tasks import background_geocode_location
 from django.contrib.gis.db.models import PointField
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -65,8 +65,7 @@ class Event(models.Model):
         try:
             self._geocode_location()
         except (requests.exceptions.RequestException, ValueError):
-            event_id = self.id
-            self._background_geocode_location(event_id)
+            background_geocode_location.enqueue(self.id)
 
     def _geocode_location(self):
         nr = requests.get(
@@ -79,12 +78,6 @@ class Event(models.Model):
         self.location_address = nr.json().get("address", None)
         if self.location_address is None:
             add_breadcrumb(category="nominatim", level="error", data=nr.json())
-
-    @staticmethod
-    @background(schedule=1)
-    def _background_geocode_location(event_id):
-        evt = Event.objects.get(id=event_id)
-        evt.save()  # geocodes implicitly
 
     @property
     def location_text(self):

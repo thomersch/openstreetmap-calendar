@@ -28,9 +28,9 @@ dependencies = [
     "django-prometheus~=2.0",
     "tzfpy>=0.15",
     "Babel~=2.9",
-    "django4-background-tasks~=1.2.10",
     "pytz~=2025.2",
     "tzdata",
+    "django-tasks-db~=0.12",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"

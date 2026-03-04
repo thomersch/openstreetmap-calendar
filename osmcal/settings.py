@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "leaflet",
-    "background_task",
+    "django_tasks_db",
     "osmcal",
     "osmcal.api",
     "osmcal.community",
@@ -137,6 +137,13 @@ if not DEBUG:
         integrations=[DjangoIntegration()],
         traces_sample_rate=0.01,
     )
+
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks_db.DatabaseBackend",
+        "QUEUES": ["default"],
+    },
+}
 
 LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19, "ATTRIBUTION_PREFIX": False}
 
