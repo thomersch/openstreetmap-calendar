@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.exceptions import MiddlewareNotUsed
 from django.db.utils import ProgrammingError
 from django.http import HttpResponse
-from psycopg2.errors import ReadOnlySqlTransaction
+from psycopg.errors import ReadOnlySqlTransaction
 
 
 class ReplayMiddleware:

@@ -1,6 +1,54 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "gdal@latest": {
+      "last_modified": "2026-02-27T06:27:13Z",
+      "resolved": "github:NixOS/nixpkgs/c0f3d81a7ddbc2b1332be0d8481a672b4f6004d6#gdal",
+      "source": "devbox-search",
+      "version": "3.12.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/85m6h7ifmfx3a1vhihpjrqgb33lc1wb5-gdal-3.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/85m6h7ifmfx3a1vhihpjrqgb33lc1wb5-gdal-3.12.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6kx58nkcsp5xafq8g313ghkf5dgw8607-gdal-3.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6kx58nkcsp5xafq8g313ghkf5dgw8607-gdal-3.12.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/92jarfkch2aphj0dcvw5c65s7s886d7i-gdal-3.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/92jarfkch2aphj0dcvw5c65s7s886d7i-gdal-3.12.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/029v2xq8jwb8gnqs4kjc363b9qd8jq5f-gdal-3.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/029v2xq8jwb8gnqs4kjc363b9qd8jq5f-gdal-3.12.2"
+        }
+      }
+    },
     "geos@latest": {
       "last_modified": "2025-03-19T06:05:51Z",
       "resolved": "github:NixOS/nixpkgs/44e422ba8ed1bdec9620b0733601669972f91170#geos",
