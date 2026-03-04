@@ -92,14 +92,14 @@ wheels = [
 
 [[package]]
 name = "django-leaflet"
-version = "0.31.0"
+version = "0.33.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2e/df/c0980b44685c1fc7e61f63d8a84820da31b3f34db6c73897936aa0f98657/django_leaflet-0.31.0.tar.gz", hash = "sha256:fb2b75f84aff60d4058659300f31a711554c65d128bade5fa8088637fb0751f7", size = 562314 }
+sdist = { url = "https://files.pythonhosted.org/packages/71/35/be356129d89c98c8f4884e946abec7f7d21ddcce159bcde4970e754ea3ab/django_leaflet-0.33.0.tar.gz", hash = "sha256:b51c71e7179eed9961484dfd57b87bd1ece3b1ff7bee4dfb7f4d5702206b2eca", size = 562259 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/31/978bf2354fdd41a224a73b3c84292ab091736480a3b701aa4488e4024226/django_leaflet-0.31.0-py3-none-any.whl", hash = "sha256:914d973a30730eafec4cd822e7107bbd71a6d2e0106b6e919fd9eea67bbcbc5c", size = 582297 },
+    { url = "https://files.pythonhosted.org/packages/d5/9b/b323a5ea711961e77e9e362f55ea6d229d75daa6c1eaa37aec3ddaba1017/django_leaflet-0.33.0-py3-none-any.whl", hash = "sha256:bf30526daf7710f9afc35f0221284fe3b0558f3d9f259344ac3b82e23d28ec98", size = 577199 },
 ]
 
 [[package]]
@@ -229,7 +229,7 @@ requires-dist = [
     { name = "babel", specifier = "~=2.9" },
     { name = "bleach", specifier = "~=6.3" },
     { name = "django", specifier = "~=6.0" },
-    { name = "django-leaflet", specifier = "~=0.27" },
+    { name = "django-leaflet", specifier = "~=0.33" },
     { name = "django-prometheus", specifier = "~=2.0" },
     { name = "django-tasks-db", specifier = "~=0.12" },
     { name = "gunicorn", specifier = "~=25.0" },

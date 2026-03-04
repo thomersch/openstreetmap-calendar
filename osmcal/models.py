@@ -6,7 +6,6 @@ import markdown
 import requests
 from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
-from osmcal.tasks import background_geocode_location
 from django.contrib.gis.db.models import PointField
 from django.db import models
 from django.utils.safestring import mark_safe
@@ -14,6 +13,8 @@ from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
 from tzfpy import get_tz
+
+from osmcal.tasks import background_geocode_location
 
 
 class EventType(Enum):
