@@ -12,13 +12,13 @@ venv = ".venv"
 [project]
 authors = [{ name = "Thomas Skowron", email = "th@skowron.eu" }]
 license = { text = "APACHE 2.0" }
-requires-python = "<4.0,>=3.11"
+requires-python = "<4.0,>=3.12"
 dependencies = [
     "psycopg2-binary~=2.8",
     "requests~=2.32",
     "requests-oauthlib~=1.2",
     "django-leaflet~=0.27",
-    "Django~=5.2",
+    "Django~=6.0",
     "Markdown~=3.2",
     "bleach~=6.2.0",
     "gunicorn~=22.0",

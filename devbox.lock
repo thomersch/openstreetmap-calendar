@@ -52,51 +52,51 @@
     "github:NixOS/nixpkgs/nixpkgs-unstable": {
       "resolved": "github:NixOS/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c?lastModified=1744868846&narHash=sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs%3D"
     },
-    "python312Packages.gdal@latest": {
-      "last_modified": "2025-04-10T20:20:34Z",
-      "resolved": "github:NixOS/nixpkgs/d19cf9dfc633816a437204555afeb9e722386b76#python312Packages.gdal",
+    "python314Packages.gdal@latest": {
+      "last_modified": "2026-02-27T06:27:13Z",
+      "resolved": "github:NixOS/nixpkgs/c0f3d81a7ddbc2b1332be0d8481a672b4f6004d6#python314Packages.gdal",
       "source": "devbox-search",
-      "version": "3.10.2",
+      "version": "3.12.2",
       "systems": {
         "aarch64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/qy50rala671i7y54rcnhw1k1r1inmf1d-gdal-3.10.2",
+              "path": "/nix/store/7avzs86rxaw6w523lz7fi5kqdcg6kzzw-gdal-3.12.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/qy50rala671i7y54rcnhw1k1r1inmf1d-gdal-3.10.2"
+          "store_path": "/nix/store/7avzs86rxaw6w523lz7fi5kqdcg6kzzw-gdal-3.12.2"
         },
         "aarch64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/pikx6cm9lbpgyin0r5k2w64ly7xpgb88-gdal-3.10.2",
+              "path": "/nix/store/wxzzksdnc48zhqqrhjk4bgylghngl3g3-gdal-3.12.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/pikx6cm9lbpgyin0r5k2w64ly7xpgb88-gdal-3.10.2"
+          "store_path": "/nix/store/wxzzksdnc48zhqqrhjk4bgylghngl3g3-gdal-3.12.2"
         },
         "x86_64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/aay4vv6bf8l7n6qq8yf0187i60sah1wq-gdal-3.10.2",
+              "path": "/nix/store/w9vh2l6i5dha1k86s72r2b9fbzcgvr96-gdal-3.12.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/aay4vv6bf8l7n6qq8yf0187i60sah1wq-gdal-3.10.2"
+          "store_path": "/nix/store/w9vh2l6i5dha1k86s72r2b9fbzcgvr96-gdal-3.12.2"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/ycn05s2pjxz9rg9in62yryfp0r6gp860-gdal-3.10.2",
+              "path": "/nix/store/kdrh7g2a5k2s0iwwn5x601r39gchswnn-gdal-3.12.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/ycn05s2pjxz9rg9in62yryfp0r6gp860-gdal-3.10.2"
+          "store_path": "/nix/store/kdrh7g2a5k2s0iwwn5x601r39gchswnn-gdal-3.12.2"
         }
       }
     },
