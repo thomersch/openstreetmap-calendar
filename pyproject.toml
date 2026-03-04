@@ -1,9 +1,10 @@
-[tool.black]
+[tool.ruff]
 line-length = 120
-target-version = ['py39']
-extend-exclude = '''
-.*/migrations/.*
-'''
+target-version = "py312"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "PL"]
 
 [tool.pyright]
 venvPath = "."
@@ -36,4 +37,4 @@ description = ""
 package-mode = false
 
 [dependency-groups]
-dev = ["PyYaml~=6.0", "pylint", "black~=24.3.0"]
+dev = ["PyYaml~=6.0", "ruff"]
