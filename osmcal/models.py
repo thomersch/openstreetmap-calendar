@@ -4,8 +4,8 @@ from typing import Optional
 import bleach
 import markdown
 import requests
-from background_task import background
 from babel.dates import get_timezone_name
+from background_task import background
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from django.db import models
@@ -42,7 +42,9 @@ class Event(models.Model):
         blank=True,
         null=True,
         help_text=mark_safe(
-            'Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'
+            'Tell people what the event is about and what they can expect. '
+            'You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> '
+            'in this field.'
         ),
     )
 
@@ -62,7 +64,7 @@ class Event(models.Model):
     def geocode_location(self):
         try:
             self._geocode_location()
-        except:
+        except (requests.exceptions.RequestException, ValueError):
             event_id = self.id
             self._background_geocode_location(event_id)
 
@@ -136,8 +138,8 @@ class Event(models.Model):
 
     @property
     def year_month(self):
-        l = self.start_localized
-        return (l.year, l.month)
+        loc = self.start_localized
+        return (loc.year, loc.month)
 
     @property
     def short_description_without_markup(self) -> str:

@@ -5,13 +5,14 @@
 {
   "languages": {
     "Python": {
-      "format_on_save": {
+      "formatter": {
         "external": {
-          "command": "black",
-          "arguments": ["-"]
-        }
-      }
+          "command": "/bin/sh",
+          "arguments": ["-l", "-c", "ruff format -"],
+        },
+      },
+      "format_on_save": "on",
     },
-    "HTML": { "format_on_save": "off" }
-  }
+    "HTML": { "format_on_save": "off" },
+  },
 }

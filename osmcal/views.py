@@ -22,6 +22,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
 from pytz import UTC
+
 from osmcal import oauth
 
 from . import forms, osmuser
@@ -50,9 +51,10 @@ class EventListView(View):
         return qs.filter(Q(start__gte=kwargs["after"]) | Q(end__gte=kwargs["after"])).order_by("local_start")
 
     def filter_around(self, filter_around, filter_around_radius, upcoming_events):
+        MAX_FILTER_RADIUS = 250
         if filter_around_radius:
             dist = float(filter_around_radius)
-            if dist <= 0 or dist > 250:
+            if dist <= 0 or dist > MAX_FILTER_RADIUS:
                 raise BadRequest("filter_around_radius invalid")
         else:
             dist = 50
@@ -60,7 +62,7 @@ class EventListView(View):
             filter_around = [float(x) for x in filter_around.split(",")]
         except ValueError:
             raise BadRequest("invalid lat/lon")
-        if len(filter_around) == 2:
+        if len(filter_around) == 2:  # noqa: PLR2004
             lat = filter_around[0]
             lon = filter_around[1]
         else:
@@ -79,8 +81,9 @@ class EventListView(View):
             after=after,
         )
 
+        COUNTRY_CODE_LENGTH = 2
         filter_to_country = params.get("in", None)
-        if filter_to_country and len(filter_to_country) == 2:
+        if filter_to_country and len(filter_to_country) == COUNTRY_CODE_LENGTH:
             upcoming_events = upcoming_events.filter(location_address__country_code=filter_to_country.lower())
         elif filter_to_country:
             upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
@@ -300,7 +303,7 @@ class MockLogin(View):
 
         try:
             user = User.objects.get(id=1)
-        except:
+        except User.DoesNotExist:
             user = User.objects.create(id=1, name="some_dummy_user")
         dj_login(request, user)
         return redirect(request.GET.get("next", "/"))
