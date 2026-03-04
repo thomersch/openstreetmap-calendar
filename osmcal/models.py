@@ -13,10 +13,7 @@ from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
-from timezonefinder import TimezoneFinder
-
-
-tf = TimezoneFinder()
+from tzfpy import get_tz
 
 
 class EventType(Enum):
@@ -223,7 +220,7 @@ class User(AbstractUser):
     def home_timezone(self):
         if not self.home_location:
             return None
-        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
+        return get_tz(self.home_location.x, self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:

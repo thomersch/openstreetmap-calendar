@@ -22,6 +22,7 @@
   },
   "include": ["plugin:postgresql"],
   "env": {
-    "PATH": "$PWD/.venv/bin:$PATH"
+    "PATH": "$PWD/.venv/bin:$PATH",
+    "DEVBOX_VENV_ENABLE": "0"
   }
 }
