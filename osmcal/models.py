@@ -42,9 +42,9 @@ class Event(models.Model):
         blank=True,
         null=True,
         help_text=mark_safe(
-            'Tell people what the event is about and what they can expect. '
+            "Tell people what the event is about and what they can expect. "
             'You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> '
-            'in this field.'
+            "in this field."
         ),
     )
 
