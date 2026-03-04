@@ -67,6 +67,7 @@ h2 {
 
 .content-main {
     display: block;
+    padding-bottom: 80px; /* Guesstimated, because we cannot measure other elements yet. Needs to be large enough that the .footer doesn't cover up main content. anchor-size() could be useful in the future. */
 }
 
 .content-main-fullwidth {
@@ -177,9 +178,12 @@ h2 {
 }
 
 .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     background-color: #f3f3f3;
     font-size: 90%;
-    margin-top: 2em;
     padding: 1em;
 }
 
