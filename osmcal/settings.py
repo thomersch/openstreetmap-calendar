@@ -86,10 +86,9 @@ DATABASES = {
         "USER": os.getenv("OSMCAL_PG_USER", "osmcal"),
         "PASSWORD": os.getenv("OSMCAL_PG_PASSWORD", None),
         "PORT": 5432 if WRITABLE_REGION == CURRENT_REGION else 5433,
+        "CONN_MAX_AGE": 600,
     }
 }
-
-CONN_MAX_AGE = 3600
 
 AUTH_PASSWORD_VALIDATORS = [
     {

@@ -10,11 +10,12 @@ FROM python:3.14-slim
 
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV DEBIAN_FRONTEND noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV UV_NO_SYNC=1
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get -y install curl make libgdal32
+RUN apt-get update && apt-get -y install curl make libgdal36
 RUN curl -LO https://github.com/DarthSim/hivemind/releases/download/v1.1.0/hivemind-v1.1.0-linux-amd64.gz && gunzip hivemind-v1.1.0-linux-amd64.gz && mv hivemind-v1.1.0-linux-amd64 /usr/local/bin/hivemind && chmod +x /usr/local/bin/hivemind
 
 RUN useradd -m osmcal

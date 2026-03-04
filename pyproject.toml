@@ -21,15 +21,16 @@ dependencies = [
     "django-leaflet~=0.27",
     "Django~=6.0",
     "Markdown~=3.2",
-    "bleach~=6.2.0",
-    "gunicorn~=22.0",
+    "bleach~=6.3",
+    "gunicorn~=25.0",
     "python-dotenv~=1.1.0",
-    "sentry-sdk~=2.8",
+    "sentry-sdk~=2.53",
     "django-prometheus~=2.0",
     "timezonefinder~=6.0",
     "Babel~=2.9",
     "django4-background-tasks~=1.2.10",
     "pytz~=2025.2",
+    "tzdata",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
