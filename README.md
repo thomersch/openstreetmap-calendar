@@ -19,7 +19,7 @@ We also feature a [devbox](https://www.jetify.com/devbox) setup which allows to 
 
 Alternatively you can install like any other Python/Django project. We're using [uv](https://docs.astral.sh/uv/) for managing dependencies. Please look at their documentation for installation instructions.
 
-We support Python ≥ 3.11 and PostgreSQL ≥ 15. (Older versions might work, but no guarantees).
+We support Python ≥ 3.12 and PostgreSQL ≥ 15. (Older versions might work, but no guarantees).
 
 ### Database
 

@@ -1,9 +1,10 @@
-[tool.black]
+[tool.ruff]
 line-length = 120
-target-version = ['py39']
-extend-exclude = '''
-.*/migrations/.*
-'''
+target-version = "py312"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "PL"]
 
 [tool.pyright]
 venvPath = "."
@@ -12,24 +13,24 @@ venv = ".venv"
 [project]
 authors = [{ name = "Thomas Skowron", email = "th@skowron.eu" }]
 license = { text = "APACHE 2.0" }
-requires-python = "<4.0,>=3.11"
+requires-python = "<4.0,>=3.12"
 dependencies = [
-    "psycopg2-binary~=2.8",
+    "psycopg[binary]>=3.1",
     "requests~=2.32",
     "requests-oauthlib~=1.2",
-    "django-leaflet~=0.27",
-    "Django~=5.2",
+    "django-leaflet~=0.33",
+    "Django~=6.0",
     "Markdown~=3.2",
     "bleach~=6.3",
     "gunicorn~=25.0",
     "python-dotenv~=1.1.0",
     "sentry-sdk~=2.53",
     "django-prometheus~=2.0",
-    "timezonefinder~=6.0",
+    "tzfpy>=0.15",
     "Babel~=2.9",
-    "django4-background-tasks~=1.2.10",
     "pytz~=2025.2",
     "tzdata",
+    "django-tasks-db~=0.12",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
@@ -37,4 +38,4 @@ description = ""
 package-mode = false
 
 [dependency-groups]
-dev = ["PyYaml~=6.0", "pylint", "black~=24.3.0"]
+dev = ["PyYaml~=6.0", "ruff"]

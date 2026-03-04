@@ -6,14 +6,14 @@ COPY osmcal/api/schema .
 COPY Makefile .
 RUN apk add make && redoc-cli bundle -o api.html --disableGoogleFont api.yaml
 
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV UV_NO_SYNC=1
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get -y install curl make libgdal36
 RUN curl -LO https://github.com/DarthSim/hivemind/releases/download/v1.1.0/hivemind-v1.1.0-linux-amd64.gz && gunzip hivemind-v1.1.0-linux-amd64.gz && mv hivemind-v1.1.0-linux-amd64 /usr/local/bin/hivemind && chmod +x /usr/local/bin/hivemind
@@ -33,4 +33,4 @@ COPY --from=apidocs /docs/api.html osmcal/static/api.html
 RUN make install staticfiles
 
 EXPOSE 8080
-CMD hivemind
+CMD ["hivemind"]

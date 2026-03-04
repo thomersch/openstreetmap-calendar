@@ -21,7 +21,7 @@ def encode_events(evts: Iterable[Event]) -> str:
 
 
 def line_format(ln: str) -> str:
-    return "\r\n\t".join(wrap(ln.replace(",", "\,").replace("\n", "\\n"), 72, drop_whitespace=False))
+    return "\r\n\t".join(wrap(ln.replace(",", "\\,").replace("\n", "\\n"), 72, drop_whitespace=False))
 
 
 def event_body(evt: Event) -> List[str]:

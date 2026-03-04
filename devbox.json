@@ -3,13 +3,16 @@
   "packages": [
     "uv@latest",
     "path:postgres#postgresql",
-    "python312Packages.gdal@latest",
+    "gdal@latest",
+    "python314Packages.gdal@latest",
     "geos@latest",
-    "python312@latest"
+    "python314@latest"
   ],
   "shell": {
     "init_hook": [
       "echo 'Welcome to devbox!' > /dev/null",
+      "command -v gdal-config >/dev/null 2>&1 && export GDAL_LIBRARY_PATH=$(gdal-config --prefix)/lib/libgdal.dylib",
+      "command -v geos-config >/dev/null 2>&1 && export GEOS_LIBRARY_PATH=$(geos-config --prefix)/lib/libgeos_c.dylib",
       "if pg_isready -q 2>/dev/null; then",
       "  psql -c \"SELECT 1 FROM pg_roles WHERE rolname='osmcal'\" | grep -q 1 || psql -c \"CREATE USER osmcal\"",
       "  psql -lqt | cut -d'|' -f1 | grep -qw osmcal || psql -c \"CREATE DATABASE osmcal OWNER osmcal\"",
@@ -22,6 +25,7 @@
   },
   "include": ["plugin:postgresql"],
   "env": {
-    "PATH": "$PWD/.venv/bin:$PATH"
+    "PATH": "$PWD/.venv/bin:$PATH",
+    "DEVBOX_VENV_ENABLE": "0"
   }
 }

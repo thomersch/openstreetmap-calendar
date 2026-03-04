@@ -6,6 +6,6 @@ class SocialConfig(AppConfig):
     name = "osmcal.social"
 
     def ready(self):
-        from .post import announce_event
+        from .post import announce_event  # noqa: PLC0415
 
         post_save.connect(announce_event, sender="osmcal.Event")

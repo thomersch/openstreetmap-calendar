@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 
 from django.template.loader import render_to_string
 from django.urls import reverse

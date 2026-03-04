@@ -1,5 +1,5 @@
-from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.gis.geos.point import Point
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 class JSONEncoder(DjangoJSONEncoder):

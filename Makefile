@@ -37,7 +37,7 @@ fixtures:
 	$(CALL) run ./manage.py loaddata osmcal/fixtures/demo.yaml
 
 processtasks:
-	$(CALL) run ./manage.py process_tasks
+	$(CALL) run ./manage.py db_worker
 
 periodic:
 	while true; do \

@@ -4,7 +4,6 @@ from typing import Optional
 import bleach
 import markdown
 import requests
-from background_task import background
 from babel.dates import get_timezone_name
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
@@ -13,10 +12,9 @@ from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
-from timezonefinder import TimezoneFinder
+from tzfpy import get_tz
 
-
-tf = TimezoneFinder()
+from osmcal.tasks import background_geocode_location
 
 
 class EventType(Enum):
@@ -45,7 +43,9 @@ class Event(models.Model):
         blank=True,
         null=True,
         help_text=mark_safe(
-            'Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'
+            "Tell people what the event is about and what they can expect. "
+            'You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> '
+            "in this field."
         ),
     )
 
@@ -65,9 +65,8 @@ class Event(models.Model):
     def geocode_location(self):
         try:
             self._geocode_location()
-        except:
-            event_id = self.id
-            self._background_geocode_location(event_id)
+        except (requests.exceptions.RequestException, ValueError):
+            background_geocode_location.enqueue(self.id)
 
     def _geocode_location(self):
         nr = requests.get(
@@ -80,12 +79,6 @@ class Event(models.Model):
         self.location_address = nr.json().get("address", None)
         if self.location_address is None:
             add_breadcrumb(category="nominatim", level="error", data=nr.json())
-
-    @staticmethod
-    @background(schedule=1)
-    def _background_geocode_location(event_id):
-        evt = Event.objects.get(id=event_id)
-        evt.save()  # geocodes implicitly
 
     @property
     def location_text(self):
@@ -139,8 +132,8 @@ class Event(models.Model):
 
     @property
     def year_month(self):
-        l = self.start_localized
-        return (l.year, l.month)
+        loc = self.start_localized
+        return (loc.year, loc.month)
 
     @property
     def short_description_without_markup(self) -> str:
@@ -223,7 +216,7 @@ class User(AbstractUser):
     def home_timezone(self):
         if not self.home_location:
             return None
-        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
+        return get_tz(self.home_location.x, self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:

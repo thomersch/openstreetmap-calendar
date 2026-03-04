@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: python:3.12-slim-bookworm
+    container: python:3.14-slim
 
     services:
       postgres:
@@ -33,7 +33,10 @@ jobs:
         run: make install-dev
 
       - name: Check formatting
-        run: uv run black --check .
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
 
       - name: Run tests
         run: uv run ./manage.py test
