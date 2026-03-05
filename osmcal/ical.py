@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Iterable
+from zoneinfo import ZoneInfo
 
-import pytz
 from icalendar import Calendar, Event as VEvent, vDate, vGeo
 
 from .models import Event
@@ -27,7 +27,7 @@ def _build_vevent(evt: Event) -> VEvent:
         if evt.end:
             vevent.add("dtend", vDate((evt.end_localized + timedelta(days=1)).date()))
     else:
-        tz = pytz.timezone(str(evt.timezone))
+        tz = ZoneInfo(str(evt.timezone))
         vevent.add("dtstart", evt.start_localized.astimezone(tz))
         if evt.end:
             vevent.add("dtend", evt.end_localized.astimezone(tz))
@@ -51,6 +51,7 @@ def _build_vevent(evt: Event) -> VEvent:
 def encode_event(evt: Event) -> str:
     cal = _build_calendar()
     cal.add_component(_build_vevent(evt))
+    cal.add_missing_timezones()
     return cal.to_ical().decode("utf-8")
 
 
@@ -58,4 +59,5 @@ def encode_events(evts: Iterable[Event]) -> str:
     cal = _build_calendar()
     for evt in evts:
         cal.add_component(_build_vevent(evt))
+    cal.add_missing_timezones()
     return cal.to_ical().decode("utf-8")
