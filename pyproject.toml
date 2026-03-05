@@ -31,6 +31,7 @@ dependencies = [
     "pytz~=2025.2",
     "tzdata",
     "django-tasks-db~=0.12",
+    "icalendar>=7.0.3",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
