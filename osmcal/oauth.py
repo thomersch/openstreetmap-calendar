@@ -3,7 +3,7 @@ from django.urls import reverse
 from requests_oauthlib import OAuth2Session
 
 
-def get_oauth_session(request):
+def get_oauth_session(request, state=None):
     callback_uri = request.build_absolute_uri(reverse("oauth-callback"))
     if settings.DEBUG:
         # This simplifies the reverse proxy setup on dev:
@@ -14,6 +14,7 @@ def get_oauth_session(request):
         settings.OAUTH2_OPENSTREETMAP_CLIENT_ID,
         redirect_uri=callback_uri,
         scope=["read_prefs"],
+        state=state,
     )
 
 
@@ -24,7 +25,7 @@ def get_authenticated_session(request) -> OAuth2Session:
         # It's pretending we're using HTTPS with a correct configuration.
         authorization_response = authorization_response.replace("http", "https")
 
-    osm = get_oauth_session(request)
+    osm = get_oauth_session(request, state=request.session.pop("oauth_state", None))
     osm.fetch_token(
         "https://www.openstreetmap.org/oauth2/token",
         client_secret=settings.OAUTH2_OPENSTREETMAP_CLIENT_SECRET,
