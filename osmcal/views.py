@@ -528,7 +528,8 @@ def oauth_start(request):
     osm = oauth.get_oauth_session(request)
     if request.GET.get("next", None):
         request.session["next"] = request.GET["next"]
-    auth_url, _ = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
+    auth_url, state = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
+    request.session["oauth_state"] = state
     return redirect(auth_url)
 
 
