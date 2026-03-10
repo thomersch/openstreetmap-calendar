@@ -13,16 +13,12 @@
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
-	{% if debug %}
-	<script src="{% static 'osmcal/thirdparty/vue.js' %}"></script>
-	{% else %}
-	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
-	{% endif %}
+	<script src="{% static 'osmcal/survey-form.js' %}"></script>
+	<script src="{% static 'osmcal/timezone-widget.js' %}"></script>
 
 	<script>
 		var appData = {
-			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}'),
-			id_location_geojson: ""
+			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}')
 		};
 	</script>
 {% endblock %}
@@ -78,35 +74,6 @@
 	</form>
 
 	<script>
-		var questionApp = new Vue({
-			el: '#event-question-form',
-			delimiters: ['[[', ']]'],
-			data: appData,
-			created: function() {
-				this.initial_questions_n = this.questions.length;
-			},
-			methods: {
-				addQuestion: function() {
-					this.questions.push({'type': 'TEXT', choices: [{}]});
-				},
-				deleteQuestion: function(index) {
-					this.questions.splice(index, 1);
-				},
-				addChoice: function(question) {
-					question.choices.push({'text': ''});
-					Vue.nextTick(function() {
-						// TODO: Focus on the new field
-					});
-				},
-				choiceLines: function(q) {
-					t = function(o) {
-						return o.text;
-					};
-					return q.choices.map(t).join('\n');
-				}
-			},
-		});
-
 		var fp = flatpickr(".datepicker-flat", {
 			enableTime: true,
 			time_24hr: true,
@@ -135,6 +102,19 @@
 			}
 		});
 
+		function dispatchLocationChange() {
+			var fieldId = geodjango_id_location.fieldid;
+			var ta = document.getElementById(fieldId);
+			if (ta && ta.value) {
+				try {
+					var gj = JSON.parse(ta.value);
+					document.dispatchEvent(new CustomEvent('osmcal:location-change', {
+						detail: { coordinates: gj.coordinates }
+					}));
+				} catch(e) {}
+			}
+		}
+
 		window.addEventListener("map:init", function (e) {
 			var leafletmap = e.detail.map;
 			var osmGeocoder = new L.Control.OSMGeocoder({
@@ -155,10 +135,12 @@
 					fs.save(marker);
 					marker.editing.enable();
 					leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
+					dispatchLocationChange();
 
 					marker.on('dragend', function(e) {
 						fs.save(marker);
 						leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
+						dispatchLocationChange();
 					});
 				}
 			});
