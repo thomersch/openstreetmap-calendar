@@ -142,7 +142,21 @@ TASKS = {
     },
 }
 
-LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19, "ATTRIBUTION_PREFIX": False}
+LEAFLET_CONFIG = {
+    "RESET_VIEW": False,
+    "MAX_ZOOM": 19,
+    "ATTRIBUTION_PREFIX": False,
+    "TILES": [
+        (
+            "osm.org",
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                "attribution": '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                "referrerPolicy": "strict-origin",
+            },
+        ),
+    ],
+}
 
 SOCIAL = {
     "mastodon": {"access_token": os.getenv("MASTODON_ACCESS_TOKEN", None)},
