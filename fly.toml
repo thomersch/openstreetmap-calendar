@@ -13,6 +13,7 @@ OSMCAL_PG_HOST = "osmcal-db2.flycast"
 OSMCAL_PROD = "true"
 PORT = "8080"
 WRITABLE_REGION = "ams"
+REVERSE_PROXY_CIDR = "172.19.0.0/16"
 
 [[services]]
 protocol = "tcp"

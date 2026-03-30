@@ -4,6 +4,7 @@ GUNICORN_WORKERS ?= 1
 FLY_REGION ?= ""
 WRITABLE_REGION ?= ""
 DEVSERVER_ARGS ?= ""
+REVERSE_PROXY_CIDR ?= "*"
 
 devserver:
 	$(CALL) run ./manage.py runserver $(DEVSERVER_ARGS)
@@ -28,7 +29,7 @@ staticfiles:
 	$(CALL) run ./manage.py collectstatic --noinput
 
 gunicorn:
-	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --timeout 60 --access-logfile - --error-logfile -
+	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --timeout 60 --access-logfile - --error-logfile - --forwarded-allow-ips=$(REVERSE_PROXY_CIDR)
 
 test:
 	$(CALL) run ./manage.py test
