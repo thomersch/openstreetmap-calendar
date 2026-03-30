@@ -28,7 +28,7 @@ staticfiles:
 	$(CALL) run ./manage.py collectstatic --noinput
 
 gunicorn:
-	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --preload --access-logfile -
+	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --timeout 60 --access-logfile - --error-logfile -
 
 test:
 	$(CALL) run ./manage.py test
