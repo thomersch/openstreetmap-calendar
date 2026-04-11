@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'osmcal/community/community.css' %}">
+{% endblock %}
+
+{% block title %}{{ block.super }} | {{ community.name }}{% endblock %}
+
+{% block content %}
+<div class="centered-content">
+	<h1>{{ community.name }}</h1>
+	<p>This community has {{ community.members.count }} member{{ community.members.count|pluralize }}.</p>
+
+	<div style="margin-top: 1em">
+		{% if user.is_anonymous or not is_member %}
+			<form action="{% url 'osmcal.community:community-join' community.id %}" method="POST">
+				{% csrf_token %}
+				<button class="btn">Join “{{ community.name }}”</button>
+			</form>
+		{% else %}
+			<form action="{% url 'osmcal.community:community-leave' community.id %}" method="POST">
+				{% csrf_token %}
+				<button class="btn btn-negative btn-mini">Leave ”{{ community.name }}“</button>
+			</form>
+		{% endif %}
+	</div>
+
+	<h2>Upcoming Events</h2>
+	<div class="community-events-list">
+		{% include "osmcal/partials/event_list.html" %}
+	</div>
+</div>
+{% endblock %}

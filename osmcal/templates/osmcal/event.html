@@ -6,9 +6,14 @@
 
 {% block head %}
 	{{ block.super }}
-	<meta property="og:title" content="{{ event.name }}">
-	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %}{% if event.location_name %} at {{ event.location_name }}{% endif %}{% if event.location %} in {{ event.location_text }}{% endif %}. {{ event.short_description_without_markup }}">
-	{% schema_block event %}
+	{% if not event.hidden %}
+    	<meta property="og:title" content="{{ event.name }}">
+    	<meta property="og:description" content="{{ event.name }}, {% include 'osmcal/date.txt' %}{% if event.location_name %} at {{ event.location_name }}{% endif %}{% if event.location %} in {{ event.location_text }}{% endif %}. {{ event.short_description_without_markup }}">
+    	{% schema_block event %}
+	{% else %}
+        <meta name="robots" content="noindex">
+	{% endif %}
+
 	{% if event.location %}
 		{% leaflet_js %}
 		{% leaflet_css %}
@@ -75,7 +80,7 @@
 							{% if participants != 0 %}
 								{% for p in event.participation.all|slice:":3" %}{{ p.user.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
 								{% if participants > 4 %}
-									and {{ participants|add:-3}} others 
+									and {{ participants|add:-3}} others
 								{% elif participants == 4 %}
 									and {% with event.participation.all|slice:"3:4" as lp %}{{ lp.0.user.name }}{% endwith %}
 								{% endif %}
@@ -97,6 +102,17 @@
 						<button class="btn btn-negative">Cancel Attendance</button>
 					</form>
 					{% endif %}
+				</div>
+				{% endif %}
+
+				{% if communities_enabled %}
+				<div class="event-single-communities">
+					<h2>Communities</h2>
+					{% if event.communities.count == 0 %}
+						This event doesn't belong to any community.
+					{% endif %}
+
+					<div><button class="btn">Add to Community</button></div>
 				</div>
 				{% endif %}
 			</aside>

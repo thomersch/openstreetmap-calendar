@@ -6,8 +6,8 @@
     {% block vars %}var {{ module }} = {};
     {{ module }}.fieldid = '{{ id_css }}';
     {{ module }}.modifiable = {{ modifiable|yesno:"true,false" }};
-    {{ module }}.geom_type = '{{ geom_type }}';
-    {{ module }}.srid = {{ map_srid|unlocalize }};
+    {{ module }}.geom_type = '{{ widget.attrs.geom_name }}';
+    {{ module }}.srid = {{ widget.attrs.map_srid|unlocalize }};
     {% endblock vars %}
 
     function {{ id_map_callback }}(map, options) {
@@ -50,4 +50,4 @@
 {% endblock map %}
 {% endif %}
 
-<textarea id="{{ id_css }}" class="required django-leaflet-raw-textarea" cols="150" rows="10" name="{{ name }}" style="display:none">{{ serialized }}</textarea>
+<textarea id="{{ id_css }}" class="required django-leaflet-raw-textarea" cols="150" rows="10" name="{{ widget.name }}" style="display:none">{{ serialized }}</textarea>

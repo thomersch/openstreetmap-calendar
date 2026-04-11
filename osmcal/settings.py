@@ -9,7 +9,9 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv("OSMCAL_SECRET", "03#2of3$kqqxc&=rz#qkm^+2cl)0al@0k@2c)qx-$rq34m&q55")
-DEBUG = os.getenv("OSMCAL_PROD", False) not in ["True", "true", "yes", "1"]
+DEBUG = os.getenv("OSMCAL_PROD", "") not in ["True", "true", "yes", "1"]
+
+ENABLE_COMMUNITIES = False
 
 if DEBUG:
     INTERNAL_IPS = ["127.0.0.1"]
@@ -26,9 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "leaflet",
-    "background_task",
+    "django_tasks_db",
     "osmcal",
     "osmcal.api",
+    "osmcal.community",
     "osmcal.social",
 ]
 
@@ -83,10 +86,9 @@ DATABASES = {
         "USER": os.getenv("OSMCAL_PG_USER", "osmcal"),
         "PASSWORD": os.getenv("OSMCAL_PG_PASSWORD", None),
         "PORT": 5432 if WRITABLE_REGION == CURRENT_REGION else 5433,
+        "CONN_MAX_AGE": 600,
     }
 }
-
-CONN_MAX_AGE = 3600
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,9 +117,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-OAUTH_OPENSTREETMAP_KEY = os.getenv("OSMCAL_OSM_KEY", "")
-OAUTH_OPENSTREETMAP_SECRET = os.getenv("OSMCAL_OSM_SECRET", "")
-
 OAUTH2_OPENSTREETMAP_CLIENT_ID = os.getenv("OSMCAL_OAUTH2_CLIENT_ID", "")
 OAUTH2_OPENSTREETMAP_CLIENT_SECRET = os.getenv("OSMCAL_OAUTH2_CLIENT_SECRET", "")
 
@@ -133,16 +132,38 @@ if not DEBUG:
     sentry_sdk.init(
         dsn=os.getenv("OSMCAL_SENTRY_URL"),
         integrations=[DjangoIntegration()],
-        traces_sample_rate=0.1,
+        traces_sample_rate=0.01,
     )
 
-LEAFLET_CONFIG = {"RESET_VIEW": False, "MAX_ZOOM": 19}
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks_db.DatabaseBackend",
+        "QUEUES": ["default"],
+    },
+}
+
+LEAFLET_CONFIG = {
+    "RESET_VIEW": False,
+    "MAX_ZOOM": 19,
+    "ATTRIBUTION_PREFIX": False,
+    "TILES": [
+        (
+            "osm.org",
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                "attribution": '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                "referrerPolicy": "strict-origin",
+            },
+        ),
+    ],
+}
 
 SOCIAL = {
-    "twitter": {
-        "client_key": os.getenv("OSMCAL_TWITTER_KEY", None),
-        "client_secret": os.getenv("OSMCAL_TWITTER_SECRET", None),
-        "user_key": os.getenv("OSMCAL_TWITTER_USER_KEY", None),
-        "user_secret": os.getenv("OSMCAL_TWITTER_USER_SECRET", None),
-    }
+    "mastodon": {"access_token": os.getenv("MASTODON_ACCESS_TOKEN", None)},
 }
+
+if gdal_path := os.getenv("GDAL_LIBRARY_PATH", None):
+    GDAL_LIBRARY_PATH = gdal_path
+
+if geos_path := os.getenv("GEOS_LIBRARY_PATH", None):
+    GEOS_LIBRARY_PATH = geos_path

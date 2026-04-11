@@ -16,5 +16,19 @@
 	{% else %}
 	<p>Your home location is unknown, but you can set it in your <a href="https://www.openstreetmap.org/user/{{ request.user.name }}/account">OpenStreetMap.org user settings</a>.</p>
 	{% endif %}
+
+	{% if enable_communities %}
+	<h2>Communities</h2>
+    	{% if user.communities.count == 0 %}
+    	<p>You aren't yet a member of any community.</p>
+    	{% else %}
+    	<p>You are part of the following communities:</p>
+    	<ul>
+    	    {% for cm in user.communities.all %}
+    	    <li><a href="{% url "community:community" cm.id %}">{{cm.name}}</a></li>
+    		{% endfor %}
+    	</ul>
+    	{% endif %}
+	{% endif %}
 </content>
 {% endblock %}

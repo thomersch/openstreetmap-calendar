@@ -58,12 +58,6 @@ class DateFormatTest(SimpleTestCase):
             "2nd January 16:00 – 3rd January 18:00",
         )
 
-    # def test_dateformat_start_end(self):
-    #     self.assertEqual(
-    #         self._fmt(MockEvent(start=datetime(year=self.cur.year, month=1, day=1), end=datetime(year=self.cur.year, month=1, day=2), whole_day=True)),
-    #         '1st-2nd January'
-    #     )
-
     def test_dateformat_next_year(self):
         self.assertEqual(
             self._fmt(MockEvent(start=datetime(year=self.cur.year + 1, month=1, day=2), whole_day=True)),

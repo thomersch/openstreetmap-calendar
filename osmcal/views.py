@@ -22,6 +22,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.base import TemplateView
 from pytz import UTC
+
 from osmcal import oauth
 
 from . import forms, osmuser
@@ -49,6 +50,28 @@ class EventListView(View):
     def filter_queryset(self, qs, **kwargs):
         return qs.filter(Q(start__gte=kwargs["after"]) | Q(end__gte=kwargs["after"])).order_by("local_start")
 
+    def filter_around(self, filter_around, filter_around_radius, upcoming_events):
+        MAX_FILTER_RADIUS = 250
+        if filter_around_radius:
+            dist = float(filter_around_radius)
+            if dist <= 0 or dist > MAX_FILTER_RADIUS:
+                raise BadRequest("filter_around_radius invalid")
+        else:
+            dist = 50
+        try:
+            filter_around = [float(x) for x in filter_around.split(",")]
+        except ValueError:
+            raise BadRequest("invalid lat/lon")
+        if len(filter_around) == 2:  # noqa: PLR2004
+            lat = filter_around[0]
+            lon = filter_around[1]
+        else:
+            raise BadRequest("filter_around invalid")
+        pt = Point(lon, lat, srid=4326)
+        return upcoming_events.annotate(distance=Distance("location", pt)).filter(
+            distance__lte=dist * 1000  # dist variable contains km, filter must be in meters
+        )
+
     def get_queryset(self, params, after=None):
         if after is None:
             after = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -58,21 +81,21 @@ class EventListView(View):
             after=after,
         )
 
+        COUNTRY_CODE_LENGTH = 2
         filter_to_country = params.get("in", None)
-        if filter_to_country and len(filter_to_country) == 2:
+        if filter_to_country and len(filter_to_country) == COUNTRY_CODE_LENGTH:
             upcoming_events = upcoming_events.filter(location_address__country_code=filter_to_country.lower())
         elif filter_to_country:
             upcoming_events = upcoming_events.filter(location_address__country=filter_to_country)
 
         filter_around = params.get("around", None)
         if filter_around:
-            filter_around = [float(x) for x in filter_around.split(",")]
-            if len(filter_around) < 2:
-                raise BadRequest("filter_around invalid")
-            pt = Point(filter_around[1], filter_around[0], srid=4326)
-            upcoming_events = upcoming_events.annotate(distance=Distance("location", pt)).filter(
-                distance__lte=50000
-            )  # distance in meters
+            filter_around_radius = params.get("around_radius", None)
+            upcoming_events = self.filter_around(filter_around, filter_around_radius, upcoming_events)
+
+        days = params.get("days", None)
+        if days:
+            upcoming_events = upcoming_events.filter(start__lte=timezone.now() + timedelta(days=int(days)))
 
         return upcoming_events
 
@@ -95,7 +118,10 @@ class Homepage(EventListView):
                 "user": request.user,
                 "events": upcoming_events,
                 "country_list": country_list,
-                "filter": {"in": request.GET.get("in", None), "around": request.GET.get("around", None)},
+                "filter": {
+                    "in": request.GET.get("in", None),
+                    "around": request.GET.get("around", None),
+                },
             },
         )
 
@@ -147,10 +173,13 @@ class EventFeed(Feed, EventListView):
     def item_guid(self, obj):
         return "osmcal-event-{}".format(obj.id)
 
+    def item_guid_is_permalink(self, obj):
+        return False
+
 
 class EventView(View):
     def get(self, request, event_id):
-        event = Event.objects.get(id=event_id)
+        event = get_object_or_404(Event, id=event_id)
         authors = event.log.all().distinct("created_by")
         current_user_may_hide_event = HideEventBase.user_is_permitted(event, request.user)
 
@@ -209,7 +238,9 @@ class JoinEvent(View):
     def survey(self, request, evt):
         question_form = forms.QuestionnaireForm
         return render(
-            request, "osmcal/event_survey.html", context={"event": evt, "form": question_form(evt.questions.all())}
+            request,
+            "osmcal/event_survey.html",
+            context={"event": evt, "form": question_form(evt.questions.all())},
         )
 
     @method_decorator(login_required)
@@ -272,15 +303,14 @@ class MockLogin(View):
 
         try:
             user = User.objects.get(id=1)
-        except:
+        except User.DoesNotExist:
             user = User.objects.create(id=1, name="some_dummy_user")
         dj_login(request, user)
         return redirect(request.GET.get("next", "/"))
 
 
-class CancelEvent(View):
-    @method_decorator(login_required)
-    def post(self, request, event_id=None):
+class CancelEventMixin:
+    def set_event_staus(self, request, event_id, cancelled: bool):
         event = get_object_or_404(Event, id=event_id)
 
         # We don't need an event form as such, but we will use the to_json method
@@ -289,8 +319,21 @@ class CancelEvent(View):
         event_form.is_valid()
         EventLog.objects.create(created_by=request.user, event=event, data=event_form.to_json())
 
-        event.cancelled = True
+        event.cancelled = cancelled
         event.save()
+
+
+class CancelEvent(View, CancelEventMixin):
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
+        self.set_event_staus(request, event_id, True)
+        return redirect(reverse("event", kwargs={"event_id": event_id}))
+
+
+class UncancelEvent(View, CancelEventMixin):
+    @method_decorator(login_required)
+    def post(self, request, event_id=None):
+        self.set_event_staus(request, event_id, False)
         return redirect(reverse("event", kwargs={"event_id": event_id}))
 
 
@@ -363,6 +406,17 @@ class EditEvent(View):
             form = forms.EventForm(request.POST, instance=Event.objects.get(id=event_id))
 
         if form.is_valid():
+            if request.user.is_banned:
+                # User is shadow-banned, let's pretend the event got saved
+                # and display a fake rendered page for them.
+                return render(
+                    request,
+                    "osmcal/event.html",
+                    context={
+                        "event": Event(id=2000000, **form.cleaned_data),
+                    },
+                )
+
             questions_data = []
             question_formset.is_valid()
             for qf in question_formset:
@@ -407,7 +461,17 @@ class DuplicateEvent(EditEvent):
         old_evt = Event.objects.get(id=event_id)
 
         form_data = self.dict_from_event(
-            old_evt, ("name", "whole_day", "link", "kind", "location_name", "location", "description", "timezone")
+            old_evt,
+            (
+                "name",
+                "whole_day",
+                "link",
+                "kind",
+                "location_name",
+                "location",
+                "description",
+                "timezone",
+            ),
         )
         form_data["start"] = datetime.now().replace(
             hour=old_evt.start_localized.hour,
@@ -464,7 +528,8 @@ def oauth_start(request):
     osm = oauth.get_oauth_session(request)
     if request.GET.get("next", None):
         request.session["next"] = request.GET["next"]
-    auth_url, _ = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
+    auth_url, state = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
+    request.session["oauth_state"] = state
     return redirect(auth_url)
 
 

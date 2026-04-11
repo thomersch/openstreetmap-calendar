@@ -1,10 +1,10 @@
-FROM python:3.11
+FROM python:3.14
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get -y install curl make libgdal32
-RUN pip install poetry==1.7.1
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 CMD /bin/bash

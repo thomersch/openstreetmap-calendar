@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 import bleach
 import markdown
@@ -11,9 +12,9 @@ from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from pytz import timezone
 from sentry_sdk import add_breadcrumb
-from timezonefinder import TimezoneFinder
+from tzfpy import get_tz
 
-tf = TimezoneFinder()
+from osmcal.tasks import background_geocode_location
 
 
 class EventType(Enum):
@@ -42,7 +43,9 @@ class Event(models.Model):
         blank=True,
         null=True,
         help_text=mark_safe(
-            'Tell people what the event is about and what they can expect. You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> in this field.'
+            "Tell people what the event is about and what they can expect. "
+            'You may use <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a> '
+            "in this field."
         ),
     )
 
@@ -52,13 +55,27 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if self.location:
             self.geocode_location()
+
+        # For the case that an event had previously an address which got removed by the edit:
+        if not self.location:
+            self.location_address = None
+
         super().save(*args, **kwargs)
 
     def geocode_location(self):
+        try:
+            self._geocode_location()
+        except (requests.exceptions.RequestException, ValueError):
+            background_geocode_location.enqueue(self.id)
+
+    def _geocode_location(self):
         nr = requests.get(
             "https://nominatim.openstreetmap.org/reverse",
             params={"format": "jsonv2", "lat": self.location.y, "lon": self.location.x, "accept-language": "en"},
+            headers={"User-Agent": "osmcal"},
         )
+        nr.raise_for_status()
+
         self.location_address = nr.json().get("address", None)
         if self.location_address is None:
             add_breadcrumb(category="nominatim", level="error", data=nr.json())
@@ -99,7 +116,7 @@ class Event(models.Model):
 
     @property
     def start_localized(self):
-        tz = timezone(self.timezone)
+        tz = timezone(str(self.timezone))
         return self.start.astimezone(tz)
 
     @property
@@ -115,8 +132,8 @@ class Event(models.Model):
 
     @property
     def year_month(self):
-        l = self.start_localized
-        return (l.year, l.month)
+        loc = self.start_localized
+        return (loc.year, loc.month)
 
     @property
     def short_description_without_markup(self) -> str:
@@ -127,8 +144,11 @@ class Event(models.Model):
         return Truncator(cleaned).words(max_words)
 
     @property
-    def originally_created_by(self) -> "User":
-        return self.log.order_by("created_at").first().created_by
+    def originally_created_by(self) -> Optional["User"]:
+        try:
+            return self.log.order_by("created_at").first().created_by
+        except AttributeError:
+            return None
 
     class Meta:
         indexes = (models.Index(fields=("end",)),)
@@ -191,11 +211,12 @@ class User(AbstractUser):
     home_location = PointField(blank=True, null=True)
 
     is_moderator = models.BooleanField(default=False)
+    is_banned = models.BooleanField(default=False)
 
     def home_timezone(self):
         if not self.home_location:
             return None
-        return tf.timezone_at(lng=self.home_location.x, lat=self.home_location.y)
+        return get_tz(self.home_location.x, self.home_location.y)
 
     def save(self, *args, **kwargs):
         if not self.username:

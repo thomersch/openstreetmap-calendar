@@ -1,21 +1,19 @@
-PATH := "$(PATH):$(HOME)/.local/bin"
-CALL := env PATH=$(PATH) poetry
+CALL := uv
 
 GUNICORN_WORKERS ?= 1
 FLY_REGION ?= ""
 WRITABLE_REGION ?= ""
+DEVSERVER_ARGS ?= ""
+REVERSE_PROXY_CIDR ?= "*"
 
 devserver:
-	$(CALL) run ./manage.py runserver
+	$(CALL) run ./manage.py runserver $(DEVSERVER_ARGS)
 
 install:
-	$(CALL) install --no-root
+	$(CALL) sync --no-dev --frozen
 
 install-dev:
-	$(CALL) install --no-root --with dev
-
-dep-update:
-	$(CALL) update
+	$(CALL) sync --frozen
 
 migrate:
 	@if [ $(FLY_REGION) = $(WRITABLE_REGION) ]; then \
@@ -31,7 +29,7 @@ staticfiles:
 	$(CALL) run ./manage.py collectstatic --noinput
 
 gunicorn:
-	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --preload --access-logfile -
+	$(CALL) run gunicorn osmcal.wsgi -b :8080 -w $(GUNICORN_WORKERS) --timeout 60 --access-logfile - --error-logfile - --forwarded-allow-ips=$(REVERSE_PROXY_CIDR)
 
 test:
 	$(CALL) run ./manage.py test
@@ -40,7 +38,7 @@ fixtures:
 	$(CALL) run ./manage.py loaddata osmcal/fixtures/demo.yaml
 
 processtasks:
-	$(CALL) run ./manage.py process_tasks
+	$(CALL) run ./manage.py db_worker
 
 periodic:
 	while true; do \

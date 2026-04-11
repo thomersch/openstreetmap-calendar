@@ -5,7 +5,7 @@
 {% block head %}
 	{{ block.super }}
 	{% include "osmcal/partials/no_index.html" %}
-	
+
 	{% leaflet_js plugins="forms" %}
 	{% leaflet_css plugins="forms" %}
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/flatpickr.min.css' %}">
@@ -13,16 +13,12 @@
 	<link rel="stylesheet" href="{% static 'osmcal/event-form.css' %}">
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
-	{% if debug %}
-	<script src="{% static 'osmcal/thirdparty/vue.js' %}"></script>
-	{% else %}
-	<script src="{% static 'osmcal/thirdparty/vue.min.js' %}"></script>
-	{% endif %}
+	<script src="{% static 'osmcal/survey-form.js' %}"></script>
+	<script src="{% static 'osmcal/timezone-widget.js' %}"></script>
 
 	<script>
 		var appData = {
-			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}'),
-			id_location_geojson: ""
+			questions: JSON.parse('{% if questions %}{{ questions | escapejs }}{% else %}[]{% endif %}')
 		};
 	</script>
 {% endblock %}
@@ -31,7 +27,7 @@
 	{% if page_title %}<h1>{{ page_title }}</h1>{% endif %}
 	<form id="event-main-form" method="POST">
 		{% csrf_token %}
-		
+
 		{% timezone tz %}
 		<section class="event-form">
 			{% for field in form %}
@@ -46,71 +42,28 @@
 		</section>
 		{% endtimezone %}
 
-		<section id="event-question-form" class="event-question-form">
-			<label class="event-question-form-label">
-				Sign Up Survey
-			</label>
+		<div style="margin-top:2em;"></div>
 
-			<div class="event-question-input-column">
-				<div v-if="questions.length == 0">
-					<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Create Sign Up Survey</button>
-					<label class="event-question-form-helptext">You can ask the participants questions they will be asked to answer during event sign up, e.g. whether they'll join the after work party.</label>
-				</div>
+		{% include 'osmcal/partials/event_form_survey.html' %}
 
-				<div v-for="(question, index) in questions" class="event-question-form-block">
-					<div style="display:flex">
-						<h3 style="flex-grow: 2;">Question [[ index+1 ]]</h3>
-						<button v-on:click.prevent="deleteQuestion(index)" v-if="!question.frozen" class="btn-mini btn-negative" style="padding: 0.3em; height: 100%;">Delete Question</button>
-					</div>
+		<div style="margin-top:2em;"></div>
 
-					<div v-if="question.frozen" class="event-question-form-helptext" style="margin-bottom:1em;">Existing Questions cannot be changed.</div>
-
-					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-question_text'" class="event-question-label">Question Text</label>
-						<input v-bind:name="'questions-' + index + '-question_text'" v-bind:id="'id_questions-'+index+'-question_text'" v-model="question.text" placeholder="E.g. your full name" :disabled="question.frozen" class="event-question-input" required>
-					</div>
-
-					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-mandatory'" class="event-question-label">Required Answer</label>
-						<input v-bind:name="'questions-' + index + '-mandatory'" v-bind:id="'id_questions-'+index+'-mandatory'" type="checkbox" v-model="question.mandatory" :disabled="question.frozen">
-					</div>
-
-					<div class="event-question-line">
-						<label v-bind:for="'id_questions-'+index+'-answer_type'" class="event-question-label">Answer Type</label>
-						<select v-bind:name="'questions-' + index + '-answer_type'" v-model="question.type" :disabled="question.frozen" class="event-question-input">
-							<option value="TEXT">Text</option>
-							<option value="CHOI">Choice</option>
-							<option value="BOOL">Boolean (yes or no)</option>
-						</select>
-					</div>
-
-					<div class="event-question-line" v-if="question.type == 'CHOI'">
-						<label class="event-question-label">Choices</label>
-						<ul class="event-question-choices"><li v-for="(choice, ci) in question.choices"><input v-model="choice.text" :disabled="question.frozen" class="event-question-input"></li></ul>
-						<button v-on:click.prevent="addChoice(question)" class="btn-mini event-question-choice-button" v-if="!question.frozen">Add Choice</button>
-						<textarea v-bind:name="'questions-' + index + '-choices'" v-model="choiceLines(question)" hidden></textarea>
-					</div>
-				</div>
-
-				<template v-if="questions.length != 0">
-					<div class="event-question-form-block">
-						<button class="btn" v-on:click.prevent="addQuestion" formnovalidate>Add Question to Survey</button>
-					</div>
-				</template>
-			</div>
-
-			<input type="hidden" name="questions-TOTAL_FORMS" v-bind:value="questions.length">
-			<input type="hidden" name="questions-INITIAL_FORMS" v-model="initial_questions_n">
-			<input type="hidden" name="questions-MIN_NUM_FORMS" value="0">
-			<input type="hidden" name="questions-MAX_NUM_FORMS" value="1000">
-		</section>
+		{% if enable_communities %}
+		<div class="event-form">
+			<label class="event-form-leading-label">Community</label>
+		</div>
+		{% endif %}
 
 		{% if event %}
 		<div method="POST" class="event-form" style="margin-top: 1em;">
 			<div class="event-form-line">
 				<div class="event-form-leading-label"></div>
-				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
-				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% if not event.cancelled %}
+    				<button type="submit" formaction="{% url 'event-cancel' event.id %}" class="btn btn-negative">Cancel Event</button>
+    				<label class="event-form-helptext">The event will be listed as cancelled and the list of participants will be hidden.</label>
+				{% else %}
+				    <button type="submit" formaction="{% url 'event-uncancel' event.id %}" class="btn btn-negative">Uncancel Event</button>
+				{% endif %}
 			</div>
 		</div>
 		{% endif %}
@@ -121,35 +74,6 @@
 	</form>
 
 	<script>
-		var questionApp = new Vue({
-			el: '#event-question-form',
-			delimiters: ['[[', ']]'],
-			data: appData,
-			created: function() {
-				this.initial_questions_n = this.questions.length;
-			},
-			methods: {
-				addQuestion: function() {
-					this.questions.push({'type': 'TEXT', choices: [{}]});
-				},
-				deleteQuestion: function(index) {
-					this.questions.splice(index, 1);
-				},
-				addChoice: function(question) {
-					question.choices.push({'text': ''});
-					Vue.nextTick(function() {
-						// TODO: Focus on the new field
-					});
-				},
-				choiceLines: function(q) {
-					t = function(o) {
-						return o.text;
-					};
-					return q.choices.map(t).join('\n');
-				}
-			},
-		});
-
 		var fp = flatpickr(".datepicker-flat", {
 			enableTime: true,
 			time_24hr: true,
@@ -168,11 +92,28 @@
 				fp[i].config.enableTime = !evt.target.checked;
 				if(evt.target.checked) {
 					fp[i].config.dateFormat = 'Y-m-d';
+					if(fp[i].selectedDates.length > 0) {
+						fp[i].setDate(new Date(fp[i].selectedDates[0].toDateString()));
+					}
 				} else {
 					fp[i].config.dateFormat = 'Y-m-d H:i';
 				}
+				fp[i].redraw();
 			}
 		});
+
+		function dispatchLocationChange() {
+			var fieldId = geodjango_id_location.fieldid;
+			var ta = document.getElementById(fieldId);
+			if (ta && ta.value) {
+				try {
+					var gj = JSON.parse(ta.value);
+					document.dispatchEvent(new CustomEvent('osmcal:location-change', {
+						detail: { coordinates: gj.coordinates }
+					}));
+				} catch(e) {}
+			}
+		}
 
 		window.addEventListener("map:init", function (e) {
 			var leafletmap = e.detail.map;
@@ -194,15 +135,17 @@
 					fs.save(marker);
 					marker.editing.enable();
 					leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
+					dispatchLocationChange();
 
 					marker.on('dragend', function(e) {
 						fs.save(marker);
 						leafletmap.fireEvent(L.Draw.Event.EDITSTOP);
+						dispatchLocationChange();
 					});
 				}
 			});
-			
-			leafletmap.addControl(osmGeocoder); 
+
+			leafletmap.addControl(osmGeocoder);
 		}, false);
 	</script>
 {% endblock %}

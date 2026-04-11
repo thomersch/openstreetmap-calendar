@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Join <a href="{% url 'osmcal.community:community' community.id %}">{{ community.name }}</a></h1>
+
+	<form action="{% url 'osmcal.community:community-join' community.id %}" method="POST">
+		{% csrf_token %}
+		<button class="btn">Join {{ community.name }}</button>
+	</form>
+{% endblock %}

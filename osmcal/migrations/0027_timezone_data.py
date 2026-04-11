@@ -1,14 +1,13 @@
 from django.db import migrations
 from pytz import timezone
-from timezonefinder import TimezoneFinder
+from tzfpy import get_tz
 
 
 def set_timezones(apps, schema_editor):
-    tf = TimezoneFinder()
     Event = apps.get_model('osmcal', 'Event')
     for event in Event.objects.filter(timezone=None):
         if event.location:
-            tz = tf.timezone_at(lng=event.location.x, lat=event.location.y)
+            tz = get_tz(event.location.x, event.location.y)
             if tz is not None:
                 event.timezone = tz
         if not event.timezone:

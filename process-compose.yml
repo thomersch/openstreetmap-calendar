@@ -1,0 +1,7 @@
+processes:
+  osmcal:
+    command: make devserver
+    availability:
+      restart: always
+  osmcal-worker:
+    command: make processtasks
