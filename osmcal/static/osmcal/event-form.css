@@ -50,6 +50,7 @@
 
 .event-form #id_location-map {
 	display: inline-block;
+	isolation: isolate;
 	margin-bottom: 1em;
 	vertical-align: top;
 	width: 100%;

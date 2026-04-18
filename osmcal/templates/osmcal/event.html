@@ -50,9 +50,11 @@
 
 			</div>
 			<aside class="event-single-additional">
-				{% if event.location %}
+			    <div style="isolation: isolate;">
+					{% if event.location %}
 					{% leaflet_map "yourmap" %}
-				{% endif %}
+					{% endif %}
+				</div>
 
 				<div class="event-single-side-buttons">
 					<a href="{% url 'event-change' event.id %}"><button class="btn btn-mini">Edit Event</button></a>
