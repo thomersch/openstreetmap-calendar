@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="{% static 'osmcal/thirdparty/Control.OSMGeocoder.css' %}">
 	<script src="{% static 'osmcal/thirdparty/Control.OSMGeocoder.js' %}"></script>
 	<script src="{% static 'osmcal/survey-form.js' %}"></script>
-	<script src="{% static 'osmcal/timezone-widget.js' %}"></script>
+	<script src="{% static 'osmcal/timezone-widget.js' %}" defer></script>
 
 	<script>
 		var appData = {
@@ -147,5 +147,7 @@
 
 			leafletmap.addControl(osmGeocoder);
 		}, false);
+
+		dispatchLocationChange();
 	</script>
 {% endblock %}

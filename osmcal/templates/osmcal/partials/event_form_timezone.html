@@ -2,9 +2,9 @@
 	class="event-form-input event-form-input-info"
 	id="{{ widget.attrs.id }}-wrapper"
 	{% if widget.value %}tz="{{ widget.value }}"{% endif %}>
-	<select name="{{ widget.name }}" id="{{ widget.attrs.id }}" hidden>
+	<select name="{{ widget.name }}" id="{{ widget.attrs.id }}" {% if not widget.value %}hidden{% endif %}>
 		{% for tz in all_timezones %}
-			<option>{{ tz }}</option>
+			<option {% if tz == widget.value %}selected{% endif %}>{{ tz }}</option>
 		{% endfor %}
 	</select>
 </timezone-widget>
