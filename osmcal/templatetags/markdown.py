@@ -11,6 +11,7 @@ allowed_tags = [
     "blockquote",
     "br",
     "code",
+    "details",
     "em",
     "h1",
     "h2",
@@ -25,6 +26,7 @@ allowed_tags = [
     "p",
     "pre",
     "strong",
+    "summary",
     "ul",
 ]
 
