@@ -1,7 +1,7 @@
 <timezone-widget
 	class="event-form-input event-form-input-info"
 	id="{{ widget.attrs.id }}-wrapper"
-	{% if widget.value %}tz="{{ widget.value }}"{% endif %}>
+	{% if widget.value == "Etc/UTC" %}tz="UTC"{% elif widget.value == "Etc/UTC" %}tz="{{ widget.value }}"{% endif %}>
 	<select name="{{ widget.name }}" id="{{ widget.attrs.id }}" {% if not widget.value %}hidden{% endif %}>
 		{% for tz in all_timezones %}
 			<option {% if tz == widget.value %}selected{% endif %}>{{ tz }}</option>
