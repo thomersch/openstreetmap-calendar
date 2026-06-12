@@ -6,7 +6,8 @@
     "gdal@latest",
     "python314Packages.gdal@latest",
     "geos@latest",
-    "python314@latest"
+    "python314@latest",
+    "pyright@latest"
   ],
   "shell": {
     "init_hook": [

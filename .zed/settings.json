@@ -5,6 +5,7 @@
 {
   "languages": {
     "Python": {
+      "language_servers": ["pyright"],
       "formatter": {
         "external": {
           "command": "/bin/sh",
