@@ -71,7 +71,7 @@ class DuplicateEventTest(AuthenticatedTestCase):
 
         self.assertEqual(resp.status_code, 200)
         content = resp.content.decode()
-        self.assertIn('<option selected>UTC</option>', content)
+        self.assertIn("<option selected>UTC</option>", content)
         select_start = content.index("<select")
         select_end = content.index(">", select_start)
         self.assertNotIn("hidden", content[select_start:select_end])
@@ -94,7 +94,7 @@ class EditEventTimezoneTest(AuthenticatedTestCase):
         content = resp.content.decode()
         # The <select> must not be hidden, and "UTC" must be the selected option,
         # otherwise the timezone field appears blank when editing (issue #202).
-        self.assertIn('<option selected>UTC</option>', content)
+        self.assertIn("<option selected>UTC</option>", content)
         select_start = content.index("<select")
         select_end = content.index(">", select_start)
         self.assertNotIn("hidden", content[select_start:select_end])
