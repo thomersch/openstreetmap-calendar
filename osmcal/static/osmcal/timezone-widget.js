@@ -1,8 +1,15 @@
 class TimezoneWidget extends HTMLElement {
   connectedCallback() {
     this._tz = this.getAttribute("tz") || null;
-    this._manuallySet = this._tz !== null;
+    this._manuallySet = false;
     this._render();
+
+    const select = this.querySelector("select");
+    if (select) {
+      select.addEventListener("change", () => {
+        this._manuallySet = true;
+      });
+    }
 
     document.addEventListener("osmcal:location-change", (e) => {
       if (!this._manuallySet) {
