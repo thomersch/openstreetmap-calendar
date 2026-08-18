@@ -25,11 +25,11 @@ USER osmcal
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # This is a hack to speed up docker builds through leveraging the layer cache.
-COPY pyproject.toml uv.lock Makefile ./
+COPY --chown=osmcal:osmcal pyproject.toml uv.lock Makefile ./
 RUN make install
 
-COPY . .
-COPY --from=apidocs /docs/api.html osmcal/static/api.html
+COPY --chown=osmcal:osmcal . .
+COPY --chown=osmcal:osmcal --from=apidocs /docs/api.html osmcal/static/api.html
 RUN make install staticfiles
 
 EXPOSE 8080
