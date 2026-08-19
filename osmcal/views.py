@@ -26,6 +26,7 @@ from pytz import UTC
 from osmcal import oauth
 
 from . import forms, osmuser
+from .cache import mark_cacheable
 from .ical import encode_event, encode_events
 from .models import (
     Event,
@@ -111,7 +112,7 @@ class Homepage(EventListView):
             .distinct()
         )
 
-        return render(
+        response = render(
             request,
             "osmcal/homepage.html",
             context={
@@ -124,6 +125,9 @@ class Homepage(EventListView):
                 },
             },
         )
+        if not request.user.is_authenticated:
+            mark_cacheable(response, max_age=60)
+        return response
 
 
 class SubscriptionInfo(TemplateView):
