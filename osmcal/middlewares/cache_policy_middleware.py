@@ -3,8 +3,8 @@ from django.utils.cache import patch_cache_control
 
 def _cache_control_directives(response):
     directives = {}
-    for directive in response.get("Cache-Control", "").split(","):
-        directive = directive.strip()
+    for raw_directive in response.get("Cache-Control", "").split(","):
+        directive = raw_directive.strip()
         if not directive:
             continue
         key, _, value = directive.partition("=")
