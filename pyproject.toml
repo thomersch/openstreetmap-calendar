@@ -32,6 +32,7 @@ dependencies = [
     "tzdata",
     "django-tasks-db~=0.12",
     "icalendar>=7.0.3",
+    "whitenoise~=6.11",
 ]
 name = "openstreetmap-calendar"
 version = "2.2.0"
