@@ -38,7 +38,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "osmcal.middlewares.cache_policy_middleware.CachePolicyMiddleware",
-    "osmcal.middlewares.replay_middleware.ReplayMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
