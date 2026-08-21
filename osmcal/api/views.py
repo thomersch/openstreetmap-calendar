@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from osmcal import views
+from osmcal.cache import cacheable
 from pytz import timezone as tzp
 from tzfpy import get_tz
 
@@ -27,6 +28,7 @@ class EventList(CORSOptionsMixin, views.EventListView):
         return serializers.EventsSerializer
 
     @cors_any
+    @cacheable(max_age=60, vary_on_language=True)
     @language_from_header
     def get(self, request, *args, **kwargs):
         es = self.get_serializer()(self.get_queryset(request.GET), context={"request": request})
