@@ -46,3 +46,17 @@ jobs:
         env:
           OSMCAL_PG_HOST: postgres
           OSMCAL_PG_PASSWORD: postgres
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Deploy to Hostim
+        uses: hostimdev/action@v2
+        with:
+          api_token: ${{ secrets.HOSTIM_API_TOKEN }}
+          project: hpr-9b0d8d4d
+          app: osmcal
+          action: rebuild
