@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load leaflet_tags markdown schema %}
+{% load leaflet_tags markdown schema static %}
 
 {% block title %}{{ event.name }} | OpenStreetMap Calendar{% endblock %}
 
@@ -18,6 +18,14 @@
 		{% leaflet_js %}
 		{% leaflet_css %}
 		<script>
+			/* Leaflet's own marker icon autodetection breaks once static files are
+			   served under hashed filenames (ManifestStaticFilesStorage), so the
+			   default icon URLs are set explicitly here. */
+			L.Icon.Default.mergeOptions({
+				iconUrl: "{% static 'leaflet/images/marker-icon.png' %}",
+				iconRetinaUrl: "{% static 'leaflet/images/marker-icon-2x.png' %}",
+				shadowUrl: "{% static 'leaflet/images/marker-shadow.png' %}"
+			});
 			window.addEventListener("map:init", function(e) {
 				/* jshint ignore:start */
 				var marker = new L.marker([{{ event.location.y }}, {{ event.location.x }}]);

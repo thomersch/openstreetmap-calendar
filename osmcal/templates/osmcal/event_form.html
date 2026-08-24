@@ -115,6 +115,15 @@
 			}
 		}
 
+		/* Leaflet's own marker icon autodetection breaks once static files are
+		   served under hashed filenames (ManifestStaticFilesStorage), so the
+		   default icon URLs are set explicitly here. */
+		L.Icon.Default.mergeOptions({
+			iconUrl: "{% static 'leaflet/images/marker-icon.png' %}",
+			iconRetinaUrl: "{% static 'leaflet/images/marker-icon-2x.png' %}",
+			shadowUrl: "{% static 'leaflet/images/marker-shadow.png' %}"
+		});
+
 		window.addEventListener("map:init", function (e) {
 			var leafletmap = e.detail.map;
 			var osmGeocoder = new L.Control.OSMGeocoder({
