@@ -7,6 +7,7 @@ app_name = "osmcal"
 
 urlpatterns = [
     path("", views.Homepage.as_view(), name="homepage"),
+    path("robots.txt", views.robots_txt, name="robots-txt"),
     path("subscribe/", views.SubscriptionInfo.as_view(), name="subscription-info"),
     path("event/add/", views.EditEvent.as_view(), name="event-edit"),
     path("event/<int:event_id>/", views.EventView.as_view(), name="event"),

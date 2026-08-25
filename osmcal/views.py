@@ -26,7 +26,7 @@ from pytz import UTC
 from osmcal import oauth
 
 from . import forms, osmuser
-from .cache import mark_cacheable
+from .cache import cacheable, mark_cacheable
 from .ical import encode_event, encode_events
 from .models import (
     Event,
@@ -288,6 +288,18 @@ class UnjoinEvent(View):
         EventParticipation.objects.get(event__id=event_id, user=request.user).delete()
         # TODO: Remove ParticipationAnswers
         return redirect(reverse("event", kwargs={"event_id": event_id}))
+
+
+@cacheable(max_age=86400)
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /oauth/",
+        "Disallow: /login/",
+        "Disallow: /logout/",
+        "Disallow: /me/",
+    ]
+    return HttpResponse("\n".join(lines) + "\n", content_type="text/plain")
 
 
 def login(request):
