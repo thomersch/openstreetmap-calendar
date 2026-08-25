@@ -65,8 +65,8 @@
 				</div>
 
 				<div class="event-single-side-buttons">
-					<a href="{% url 'event-change' event.id %}"><button class="btn btn-mini">Edit Event</button></a>
-					<a href="{% url 'event-duplicate' event.id %}"><button class="btn btn-mini">Repeat Event</button></a>
+					<a href="{% url 'event-change' event.id %}" rel="nofollow"><button class="btn btn-mini">Edit Event</button></a>
+					<a href="{% url 'event-duplicate' event.id %}" rel="nofollow"><button class="btn btn-mini">Repeat Event</button></a>
 					{% if current_user_may_hide_event %}
 						{% if not event.hidden %}
 							<form action="{% url 'event-hide' event.id %}" method="POST" class="form-inline">
