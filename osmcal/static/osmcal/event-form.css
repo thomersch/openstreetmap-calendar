@@ -36,6 +36,10 @@
 	color: #666666;
 }
 
+timezone-widget a {
+	cursor: pointer;
+}
+
 .event-form textarea {
 	font-size: 12pt;
 	width: 100%;
