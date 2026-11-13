@@ -19,6 +19,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 from django.views.generic.base import TemplateView
 from pytz import UTC
@@ -540,17 +541,32 @@ class EventFeedICal(EventListView):
         return HttpResponse(encode_events(evts), content_type="text/calendar")
 
 
+OAUTH_FLOW_COOKIE = "oauth_flow"
+OAUTH_FLOW_MAX_AGE_SECONDS = 15 * 60
+
+
 def oauth_start(request):
     osm = oauth.get_oauth_session(request)
-    if request.GET.get("next", None):
-        request.session["next"] = request.GET["next"]
     auth_url, state = osm.authorization_url("https://www.openstreetmap.org/oauth2/authorize")
-    request.session["oauth_state"] = state
-    return redirect(auth_url)
+    response = redirect(auth_url)
+    response.set_signed_cookie(
+        OAUTH_FLOW_COOKIE,
+        json.dumps({"state": state, "next": request.GET.get("next")}),
+        max_age=OAUTH_FLOW_MAX_AGE_SECONDS,
+        httponly=True,
+        secure=not settings.DEBUG,
+        samesite="Lax",
+    )
+    return response
 
 
 def oauth_callback(request):
-    osm = oauth.get_authenticated_session(request)
+    raw_flow = request.get_signed_cookie(OAUTH_FLOW_COOKIE, default=None, max_age=OAUTH_FLOW_MAX_AGE_SECONDS)
+    if raw_flow is None:
+        raise BadRequest("OAuth flow expired or missing")
+    flow = json.loads(raw_flow)
+
+    osm = oauth.get_authenticated_session(request, state=flow["state"])
     osm_attrs = osmuser.get_user_attributes(osm)
 
     try:
@@ -563,12 +579,14 @@ def oauth_callback(request):
     u.save()
 
     dj_login(request, u)
-    request.session.delete("oauth_params")
 
-    next_redir = request.session.pop("next", None)
-    if next_redir:
-        return redirect(next_redir)
-    return redirect("/login/")
+    next_redir = flow["next"]
+    if next_redir and url_has_allowed_host_and_scheme(next_redir, allowed_hosts={request.get_host()}):
+        response = redirect(next_redir)
+    else:
+        response = redirect("/login/")
+    response.delete_cookie(OAUTH_FLOW_COOKIE)
+    return response
 
 
 class Documentation(TemplateView):

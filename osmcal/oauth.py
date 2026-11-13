@@ -18,14 +18,14 @@ def get_oauth_session(request, state=None):
     )
 
 
-def get_authenticated_session(request) -> OAuth2Session:
+def get_authenticated_session(request, state: str) -> OAuth2Session:
     authorization_response = request.build_absolute_uri(None)
     if settings.DEBUG:
         # This simplifies the reverse proxy setup on dev:
         # It's pretending we're using HTTPS with a correct configuration.
         authorization_response = authorization_response.replace("http", "https")
 
-    osm = get_oauth_session(request, state=request.session.pop("oauth_state", None))
+    osm = get_oauth_session(request, state=state)
     osm.headers["User-Agent"] = "osmcal/1.0"
     osm.fetch_token(
         "https://www.openstreetmap.org/oauth2/token",
