@@ -10,8 +10,14 @@ eval "$(devbox shellenv)" && ./manage.py test osmcal.test_views
 This puts `.venv/bin`, GDAL/GEOS, and postgres on PATH for the rest of the
 command.
 
+The project uses uv for python deps.
+
 # Linting
 
 Run ruff before considering Python changes done:
 
 eval "$(devbox shellenv)" && ruff check . && ruff format --check .
+
+# Documentation
+
+Avoid comments about functionality, especially how things used to work. Functions and argument names should be self-explanatory. You are allowed to remove obsolete comments and documentation if you are in the area.
